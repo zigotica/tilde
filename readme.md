@@ -4,7 +4,7 @@
 This approach is following [The best way to store your dotfiles: A bare Git repository](https://www.atlassian.com/git/tutorials/dotfiles) article. I just changed the alias and destination folder a bit: 
 
 
-## Create new bare repo from scratch
+## Create new bare repo from scratch
 
 
 ```
@@ -21,7 +21,7 @@ At this point the article has a command to append the alias to `.bashrc`. But si
 In my case then I am using `tilde status`, `tilde add`, `tilde commit`, etc. 
 
 
-## Clone bare repo in new machine
+## Clone bare repo in new machine
 
 
 First, you need to make sure you don't already have these files / folders in your machine, to avoid conflicts. You can simply backup or remove them, depending on your situation. Then: 
