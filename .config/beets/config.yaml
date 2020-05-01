@@ -1,0 +1,59 @@
+##################################################################### MAIN
+library: /Users/zgtc/.config/beets/zgtc.blb
+directory: /Volumes/music
+
+ui:
+    color: yes
+
+import:
+    copy: no
+    move: yes
+    resume: no
+    incremental: yes
+    default_action: apply
+    log: beetslog.txt
+
+match:
+    strong_rec_thresh: 0.01
+
+##################################################################### REGEXP
+replace:
+    '☮': 'o'
+    '[\&]': '&'
+    '[\?]': '?'
+    '[‘’“”"]': "'"
+    '^\.': ''
+    '[\x00-\x1f]': ''
+    '[<>:\*\|`]': ''
+    '\.$': ''
+    '\s+$': ''
+    '^\s+': ''
+    ' _ ': ' - '
+    '_': ''
+original_date: yes
+ignore: .AppleDouble ._* *~ .DS_Store
+art_filename: cover
+
+##################################################################### PATHS
+paths:
+    singleton: _unknown/$artist/$title
+    albumtype:soundtrack: _soundtracks/$year $album%aunique{}/$track - $title
+    comp: _vvaa/$year $album%aunique{}/$track - $title
+    default: $albumartist/$year $album%aunique{}/$track - $title
+
+##################################################################### PLUGINS
+pluginpath: /Users/zgtc/.config/beets/myplugins
+plugins: missing acousticbrainz fetchart lyrics
+missing:
+    format: $albumartist - $album - $title
+    count: no
+    total: no
+acousticbrainz:
+    auto: yes
+fetchart:
+    cautious: true
+    cover_names: front back
+    sources: coverart amazon albumart
+lyrics:
+    fallback: ''
+    google_engine_ID: 009217259823014548361:lndtuqkycfu
