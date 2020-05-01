@@ -155,9 +155,14 @@ behindahead() {
 
 real_time_prompt() {
   PS1="\[\033]0;\W\007\]"; 
-  PS1+="\n\[${os_icon}\] \u \[${Blue}\]\w "
 
   # modify prompt adding development info if we are in a git repo folder
+  if [ "$HOME" == "$PWD" ]; then
+    PS1+="\n\[${os_icon}\] \u \[${Red}\]\w (HOME of tilde repo)"
+  else
+    PS1+="\n\[${os_icon}\] \u \[${Blue}\]\w "
+  fi
+
   if `git status &> /dev/null`; then
     PS1+="\[$(dev_jump)\]\[${Yellow}\]\[$(dev_start)\]"
     PS1+="\[$(node_v)\]"
