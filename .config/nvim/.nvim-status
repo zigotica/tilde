@@ -1,0 +1,12 @@
+" show the status line all the time
+set laststatus=2
+
+" status line info
+set statusline= " left side
+set statusline+=\ %M
+set statusline+=\ %r
+set statusline+=\ %F
+set statusline+=%= " right side
+set statusline+=\ %c:%l/%L
+set statusline+=\ %p%%
+set statusline+=\   

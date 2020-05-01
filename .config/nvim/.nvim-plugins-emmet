@@ -1,0 +1,6 @@
+" Emmet Setup
+" CTRL y, to expand the template
+" or :Emmet template ENTER
+let g:user_emmet_mode='a' "enable all function in all mode
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall

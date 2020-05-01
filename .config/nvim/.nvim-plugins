@@ -1,0 +1,30 @@
+
+" PLUGINS
+" ---------------------------
+
+" Specify a directory for plugins
+call plug#begin('~/.config/nvim/plugged')
+
+" Specifiy plugins, in single quotes
+Plug 'scrooloose/nerdtree'
+Plug '/usr/local/opt/fzf' " Installed using brew
+Plug 'morhetz/gruvbox'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'sheerun/vim-polyglot'
+Plug 'airblade/vim-gitgutter'
+Plug 'vim-syntastic/syntastic'
+Plug 'mattn/emmet-vim'
+Plug 'Chiel92/vim-autoformat'
+Plug 'rking/ag.vim'
+
+" Initialize plugin system
+call plug#end()
+
+" Specific setups
+source ~/.config/nvim/.nvim-plugins-nerdtree
+source ~/.config/nvim/.nvim-plugins-coc
+source ~/.config/nvim/.nvim-plugins-gitgutter
+source ~/.config/nvim/.nvim-plugins-emmet
+
+" needed for autoformat
+let g:python2_host_prog = '/usr/bin/python2.7'
