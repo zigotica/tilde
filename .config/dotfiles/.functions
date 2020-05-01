@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+#####################################################################################
+#                                                                           FUNCTIONS
+#####################################################################################
+
+# Create a new directory and enter it
+function mkd() {
+	mkdir -p "$@" && cd "$_";
+}
+
+# Determine size of a file or total size of a directory
+function fs() {
+	if du -b /dev/null > /dev/null 2>&1; then
+		local arg=-sbh;
+	else
+		local arg=-sh;
+	fi
+	if [[ -n "$@" ]]; then
+		du $arg -- "$@";
+	else
+		du $arg .[^.]* ./*;
+	fi;
+}
+
+# Create a data URL from a file
+function dataurl() {
+	local mimeType=$(file -b --mime-type "$1");
+	if [[ $mimeType == text/* ]]; then
+		mimeType="${mimeType};charset=utf-8";
+	fi
+	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
+}
+
+# start quick server from folder
+function zerve() {
+  python -m SimpleHTTPServer 7777
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given
+# location
+function o() {
+	if [ $# -eq 0 ]; then
+		open .;
+	else
+		open "$@";
+	fi;
+}
+
+# youtube downloader 
+# use: ytd video-url
+function ytd() {
+  youtube-dl -f 'bestvideo+bestaudio/best/best' --merge-output-format mkv $1
+}
+
+# only audio
+function ytda() {
+	youtube-dl -x --audio-format flac $1
+}
+
+# ffmpeg quick edits (remove n secs from start or end of file)
+# use: trims 100 'input-file.extension' 'output-file.extension' 
+function trims(){ ffmpeg -ss $1 -i "$2" -c copy "$3"; }
+function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }

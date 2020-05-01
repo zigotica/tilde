@@ -1,0 +1,11 @@
+#####################################################################################
+#                                                                                PATH
+#####################################################################################
+
+export PATH="$HOME/bin:$PATH"
+export homebrew="/usr/local/bin:/usr/local/sbin"
+export PATH="$homebrew:$PATH"
+export PATH="/usr/local/heroku/bin:$PATH"
+export PATH="/opt/anaconda2/bin:$PATH"
+export NVM_DIR="/Users/zgtc/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
