@@ -47,6 +47,7 @@ nnoremap Q <nop>
 
 " NerdTree
 map <leader>m :NERDTreeToggle<CR>
+nnoremap <silent> <leader>s :NERDTreeFind<CR>
 
 " Open files in horizontal split
 map <silent> <leader>f :call fzf#run({
