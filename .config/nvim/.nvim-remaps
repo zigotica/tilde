@@ -35,6 +35,10 @@ nnoremap <PageDown> <C-F><CR>
 nnoremap <C-e> 2<C-e>
 nnoremap <C-y> 2<C-y>
 
+" move selected blocks in visual mode
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
 " spell checking
 map <F12> :setlocal spell! spelllang=en_gb<CR>
 
