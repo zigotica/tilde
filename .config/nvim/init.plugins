@@ -20,11 +20,5 @@ Plug 'rking/ag.vim'
 " Initialize plugin system
 call plug#end()
 
-" Specific setups
-source ~/.config/nvim/.nvim-plugins-nerdtree
-source ~/.config/nvim/.nvim-plugins-coc
-source ~/.config/nvim/.nvim-plugins-gitgutter
-source ~/.config/nvim/.nvim-plugins-emmet
-
 " needed for autoformat
 let g:python2_host_prog = '/usr/bin/python2.7'
