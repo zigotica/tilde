@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
+#####################################################################################
+#                                                                          CONNECTION
+#####################################################################################
+is_ssh() {
+  if [[ -n $SSH_CONNECTION ]]; then
+    echo -ne " [ssh]"
+  else
+    echo ""
+  fi
+
+}
+
+is_tmux() {
+  if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
+    echo -ne " [tmux]"
+  else
+    echo ""
+  fi
+}
 
 #####################################################################################
 #                                                                        OS DETECTION
@@ -11,11 +30,11 @@ if [ "$krnl" == "Darwin" ]; then
   os="macos"
 elif [ "$krnl" == "Linux" ]; then
   if [ -e "/etc/os-release" ]; then
-  os="$(. /etc/os-release; printf "%s" "$ID")"
+    os="$(. /etc/os-release; printf "%s" "$ID")"
   fi
 fi
 
-os_icon='' 
+os_icon=''
 if [[ $os == "macos" ]]; then
   os_icon=''
 elif [[ $os == "arch" ]]; then
@@ -202,6 +221,7 @@ real_time_prompt() {
     PS1+="\[$(dev_end)\]"
   fi
 
+  PS1+="\[${Red}\]\[$(is_ssh)\]\[$(is_tmux)\]"
   PS1+="\[${RESET}\]$ "
 
   export PS1
