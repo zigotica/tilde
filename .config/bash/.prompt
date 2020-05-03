@@ -1,11 +1,36 @@
 #!/usr/bin/env bash
 
 #####################################################################################
+#                                                                        OS DETECTION
+#####################################################################################
+os=""
+krnl=""
+krnl="$(uname -s)"
+
+if [ "$krnl" == "Darwin" ]; then
+  os="macos"
+elif [ "$krnl" == "Linux" ]; then
+  if [ -e "/etc/os-release" ]; then
+  os="$(. /etc/os-release; printf "%s" "$ID")"
+  fi
+fi
+
+os_icon='' 
+if [[ $os == "macos" ]]; then
+  os_icon=''
+elif [[ $os == "arch" ]]; then
+  os_icon+=' arch'
+elif [[ $os == "raspbian" ]]; then
+  os_icon+=' pi'
+fi
+
+
+######################################################################################
 #                                                                      COLORS & ICONS
 #####################################################################################
 # you might need to install icon fonts and make them available to terminal
 # https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X
-: ${os_icon:=''}
+#: ${os_icon:=''}
 : ${node_icon:=''}
 : ${branch_icon:=''}
 : ${clean_icon:='✔'}
@@ -54,8 +79,8 @@ node_v() {
       [ "$nv" != "" ] && echo -ne "${Red}${node_icon} ${nv}${alert_icon} "
     else
       [ "$nv" != "" ] && echo -ne "${Green}${node_icon} ${nv}"
-    fi 
-  else 
+    fi
+  else
     [ "$nv" != "" ] && echo -ne "${Green}${node_icon} ${nv}"
   fi
 }
@@ -70,7 +95,7 @@ git_branch() {
   _branch="$(git symbolic-ref --short HEAD)"
   if [[ $_branch != "" ]]; then
     echo -ne "${Yellow} ${branch_icon}$_branch"
-  else 
+  else
     hd="$(git rev-parse --short HEAD | head -n 1)"
     echo -ne "${Red} ${branch_icon} detached HEAD $hd"
   fi
@@ -81,9 +106,9 @@ staged() {
   count=`echo $count | xargs`
   if [[ $count != "0" ]]; then
     echo -ne "${Green} ${staged_icon}${count}"
-  else 
+  else
     echo ""
-  fi 
+  fi
 }
 
 unstaged() {
@@ -91,9 +116,9 @@ unstaged() {
   count=`echo $count | xargs`
   if [[ $count != "0" ]]; then
     echo -ne "${Red} ?${count}"
-  else 
+  else
     echo ""
-  fi 
+  fi
 }
 
 untracked() {
@@ -101,9 +126,9 @@ untracked() {
   count=`echo $count | xargs`
   if [[ $count != "0" ]]; then
     echo -ne "${Red} ${untracked_icon}${count}"
-  else 
+  else
     echo ""
-  fi 
+  fi
 }
 
 behindahead() {
@@ -154,11 +179,11 @@ behindahead() {
 }
 
 real_time_prompt() {
-  PS1="\[\033]0;\W\007\]"; 
+  PS1="\[\033]0;\W\007\]";
 
   # modify prompt adding development info if we are in a git repo folder
   if [ "$HOME" == "$PWD" ]; then
-    PS1+="\n\[${os_icon}\] \u \[${Red}\]\w (HOME of tilde repo)"
+    PS1+="\n\[${os_icon}\] \u \[${Red}\]\w (tilde repo)"
   else
     PS1+="\n\[${os_icon}\] \u \[${Blue}\]\w "
   fi
