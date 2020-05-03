@@ -17,6 +17,7 @@ Plug 'mattn/emmet-vim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'rking/ag.vim'
 Plug 'tpope/vim-commentary'
+Plug 'editorconfig/editorconfig-vim'
 
 " Initialize plugin system
 call plug#end()
