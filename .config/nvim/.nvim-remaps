@@ -57,10 +57,8 @@ map <silent> <leader>f :call fzf#run({
 " Display the buffer list and invoke the ':buffer' command. 
 " You can enter the desired buffer number and hit <Enter> to edit the buffer
 nnoremap <leader>b :ls<CR>:buffer<Space>
-
-" Display the buffer list and invoke the ':vertical sb' command. 
-" You can enter the desired buffer number and hit <Enter> to edit the buffer
-nnoremap <leader>v :ls<CR>:vertical sb<Space>
+" Same but invoking ':vertical sb' command. 
+nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 
 
 " ----------- shortcomings
