@@ -19,31 +19,6 @@ is_tmux() {
   fi
 }
 
-#####################################################################################
-#                                                                        OS DETECTION
-#####################################################################################
-os=""
-krnl=""
-krnl="$(uname -s)"
-
-if [ "$krnl" == "Darwin" ]; then
-  os="macos"
-elif [ "$krnl" == "Linux" ]; then
-  if [ -e "/etc/os-release" ]; then
-    os="$(. /etc/os-release; printf "%s" "$ID")"
-  fi
-fi
-
-os_icon=''
-if [[ $os == "macos" ]]; then
-  os_icon=''
-elif [[ $os == "arch" ]]; then
-  os_icon+=' arch'
-elif [[ $os == "raspbian" ]]; then
-  os_icon+=' pi'
-fi
-
-
 ######################################################################################
 #                                                                      COLORS & ICONS
 #####################################################################################
@@ -64,7 +39,33 @@ Red="$(tput setaf 1)"
 Green="$(tput setaf 2)"
 Yellow="$(tput setaf 3)"
 Blue="$(tput setaf 4)"
+Pink="$(tput setaf 5)"
 RESET="$(tput sgr0)"
+
+#####################################################################################
+#                                                                        OS DETECTION
+#####################################################################################
+os_detection() {
+  os=""
+  krnl=""
+  krnl="$(uname -s)"
+
+  if [ "$krnl" == "Darwin" ]; then
+    os="macos"
+  elif [ "$krnl" == "Linux" ]; then
+    if [ -e "/etc/os-release" ]; then
+      os="$(. /etc/os-release; printf "%s" "$ID")"
+    fi
+  fi
+
+  if [[ $os == "macos" ]]; then
+     echo -ne "${White} "
+  elif [[ $os == "arch" ]]; then
+    echo -ne "${Blue} arch "
+  elif [[ $os == "aspbian" ]]; then
+    echo -ne "${Pink} pi "
+  fi
+}
 
 #####################################################################################
 #                                                                              PROMPT
@@ -202,9 +203,9 @@ real_time_prompt() {
 
   # modify prompt adding development info if we are in a git repo folder
   if [ "$HOME" == "$PWD" ]; then
-    PS1+="\n\[${os_icon}\] \u \[${Red}\]\w (tilde repo)"
+    PS1+="\n\[$(os_detection)\] \u \[${Red}\]\w (tilde repo)"
   else
-    PS1+="\n\[${os_icon}\] \u \[${Blue}\]\w "
+    PS1+="\n\[$(os_detection)\] \u \[${Blue}\]\w "
   fi
 
   if `git status &> /dev/null`; then
