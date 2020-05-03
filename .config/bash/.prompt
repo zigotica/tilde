@@ -222,7 +222,7 @@ real_time_prompt() {
     PS1+="\[$(dev_end)\]"
   fi
 
-  PS1+="\[${Red}\]\[$(is_ssh)\]\[$(is_tmux)\]"
+  PS1+="\[${RESET}\]\[$(is_ssh)\]\[$(is_tmux)\]"
   PS1+="\[${RESET}\]$ "
 
   export PS1
