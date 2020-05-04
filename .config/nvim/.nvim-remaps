@@ -67,8 +67,9 @@ nnoremap <leader>b :ls<CR>:buffer<Space>
 nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 
 " Close all buffers except the one being edited
-" We need to also close all splits
-nnoremap <leader>bc :bufdo bd<CR>:only<CR>
+" We also also close all possible remaining splits
+" Finally, open NERDTree
+nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
 
 " Use tab instead of % to match bracket pairs
 nnoremap <tab> %
