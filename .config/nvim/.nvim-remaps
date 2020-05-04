@@ -67,7 +67,7 @@ nnoremap <leader>b :ls<CR>:buffer<Space>
 nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 
 " Close all buffers except the one being edited
-nnoremap <leader>bc :%bd|e#<CR>
+nnoremap <leader>bc :bufdo bd<CR>
 
 " ----------- shortcomings
 " mac os doesnt expose the Alt or Ctrl combinations properly to vim
