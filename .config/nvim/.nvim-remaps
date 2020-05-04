@@ -69,6 +69,10 @@ nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 " Close all buffers except the one being edited
 nnoremap <leader>bc :bufdo bd<CR>
 
+" Use tab instead of % to match bracket pairs
+nnoremap <tab> %
+vnoremap <tab> %
+
 " ----------- shortcomings
 " mac os doesnt expose the Alt or Ctrl combinations properly to vim
 " To determine whether Vim receives a key sequence, do the following: 
