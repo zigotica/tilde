@@ -12,6 +12,7 @@ Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'airblade/vim-gitgutter'
+Plug 'zivyangll/git-blame.vim'
 Plug 'vim-syntastic/syntastic'
 Plug 'mattn/emmet-vim'
 Plug 'Chiel92/vim-autoformat'

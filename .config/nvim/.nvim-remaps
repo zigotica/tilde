@@ -75,6 +75,9 @@ nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
 nnoremap <tab> %
 vnoremap <tab> %
 
+" git blame current line
+nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
+
 " ----------- shortcomings
 " mac os doesnt expose the Alt or Ctrl combinations properly to vim
 " To determine whether Vim receives a key sequence, do the following: 
