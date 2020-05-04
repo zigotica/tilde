@@ -42,6 +42,12 @@ vnoremap K :m '<-2<CR>gv=gv
 " spell checking
 map <F12> :setlocal spell! spelllang=en_gb<CR>
 
+" toggle invisible characters
+function! ToggleInvisiblChars()
+  set list!
+endfunction
+nnoremap <leader>i :call ToggleInvisiblChars()<CR>
+
 " Don't use Ex mode
 nnoremap Q <nop> 
 
