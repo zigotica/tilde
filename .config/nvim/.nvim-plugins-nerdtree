@@ -5,6 +5,10 @@ autocmd StdinReadPre * let s:std_in=1
 " open a NERDTree automatically when vim starts up, if no files were specified, unless opening a saved session
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") && v:this_session == "" | NERDTree | endif
 
+" For mouse click in NERDTree
+:set mouse=a
+let g:NERDTreeMouseMode=3 
+
 " other
 let NERDTreeDirArrowExpandable = "\u00a0" " make arrows invisible instead '▷'
 let NERDTreeDirArrowCollapsible = "\u00a0" " make arrows invisible instead '▼'
