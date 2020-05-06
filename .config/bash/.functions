@@ -87,7 +87,7 @@ function dev() {
       parsed=$(echo "${attd/$target/}")
       if [[ "$parsed" = "attached" ]]; then
         # target session already attached
-        echo "Session target exists and is already attached somewhere else"
+        echo "Session $target exists and is already attached somewhere else"
       else
         # target session exists but not attached, re-attach + kill current
         TMUX=`tmux attach -t $target`
