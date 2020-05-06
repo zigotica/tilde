@@ -62,3 +62,46 @@ function ytda() {
 # use: trims 100 'input-file.extension' 'output-file.extension' 
 function trims(){ ffmpeg -ss $1 -i "$2" -c copy "$3"; }
 function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }
+
+# setup tmux session for development
+# will create 1 main pane for coding, and two bottom panes for terminal
+# requires being called from inside a tmux window/session
+function dev() {
+  if [[ ! "$TERM" =~ screen ]]; then
+    echo "You need to start a tmux session before running this function"
+  else
+    # current session id
+    id=$(tmux display-message -p '#S' | sed 's/#//g')
+    # final session name
+    if [[ "$1" != "" ]]; then
+      target="$1"
+    else
+      target=$(echo "${PWD##*/}")
+    fi
+
+    # check if target session exists
+    if tmux has-session -t $target; then
+      # target session exists
+      # we need some dirty parsing of the sessions list
+      attd=$(tmux ls -F "#{session_name}#{?session_attached,attached,detached}" | grep "$target")
+      parsed=$(echo "${attd/$target/}")
+      if [[ "$parsed" = "attached" ]]; then
+        # target session already attached
+        echo "Session target exists and is already attached somewhere else"
+      else
+        # target session exists but not attached, re-attach + kill current
+        TMUX=`tmux attach -t $target`
+        tmux switch-client -t $target
+        tmux kill-session -t $id
+      fi
+    else
+      # target session doesnt exist, create splits + rename session
+      tmux splitw -v -p 30
+      tmux splitw -h
+      tmux selectp -t 1 
+      tmux send-keys "vi" C-m 
+
+      tmux rename-session -t $id $target
+    fi
+  fi
+}
