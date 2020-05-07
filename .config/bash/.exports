@@ -4,7 +4,8 @@
 #                                                                             EXPORTS
 #####################################################################################
 
-export EDITOR="code -w"
+export EDITOR="vi"
+export VISUAL="vim"
 
 # Increase Bash history size. Allow 32³ entries; the default is 500.
 export HISTSIZE='32768';

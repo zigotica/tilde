@@ -18,8 +18,8 @@ alias ls="exa -l --git -h -g -a --sort=type"
 alias lst="exa -l --git -h -g -a -T -L=2"
 alias host="sudo vi /etc/hosts"
 alias v="nvim"
-alias vi="nvim"
-alias s="code ."
+alias vim="nvim" # we'll leave old vi for EDITOR use
+alias s="v ."
 #weinre WEb INspector REmote
 alias weinreall="weinre -boundHost -all-"
 # Install npm plugins from package.json and save to devDependencies
