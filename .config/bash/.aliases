@@ -14,7 +14,7 @@ alias fuck='sudo $(history -p \!\!)' # add sudo to last command
 alias mv='mv -i'
 alias rm='rm -i'
 # console
-alias ls="exa -l --git -h -g -a"
+alias ls="exa -l --git -h -g -a --sort=type"
 alias lst="exa -l --git -h -g -a -T -L=2"
 alias host="sudo vi /etc/hosts"
 alias v="nvim"
