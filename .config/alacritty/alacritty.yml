@@ -18,15 +18,18 @@ live_config_reload: true
 # Font Customization
 font:
   normal:
-    family: monospace
+    family: Menlo
     style: Regular
   bold:
-    family: monospace
+    family: Menlo
     style: Bold
   italic:
-    family: monospace
+    family: Menlo
     style: Italic
-  size: 14
+  size: 12
+  offset:
+    x: 0
+    y: 1
   use_thin_strokes: false
 
 # Colorscheme (gruvbox)
