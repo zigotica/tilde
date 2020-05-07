@@ -9,16 +9,16 @@ This approach is following [The best way to store your dotfiles: A bare Git repo
 
 ```
 cd ~
-git init --bare $HOME/.config-tilde
-alias tilde='/usr/bin/git --git-dir=$HOME/.config-tilde/ --work-tree=$HOME'
-tilde config --local status.showUntrackedFiles no
+git init --bare $HOME/.config-dot
+alias dot='/usr/bin/git --git-dir=$HOME/.config-dot/ --work-tree=$HOME'
+dot config --local status.showUntrackedFiles no
 ```
 
 
 At this point the article has a command to append the alias to `.bashrc`. But since my bash profile is a bit more elaborated, I just added it manually in `/.config/bash/.aliases`.
 
 
-In my case then I am using `tilde status`, `tilde add`, `tilde commit`, etc. 
+In my case then I am using `dot status`, `dot add`, `dot commit`, etc. 
 
 
 ## Clone bare repo in new machine
@@ -28,14 +28,14 @@ First, you need to make sure you don't already have these files / folders in you
 
 
 ```
-alias tilde='/usr/bin/git --git-dir=$HOME/.config-tilde/ --work-tree=$HOME'
-echo ".config-tilde" >> .gitignore
-git clone --bare <git-repo-url> $HOME/.config-tilde
-alias tilde='/usr/bin/git --git-dir=$HOME/.config-tilde/ --work-tree=$HOME'
-tilde checkout
-tilde config --local status.showUntrackedFiles no
+alias dot='/usr/bin/git --git-dir=$HOME/.config-dot/ --work-tree=$HOME'
+echo ".config-dot" >> .gitignore
+git clone --bare <git-repo-url> $HOME/.config-dot
+alias dot='/usr/bin/git --git-dir=$HOME/.config-dot/ --work-tree=$HOME'
+dot checkout
+dot config --local status.showUntrackedFiles no
 ```
 
 
-...and you're good to go. Again, in this case, you would be using `tilde status`, `tilde add`, `tilde commit`, etc. 
+...and you're good to go. Again, in this case, you would be using `dot status`, `dot add`, `dot commit`, etc. 
 
