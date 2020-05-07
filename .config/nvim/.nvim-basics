@@ -41,4 +41,9 @@ set clipboard+=unnamedplus
 " Splits opens at bottom or right unlike vim defaults
 set splitbelow splitright
 
-
+" Persistent history of changes
+" You can use u (or :earlier 5m) to undo and CTRL R to redo
+set undodir=~/.config/nvim/history
+set undofile
+set undolevels=1000
+set undoreload=1000
