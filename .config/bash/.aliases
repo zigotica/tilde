@@ -31,7 +31,12 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo 
 #####################################################################################
 #                                                                                 Git
 #####################################################################################
-alias tilde='/usr/bin/git --git-dir=/Users/zgtc/.config-tilde/ --work-tree=/Users/zgtc'
+alias dot='/usr/bin/git --git-dir=/Users/zgtc/.config-dot/ --work-tree=/Users/zgtc'
+alias ds="dot status"
+alias da="dot add"
+alias dco="dot commit"
+alias dpom="dot push origin master"
+alias dl="dot log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
 alias gs="git status"
 alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
 alias glg="git log --graph --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
