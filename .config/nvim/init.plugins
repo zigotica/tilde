@@ -21,9 +21,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'AndrewRadev/tagalong.vim'
+Plug 'othree/csscomplete.vim'
 
 " Initialize plugin system
 call plug#end()
 
-" needed for autoformat
-let g:python2_host_prog = '/usr/bin/python2.7'
