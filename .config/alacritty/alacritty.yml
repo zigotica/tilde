@@ -1,11 +1,11 @@
 # Basic Customization
 window:
   dimensions:
-    columns: 160
-    lines: 60
+    columns: 275 
+    lines: 66
   position:
     x: 0
-    y: 60
+    y: 65
 scrolling:
   history: 10000
   multiplier: 3
@@ -79,3 +79,4 @@ key_bindings:
   - { key: 42,        mods: Alt,    chars: "}" } # cierra llaves `}`
   - { key: 33,        mods: Alt,    chars: "[" } # abre corchetes `[`
   - { key: 30,        mods: Alt,    chars: "]" } # cierra corchetes `]`
+  # - { key: Semicolon, mods: Alt,    chars: "~" } # tilde `~`
