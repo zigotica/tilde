@@ -121,7 +121,7 @@ function dev() {
 
       # run vim in 1st split
       tmux selectp -t 1 
-      tmux send-keys "vi" C-m 
+      tmux send-keys "vim" C-m 
 
       # rename session
       tmux rename-session -t $id $target
