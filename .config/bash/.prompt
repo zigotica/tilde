@@ -62,7 +62,7 @@ os_detection() {
      echo -ne "${White} "
   elif [[ $os == "arch" ]]; then
     echo -ne "${Blue} arch "
-  elif [[ $os == "aspbian" ]]; then
+  elif [[ $os == "raspbian" ]]; then
     echo -ne "${Pink} pi "
   fi
 }
@@ -162,7 +162,7 @@ behindahead() {
       # check if remote branch exists
       # master & squashed branches compare to their remotes
       # all other branches compare to origin/develop
-      if [[ $br != "master" ]] && [[ $br != "squashed" ]] && [[ $br != "develop" ]]; then
+      if [[ $br != "master" ]] && [[ $br != "squashed" ]]; then
         rbr="develop"
       else
         rbr="${br}"
