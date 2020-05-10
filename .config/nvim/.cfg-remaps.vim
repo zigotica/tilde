@@ -75,10 +75,6 @@ nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 " Finally, open NERDTree
 nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
 
-" Use tab instead of % to match bracket pairs
-nnoremap <tab> %
-vnoremap <tab> %
-
 " git blame current line
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
 
