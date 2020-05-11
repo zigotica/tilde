@@ -47,3 +47,6 @@ set undodir=~/.config/nvim/history
 set undofile
 set undolevels=1000
 set undoreload=1000
+
+" Allow real time search hightlight/replace
+set inccommand=nosplit
