@@ -30,3 +30,6 @@ endfunction
 
 autocmd BufEnter,FocusGained,VimEnter,WinEnter * call FocusBuffer()
 autocmd FocusLost,WinLeave * call BlurBuffer()
+
+" save file on blur
+autocmd FocusLost,WinLeave * silent! :wa 
