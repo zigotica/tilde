@@ -76,7 +76,10 @@ nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
 
 " git blame current line
-nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
+nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
+
+" source vim settings
+nnoremap <leader>sv :source ~/.config/nvim/init.vim<CR>
 
 " ----------- shortcomings
 " mac os doesnt expose the Alt or Ctrl combinations properly to vim
