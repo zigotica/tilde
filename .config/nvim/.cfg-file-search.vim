@@ -27,4 +27,5 @@ set smartcase " case-sensitive if expresson contains a capital letter
 set hlsearch " highlight search results
 set incsearch " set incremental search, like modern browsers
 
-
+" Allow real time search hightlight/replace
+set inccommand=nosplit " remove hightlight pressing leader+esc, see remaps

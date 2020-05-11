@@ -46,6 +46,9 @@ vnoremap < <gv
 " spell checking
 map <F12> :setlocal spell! spelllang=en_gb<CR>
 
+" remove search highlight
+map <leader><ESC> :nohls<CR>
+
 " toggle invisible characters
 function! ToggleInvisiblChars()
   set list!
