@@ -17,10 +17,6 @@ endfunction
 function! BlurBuffer() abort
   if ShouldColor()
     ownsyntax off
-    set nolist
-    if has('conceal')
-      set conceallevel=0
-    endif
   endif
 endfunction
 
@@ -28,11 +24,6 @@ function! FocusBuffer() abort
   if ShouldColor()
     if !empty(&ft)
       ownsyntax on
-      set list
-      let l:conceal_exclusions=get(g:, 'indentLine_fileTypeExclude', [])
-      if has('conceal') && index(l:conceal_exclusions, &ft) == -1
-        set conceallevel=1
-      endif
     endif
   endif
 endfunction
