@@ -1,6 +1,6 @@
 " ripped off from https://github.com/wincent/wincent just simplified & renames
 let g:WincentColorColumnBufferNameBlacklist = ['__LanguageClient__']
-let g:WincentColorColumnFileTypeBlacklist = ['command-t', 'diff', 'dirvish', 'fugitiveblame', 'undotree', 'qf']
+let g:WincentColorColumnFileTypeBlacklist = ['command-t', 'diff', 'dirvish', 'fugitiveblame', 'nerdtree', 'undotree', 'qf']
 let g:WincentCursorlineBlacklist = ['command-t']
 
 function! ShouldColor() abort
