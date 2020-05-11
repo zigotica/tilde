@@ -21,6 +21,9 @@ alias v="$VISUAL"
 alias vi="$VISUAL"
 alias vim="$VISUAL"
 alias s="$VISUAL ."
+alias t="tmux"
+alias tl="tmux ls"
+alias tk="tmux kill-server"
 #weinre WEb INspector REmote
 alias weinreall="weinre -boundHost -all-"
 # Install npm plugins from package.json and save to devDependencies
