@@ -71,15 +71,16 @@ os_detection() {
 #                                                                              PROMPT
 #####################################################################################
 dev_jump() {
-  echo "\n       ${Yellow}└─"
+  # echo "\n       ${Yellow}└─"
+  echo "\n${Yellow}"
 }
 
 dev_start() {
-  echo "${Yellow}("
+  echo "${Yellow}["
 }
 
 dev_end() {
-  echo "${Yellow})"
+  echo "${Yellow}]"
 }
 
 # https://stackoverflow.com/a/24067243
@@ -201,6 +202,11 @@ behindahead() {
 real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
+  cols=$(tput cols)
+  LINE=''
+  while ((cols--)); do LINE+="·"; done;
+  PS1+="\n\${LINE}";
+
   if [ "$HOME" == "$PWD" ]; then
     PS1+="\n\[${Red}\]\[$(os_detection)\] \u \w "
   else
@@ -223,7 +229,7 @@ real_time_prompt() {
   fi
 
   PS1+="\[${RESET}\]\[$(is_ssh)\]\[$(is_tmux)\]"
-  PS1+="\[${RESET}\]$ "
+  PS1+="\n\[${RESET}\]$ "
 
   export PS1
 }
