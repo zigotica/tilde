@@ -5,8 +5,17 @@ set laststatus=2
 set noshowmode
 
 " let lightline statusline plugin use gruvbox settings
-let g:lightline = {}
-let g:lightline.colorscheme = 'gruvbox'
+let g:lightline = {
+      \ 'colorscheme': 'gruvbox',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'absolutepath', 'modified' ] ]
+      \   },
+      \ 'inactive': {
+      \   'left': [ [ 'absolutepath', 'modified' ] ],
+      \   'right': [ ]
+      \   },
+      \ }
 
 " Custom overwrites:
 " Add/modify the following in plugged/gruvbox/autload/lightline/gruvbox.vim
