@@ -1,4 +1,3 @@
-
 " PLUGINS
 " ---------------------------
 
@@ -7,8 +6,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Specifiy plugins, in single quotes
 Plug 'scrooloose/nerdtree'
-Plug '/usr/local/opt/fzf' " Installed using brew
-Plug 'morhetz/gruvbox'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'airblade/vim-gitgutter'
@@ -22,7 +20,17 @@ Plug 'tpope/vim-commentary'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'AndrewRadev/tagalong.vim'
 Plug 'othree/csscomplete.vim'
-Plug 'itchyny/lightline.vim'
+
+Plug 'itchyny/lightline.vim' " status line color tweaks
+
+Plug 'morhetz/gruvbox'
+Plug 'tlhr/anderson.vim'
+Plug 'ajmwagar/vim-deus'
+Plug 'jacoborus/tender.vim'
+Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'easysid/mod8.vim'
 
 " Initialize plugin system
 call plug#end()
+ 
+

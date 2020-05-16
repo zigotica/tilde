@@ -1,7 +1,6 @@
 " KEY REMAPS
 " Shortcomings in macOS below
 " ---------------------------
-
 let mapleader = ","
 
 " help
@@ -58,11 +57,12 @@ nnoremap <leader>i :call ToggleInvisiblChars()<CR>
 " Don't use Ex mode
 nnoremap Q <nop> 
 
-" NerdTree
+" toggle NerdTree visibility
 map <leader>m :NERDTreeToggle<CR>
-nnoremap <silent> <leader>s :NERDTreeFind<CR>
+" show file in enclosing folder
+nnoremap <silent> <leader>sf :NERDTreeFind<CR>
 
-" Open files in horizontal split
+" Fuzzy find files, then open in horizontal split
 map <silent> <leader>f :call fzf#run({
 \   'down': '30%',
 \   'sink': 'vertical split' })<CR>
@@ -78,11 +78,25 @@ nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 " Finally, open NERDTree
 nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
 
+" Replacement bindings (2x leader being a destructive command)
+" Search and replace in file
+nnoremap <leader><leader>rf :%s/a/b/g
+
+" Search current word (press *) and replace in file
+nnoremap <leader><leader>rcf :%s//b/g
+
+" Search and replace in all open buffers
+nnoremap <leader><leader>rb :bufdo %s/a/b/ge | update
+
+" Search current word (press *) and replace in all open buffers
+nnoremap <leader><leader>rcb :bufdo %s//b/ge | update
+
 " git blame current line
 nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
 
 " source vim settings
 nnoremap <leader>sv :source ~/.config/nvim/init.vim<CR>
+
 
 " ----------- shortcomings
 " mac os doesnt expose the Alt or Ctrl combinations properly to vim
