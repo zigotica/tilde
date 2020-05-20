@@ -2,7 +2,7 @@
 #####################################################################################
 #                                                                          CONNECTION
 #####################################################################################
-is_ssh() {
+function is_ssh() {
   if [[ -n $SSH_CONNECTION ]]; then
     echo -ne " [ssh]"
   else
@@ -11,7 +11,7 @@ is_ssh() {
 
 }
 
-is_tmux() {
+function is_tmux() {
   if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
     echo -ne " [tmux]"
   else
@@ -45,7 +45,7 @@ RESET="$(tput sgr0)"
 #####################################################################################
 #                                                                        OS DETECTION
 #####################################################################################
-os_detection() {
+function os_detection() {
   os=""
   krnl=""
   krnl="$(uname -s)"
@@ -70,16 +70,16 @@ os_detection() {
 #####################################################################################
 #                                                                              PROMPT
 #####################################################################################
-dev_jump() {
+function dev_jump() {
   # echo "\n       ${Yellow}└─"
   echo "\n${Yellow}"
 }
 
-dev_start() {
+function dev_start() {
   echo "${Yellow}["
 }
 
-dev_end() {
+function dev_end() {
   echo "${Yellow}]"
 }
 
@@ -88,7 +88,7 @@ function version_gt() {
   test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1";
 }
 
-node_v() {
+function node_v() {
   if hash node 2>/dev/null; then
     nv=$(node -v | tr -d '[v]')
   fi
@@ -106,12 +106,12 @@ node_v() {
   fi
 }
 
-git_dirty() {
+function git_dirty() {
   local repo_status=$(git status 2>&1 | tail -n1)
   [[ $repo_status != "nothing to commit, working directory clean" ]] && echo " ${Red}*"
 }
 
-git_branch() {
+function git_branch() {
   # show either the branch name or the detached HEAD
   _branch="$(git symbolic-ref --short HEAD)"
   if [[ $_branch != "" ]]; then
@@ -122,7 +122,7 @@ git_branch() {
   fi
 }
 
-staged() {
+function staged() {
   count="$(git diff --cached --name-only | wc -l)"
   count=`echo $count | xargs`
   if [[ $count != "0" ]]; then
@@ -132,7 +132,7 @@ staged() {
   fi
 }
 
-unstaged() {
+function unstaged() {
   count="$(git diff --name-status | wc -l)"
   count=`echo $count | xargs`
   if [[ $count != "0" ]]; then
@@ -142,7 +142,7 @@ unstaged() {
   fi
 }
 
-untracked() {
+function untracked() {
   count="$(git ls-files --others --exclude-standard | wc -l)"`echo $count | sed 's/ *$//g'`
   count=`echo $count | xargs`
   if [[ $count != "0" ]]; then
@@ -152,7 +152,7 @@ untracked() {
   fi
 }
 
-behindahead() {
+function behindahead() {
   # current branch name
   br="$(git rev-parse --abbrev-ref HEAD)"
   if [[ $br != "HEAD" ]]; then
@@ -199,7 +199,7 @@ behindahead() {
   fi
 }
 
-real_time_prompt() {
+function real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
   if [ "$HOME" == "$PWD" ]; then
