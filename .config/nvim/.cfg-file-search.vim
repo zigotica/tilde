@@ -29,3 +29,9 @@ set incsearch " set incremental search, like modern browsers
 
 " Allow real time search hightlight/replace
 set inccommand=nosplit " remove hightlight pressing leader+esc, see remaps
+
+" Set hidden allows the buffers to stay open while :cdo makes changes to each file in the quickfix buffer
+set hidden
+
+" Make Ag search from root of the project, not just current folder
+let g:ag_working_path_mode="r"

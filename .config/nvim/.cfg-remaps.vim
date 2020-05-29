@@ -82,14 +82,12 @@ nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
 " Search and replace in file
 nnoremap <leader><leader>rf :%s/a/b/g
 
-" Search current word (press *) and replace in file
-nnoremap <leader><leader>rcf :%s//b/g
-
 " Search and replace in all open buffers
 nnoremap <leader><leader>rb :bufdo %s/a/b/ge | update
 
-" Search current word (press *) and replace in all open buffers
-nnoremap <leader><leader>rcb :bufdo %s//b/ge | update
+" Search and replace in all project
+" Requires a quickfix buffer with results from a global search like :Ag whatever
+nnoremap <leader><leader>rp :cdo %s/a/b/g
 
 " git blame current line
 nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
