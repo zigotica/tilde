@@ -2,8 +2,14 @@
 #                                                                                PATH
 #####################################################################################
 
-PATH=$PATH:$HOME/bin:$HOME/.config/scripts:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin:/opt/anaconda2/bin
+PATH=$PATH:$HOME/bin:$HOME/.config/scripts:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
 export PATH
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# Use python pyenv version instead of default, older osx
+# https://opensource.com/article/19/5/python-3-default-mac#what-to-do
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
