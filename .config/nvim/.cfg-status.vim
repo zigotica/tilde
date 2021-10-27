@@ -9,10 +9,10 @@ let g:lightline = {
       \ 'colorscheme': g:colors_name,
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'absolutepath', 'modified' ] ]
+      \             [ 'readonly', 'relativepath', 'modified' ] ]
       \   },
       \ 'inactive': {
-      \   'left': [ [ 'absolutepath', 'modified' ] ],
+      \   'left': [ [ 'filename', 'modified' ] ],
       \   'right': [ ]
       \   },
       \ }

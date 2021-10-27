@@ -5,6 +5,8 @@ set nocompatible " Use Vim settings, rather than Vi settings
 
 set encoding=UTF-8
 
+set title
+
 set ttyfast " faster redrawing
 set autoindent
 set smartindent

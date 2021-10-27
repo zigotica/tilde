@@ -1,7 +1,7 @@
 " KEY REMAPS
 " Shortcomings in macOS below
 " ---------------------------
-let mapleader = ","
+let mapleader = " "
 
 " help
 map <F1> :help<CR>
@@ -75,8 +75,14 @@ nnoremap <leader>bv :ls<CR>:vertical sb<Space>
 
 " Close all buffers except the one being edited
 " We also also close all possible remaining splits
-" Finally, open NERDTree
-nnoremap <leader>bc :bufdo bd<CR>:only<CR>:NERDTree<CR>
+" Finally, open NERDTree but focus on the file
+nnoremap <leader>bc :%bd<CR>:e#<CR>:bd#<CR>:NERDTree<CR><C-w>l
+
+" git blame current line
+nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
+
+" source vim settings
+nnoremap <leader>sv :source ~/.config/nvim/init.vim<CR>
 
 " Replacement bindings (2x leader being a destructive command)
 " Search and replace in file
@@ -88,12 +94,6 @@ nnoremap <leader><leader>rb :bufdo %s/a/b/ge | update
 " Search and replace in all project
 " Requires a quickfix buffer with results from a global search like :Ag whatever
 nnoremap <leader><leader>rp :cdo %s/a/b/g
-
-" git blame current line
-nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
-
-" source vim settings
-nnoremap <leader>sv :source ~/.config/nvim/init.vim<CR>
 
 
 " ----------- shortcomings
