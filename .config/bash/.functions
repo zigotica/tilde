@@ -9,6 +9,16 @@ function mkd() {
 	mkdir -p "$@" && cd "$_";
 }
 
+# Return n number of history items
+function hist() {
+  history | tail -"$@";
+}
+
+# Return history items matching a grep param
+function histg() {
+  history | grep "$@";
+}
+
 # Determine size of a file or total size of a directory
 function fs() {
 	if du -b /dev/null > /dev/null 2>&1; then
@@ -34,7 +44,7 @@ function dataurl() {
 
 # start quick server from folder
 function zerve() {
-  python -m SimpleHTTPServer 7777
+  python -m http.server 7777
 }
 
 # `o` with no arguments opens the current directory, otherwise opens the given
