@@ -7,9 +7,11 @@
 alias ..='cd ..'
 alias ...='cd ../..'
 alias projectes='cd  ~/Documents/projectes/'
+alias qm='cd  ~/qmk_firmware'
+alias keeb='cd ~/Documents/Dropbox/KEYBOARDS/zigotica-mechanical-keyboards'
 alias profile='s ~/.bash_profile'
 alias reload="source ~/.bash_profile"
-alias fuck='sudo $(history -p \!\!)' # add sudo to last command
+alias fuck='sudo !!' # prepend sudo to last command
 # make mv and rm a bit more safe
 alias mv='mv -i'
 alias rm='rm -i'
@@ -23,9 +25,8 @@ alias vim="$VISUAL"
 alias s="$VISUAL ."
 alias t="tmux"
 alias tl="tmux ls"
+alias ta="tmux attach -t $1"
 alias tk="tmux kill-server"
-#weinre WEb INspector REmote
-alias weinreall="weinre -boundHost -all-"
 # Install npm plugins from package.json and save to devDependencies
 alias npmdev="npm install --save-dev"
 # Empty the Trash on all mounted volumes and the main HDD.
@@ -35,11 +36,11 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo 
 #####################################################################################
 #                                                                                 Git
 #####################################################################################
-alias dot='/usr/bin/git --git-dir=/Users/zgtc/.config-dot/ --work-tree=/Users/zgtc'
+alias dot='/usr/bin/git --git-dir=/Users/$USER/.config-dot/ --work-tree=/Users/$USER'
 alias ds="dot status"
 alias da="dot add"
 alias dco="dot commit"
-alias dpom="dot push origin master"
+alias dpoh="dot push origin HEAD"
 alias dl="dot log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
 alias gs="git status"
 alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
@@ -49,7 +50,7 @@ alias gback="git reset --soft HEAD~1 && git reset HEAD ."
 alias grall="git clean -df ." # removes all untracked files
 alias gp="git pull"
 alias gam="git commit -am"
-alias gpom="git push origin master"
+alias gpod="git pull origin develop"
 alias gpoh="git push origin HEAD"
 alias gc="git checkout"
 alias gcd="git checkout develop"
