@@ -169,7 +169,7 @@ function behindahead() {
         rbr="${br}"
       fi
 
-      ub="$(git ls-remote --heads ${r} ${rbr} 2>&1 | sed -n 2p)"
+      ub="$(timeout 1 git ls-remote --heads ${r} ${rbr} 2>&1 | sed -n 2p)"
       if [[ $ub != 0 ]] && [[ $ub != "fatal: Could not read from remote repository." ]]; then
         #echo "we have upstream branch in remote origin"
         upstream="origin/${rbr}"
