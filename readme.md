@@ -41,22 +41,29 @@ dot config --local status.showUntrackedFiles no
 
 ## Install other software
 
-You can get a list of manually installed formuli with `brew bundle dump` (this will create a file called Brewfile). You can also list the formuli installed manually by typing `brew leaves --installed-on-request`. In my case, I will need to install:
+You can get a list of manually installed formulae with `brew bundle dump` (this will create a file called Brewfile). You can also list the formulae installed manually by typing `brew leaves --installed-on-request`. In my case, I will need to install:
 
 Brew:
-exa
-tmux
-neovim
-plug
-nvm
-node
+bash
 bash-completion@2
-htop
-the_silver_searcher
+coreutils
+exa
+ffmpeg
 fzf
+git
+git-lfs
+htop
+mas
+neovim
+nvm
+pfetch
+plug
+the_silver_searcher
+tmux
+wakeonlan
+wget
 yarn
 youtube-dl
-wakeonlan
 
 Brew casks:
 alacritty
@@ -67,12 +74,12 @@ dropbox
 easyeda
 figma
 firefox
+forticlient
 google-chrome
 google-drive-file-stream
 handbrake
 imageoptim
 mediahuman-audio-converter
-music-manager
 musicbrainz-picard
 sketch
 sketch-toolbox
@@ -85,7 +92,3 @@ tunnelblick
 vlc
 zerotier-one
 zoom
-
-From source:
-git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-
