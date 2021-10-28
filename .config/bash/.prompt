@@ -161,9 +161,9 @@ function behindahead() {
     r="$(git remote get-url origin 2>&1 | tail -n1)"
     if [[ $r != "fatal: No such remote 'origin'" ]]; then
       # check if remote branch exists
-      # master & squashed branches compare to their remotes
+      # master/main & squashed branches compare to their remotes
       # all other branches compare to origin/develop
-      if [[ $br != "master" ]] && [[ $br != "squashed" ]]; then
+      if [[ $br != "main" ]] && [[ $br != "master" ]] && [[ $br != "squashed" ]]; then
         rbr="develop"
       else
         rbr="${br}"
