@@ -23,8 +23,9 @@ In my case then I am using `dot status`, `dot add`, `dot commit`, etc.
 
 ## Clone bare repo in new machine
 
+I actually use [this shell script](https://github.com/zigotica/automated-desktop-setup) to automate my desktop setup. One of the options is actually cloning this repo as a bare repo.
 
-First, you need to make sure you don't already have these files / folders in your machine, to avoid conflicts. You can simply backup or remove them, depending on your situation. Then: 
+If you want to do this manually, first you need to make sure you don't already have these files / folders in your machine, to avoid conflicts. You can simply backup or remove them, depending on your situation. Then: 
 
 
 ```
@@ -38,57 +39,3 @@ dot config --local status.showUntrackedFiles no
 
 
 ...and you're good to go. Again, in this case, you would be using `dot status`, `dot add`, `dot commit`, etc. 
-
-## Install other software
-
-You can get a list of manually installed formulae with `brew bundle dump` (this will create a file called Brewfile). You can also list the formulae installed manually by typing `brew leaves --installed-on-request`. In my case, I will need to install:
-
-Brew:
-bash
-bash-completion@2
-coreutils
-exa
-ffmpeg
-fzf
-git
-git-lfs
-htop
-mas
-neovim
-nvm
-pfetch
-plug
-the_silver_searcher
-tmux
-wakeonlan
-wget
-yarn
-youtube-dl
-
-Brew casks:
-alacritty
-arduino
-balenaetcher
-docker
-dropbox
-easyeda
-figma
-firefox
-forticlient
-google-chrome
-google-drive-file-stream
-handbrake
-imageoptim
-mediahuman-audio-converter
-musicbrainz-picard
-sketch
-sketch-toolbox
-skype
-slack
-sourcetree
-spotify
-tripmode
-tunnelblick
-vlc
-zerotier-one
-zoom
