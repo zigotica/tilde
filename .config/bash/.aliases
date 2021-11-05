@@ -11,7 +11,7 @@ alias qm='cd  ~/qmk_firmware'
 alias keeb='cd ~/Documents/Dropbox/KEYBOARDS/zigotica-mechanical-keyboards'
 alias profile='s ~/.bash_profile'
 alias reload="source ~/.bash_profile"
-alias fuck='sudo !!' # prepend sudo to last command
+alias fuck='sudo $(history -p \!\!)' # prepend sudo to last command
 # make mv and rm a bit more safe
 alias mv='mv -i'
 alias rm='rm -i'
