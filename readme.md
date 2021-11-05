@@ -61,4 +61,8 @@ echo Note that some of these changes require a logout/restart to take effect
 ```
 
 
-...and you're good to go. Again, in my case, once resourcing or restarting the shell, I would be using `dot status`, `dot add`, `dot commit`, etc. since they are part of my aliases.
+...and you're good to go.
+
+Please note, in my case, I am keeping my ssh keys and config encrypted in a folder inside this repo (`.ssh_bk`). To encrypt/decrypt I am using ansible-vault on all the files of this folder, for instance, `ansible-vault encrypt $HOME/.ssh/*`, and `ansible-vault decrypt $HOME/.ssh/*`. In both cases, it will prompt for a password and use AES256. In the example above, I copy the encrypted files to a proper `.ssh` folder when cloning the repo, then decrypt them. This way the decrypted files will never be part of the repo.
+
+Finally, once resourcing or restarting the shell, I would be using `dot status`, `dot add`, `dot commit`, etc. since they are part of my aliases.
