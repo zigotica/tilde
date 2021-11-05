@@ -25,17 +25,40 @@ In my case then I am using `dot status`, `dot add`, `dot commit`, etc.
 
 I actually use [this shell script](https://github.com/zigotica/automated-desktop-setup) to automate my desktop setup. One of the options is actually cloning this repo as a bare repo.
 
-If you want to do this manually, first you need to make sure you don't already have these files / folders in your machine, to avoid conflicts. You can simply backup or remove them, depending on your situation. Then: 
+If you want to do this manually, make sure you backup these files / folders in your machine, to avoid conflicts. How I do it: 
 
 
 ```
-alias dot='/usr/bin/git --git-dir=$HOME/.config-dot/ --work-tree=$HOME'
-echo ".config-dot" >> .gitignore
-git clone --bare <git-repo-url> $HOME/.config-dot
-alias dot='/usr/bin/git --git-dir=$HOME/.config-dot/ --work-tree=$HOME'
-dot checkout
-dot config --local status.showUntrackedFiles no
+echo Move to $HOME folder
+cd $HOME
+
+echo Clone bare repo
+git clone --bare git@github.com:zigotica/tilde.git $HOME/._dotfiles.git
+
+echo Hide untracked files
+/usr/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME config status.showUntrackedFiles no
+
+echo Add bare repo to .gitignore
+echo ._dotfiles.git >> $HOME/.gitignore
+
+echo backup current dotfiles
+mv $HOME/.config $HOME/.config.bk
+mv $HOME/.bash_profile $HOME/.bash_profile.bk
+mv $HOME/.bashrc $HOME/.bashrc.bk
+mv $HOME/.tmux.conf $HOME/.tmux.conf.bk
+mv $HOME/readme.md $HOME/readme.md.bk
+
+echo Checkout
+/usr/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME checkout
+
+echo copy .ssh_bk encrypted files into .ssh and decrypt them
+mkdir $HOME/.ssh
+cp $HOME/.ssh_bk/* $HOME/.ssh/
+ansible-vault decrypt $HOME/.ssh/*
+
+echo DONE
+echo Note that some of these changes require a logout/restart to take effect
 ```
 
 
-...and you're good to go. Again, in this case, you would be using `dot status`, `dot add`, `dot commit`, etc. 
+...and you're good to go. Again, in my case, once resourcing or restarting the shell, I would be using `dot status`, `dot add`, `dot commit`, etc. since they are part of my aliases.
