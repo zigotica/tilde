@@ -5,12 +5,12 @@ bind 'set completion-ignore-case on'
 shopt -s cdspell autocd histappend
 complete -d cd
 
-# Bind Ctrl+f to favourite folder finder and tmux session
-bind '"\006": "gt\015"'
-
 if [ "$(uname -s)" == "Darwin" ]; then
   [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 fi
+
+# ctrl+g: go to favourite folder finder and tmux session
+bind '"\007": "gt\015"'
 
 # pipe fzf searches through ag
 # it's faster and allows filtering out .gitignore content
@@ -22,4 +22,9 @@ if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
   --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108
   --color info:108,prompt:109,spinner:108,pointer:168,marker:168
   '
+fi
+
+# Run tmux on startup
+if [[ ! "$TERM" =~ screen ]]; then
+    tmux
 fi
