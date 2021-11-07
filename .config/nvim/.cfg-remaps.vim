@@ -67,6 +67,9 @@ map <silent> <leader>f :call fzf#run({
 \   'down': '30%',
 \   'sink': 'vertical split' })<CR>
 
+" Make current file executable
+nnoremap <leader>x :!chmod +x %<CR>
+
 " Display the buffer list and invoke the ':buffer' command. 
 " You can enter the desired buffer number and hit <Enter> to edit the buffer
 nnoremap <leader>b :ls<CR>:buffer<Space>
