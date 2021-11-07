@@ -63,6 +63,22 @@ function ytda() {
 function trims(){ ffmpeg -ss $1 -i "$2" -c copy "$3"; }
 function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }
 
+# cheatsheet helper
+# Inspired by ThePrimeagen
+function chsh() {
+  languages=$(echo "bash c cpp javascript node typescript" | tr " " "\n")
+  utils=$(echo "ansible ag awk find fzf git grep mas npm rsync sed tldr tmux xargs yarn" | tr " " "\n")
+  selected=$(echo -e "$languages\n$utils" | fzf)
+
+  read -p "SEEK IN CHEATSHEET: " what
+
+  if echo "$languages" | grep -qs $selected; then
+    tmux splitw -h bash -c "curl cht.sh/$selected/$(echo "$what" | tr " " "+") | less -R"
+  else
+    tmux splitw -h bash -c "curl cht.sh/$selected~$what | less -R"
+  fi
+}
+
 # GoTo: find and move to favourite folder using fzf
 # then create a tmux session there, requires tmux to be already running
 # Inspired by ThePrimeagen

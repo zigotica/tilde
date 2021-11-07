@@ -11,6 +11,8 @@ fi
 
 # ctrl+g: go to favourite folder finder and tmux session
 bind '"\007": "gt\015"'
+# ctrl+h: launch cheatsheet helper
+bind '"\010": "chsh\015"'
 
 # pipe fzf searches through ag
 # it's faster and allows filtering out .gitignore content
