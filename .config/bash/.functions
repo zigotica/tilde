@@ -73,6 +73,24 @@ function ytda() {
 function trims(){ ffmpeg -ss $1 -i "$2" -c copy "$3"; }
 function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }
 
+# GoTo: find and move to favourite folder using fzf
+# then create a tmux session there, requires tmux to be already running
+# Inspired by ThePrimeagen
+function gt() {
+  if [[ ! "$TERM" =~ screen ]]; then
+    echo "You need to start a tmux session before running this function"
+  else
+    favs=$(find ~/.config ~/Documents/personal ~/Documents/work -mindepth 1 -maxdepth 1 -type d | fzf)
+    favfolder=$(basename "$favs" | tr . _)
+
+    if ! tmux has-session -t "$favfolder" 2> /dev/null; then
+      tmux new-session -s "$favfolder" -c "$favs" -d
+    fi
+
+    tmux switch-client -t "$favfolder"
+  fi
+}
+
 # setup tmux session for development
 # will create 1 main pane for coding, and two bottom panes for terminal
 # requires being called from inside a tmux window/session

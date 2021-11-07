@@ -5,6 +5,9 @@ bind 'set completion-ignore-case on'
 shopt -s cdspell autocd histappend
 complete -d cd
 
+# Bind Ctrl+f to favourite folder finder and tmux session
+bind '"\006": "gt\015"'
+
 if [ "$(uname -s)" == "Darwin" ]; then
   [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 fi
