@@ -2,7 +2,7 @@
 
 # Bash completion
 bind 'set completion-ignore-case on'
-shopt -s cdspell autocd histappend
+shopt -s autocd cdspell dirspell dotglob histappend
 complete -d cd
 
 if [ "$(uname -s)" == "Darwin" ]; then
@@ -26,7 +26,3 @@ if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
   '
 fi
 
-# Run tmux on startup
-if [[ ! "$TERM" =~ screen ]]; then
-    tmux
-fi

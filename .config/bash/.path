@@ -2,7 +2,7 @@
 #                                                                                PATH
 #####################################################################################
 
-PATH=$PATH:$HOME/bin:$HOME/.config/scripts:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
+PATH=$PATH:$HOME/bin:$HOME/.config/bin:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
 export PATH
 
 export NVM_DIR="$HOME/.nvm"

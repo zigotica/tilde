@@ -1,3 +1,10 @@
+# Run command to start tmux on init
+shell:
+  program: /usr/local/bin/bash
+  args:
+    - -l
+    - -c
+    - "tmux"
 # Basic Customization
 window:
   dynamic_title: true
