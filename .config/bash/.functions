@@ -67,7 +67,7 @@ function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }
 # then create a tmux pane to show the cheatsheet (using less)
 # requires tmux to be already running
 # Inspired by ThePrimeagen
-function chsh() {
+function cheatsh() {
   if [[ ! "$TERM" =~ screen ]]; then
     echo "You need to start a tmux session before running this function"
   else
