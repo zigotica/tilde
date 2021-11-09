@@ -1,0 +1,6 @@
+bash
+c
+cpp
+javascript
+node
+typescript

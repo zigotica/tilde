@@ -71,8 +71,8 @@ function cheatsh() {
   if [[ ! "$TERM" =~ screen ]]; then
     echo "You need to start a tmux session before running this function"
   else
-    languages=$(echo "bash c cpp javascript node typescript" | tr " " "\n")
-    utils=$(echo "ansible ag awk find fzf git grep mas npm rsync sed tldr tmux xargs yarn" | tr " " "\n")
+    languages=$(cat ~/.config/bash/fzf-utils/languages.txt)
+    utils=$(cat ~/.config/bash/fzf-utils/utils.txt)
     selected=$(echo -e "$languages\n$utils" | fzf)
 
     read -p "SEEK IN CHEATSHEET: " what
@@ -93,14 +93,16 @@ function gt() {
   if [[ ! "$TERM" =~ screen ]]; then
     echo "You need to start a tmux session before running this function"
   else
-    favs=$(find ~/.config ~/Documents/personal ~/Documents/work -mindepth 1 -maxdepth 1 -type d | fzf)
-    favfolder=$(basename "$favs" | tr . _)
+    targets=$(cat ~/.config/bash/fzf-utils/dirs-personal.txt  ~/.config/bash/fzf-utils/dirs-work.txt | tr "\n" " " | sed "s|~|$HOME|g")
+    selected=$(find $targets -mindepth 1 -maxdepth 1 -type d | fzf)
 
-    if ! tmux has-session -t "$favfolder" 2> /dev/null; then
-      tmux new-session -s "$favfolder" -c "$favs" -d
+    foldername=$(basename "$selected" | tr . _)
+
+    if ! tmux has-session -t "$foldername" 2> /dev/null; then
+      tmux new-session -s "$foldername" -c "$selected" -d
     fi
 
-    tmux switch-client -t "$favfolder"
+    tmux switch-client -t "$foldername"
   fi
 }
 

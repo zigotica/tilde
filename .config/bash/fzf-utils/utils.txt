@@ -1,0 +1,15 @@
+ansible
+ag
+awk
+find
+fzf
+git
+grep
+mas
+npm
+rsync
+sed
+tldr
+tmux
+xargs
+yarn
