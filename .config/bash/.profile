@@ -11,6 +11,8 @@ fi
 
 # ctrl+g: go to favourite folder finder and tmux session
 bind '"\007": "gt\015"'
+# ctrl+f: save folder to gt list of folders
+bind '"\006": "fff\015"'
 # ctrl+h: launch cheatsheet helper
 bind '"\010": "cheatsh\015"'
 

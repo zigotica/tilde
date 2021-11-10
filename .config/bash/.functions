@@ -67,6 +67,7 @@ function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }
 # then create a tmux pane to show the cheatsheet (using less)
 # requires tmux to be already running
 # Inspired by ThePrimeagen
+# ctrl+h, see .profile
 function cheatsh() {
   if [[ ! "$TERM" =~ screen ]]; then
     echo "You need to start a tmux session before running this function"
@@ -89,6 +90,7 @@ function cheatsh() {
 # then create a tmux session there
 # requires tmux to be already running
 # Inspired by ThePrimeagen
+# ctrl+g, see .profile
 function gt() {
   if [[ ! "$TERM" =~ screen ]]; then
     echo "You need to start a tmux session before running this function"
@@ -103,6 +105,34 @@ function gt() {
     fi
 
     tmux switch-client -t "$foldername"
+  fi
+}
+
+# Add current folder (in ~ format) to fzf personal/work favourites
+# These can then be used by the gt function above
+# ctrl+f, see .profile
+function fff() {
+  folder=$(echo $PWD | sed "s|$HOME|~|g")
+
+  # Save in work list by default
+  list="Work"
+  file="$HOME/.config/bash/fzf-utils/dirs-work.txt"
+  workfolder="~/Documents/work"
+  projectsfolder="~/Documents/projectes"
+
+  # set personal file as target if not inside work/projectes hierarchy
+  if [[ $folder != *"$workfolder"* ]] && [[ $folder != *"$projectsfolder"* ]]; then
+    file="$HOME/.config/bash/fzf-utils/dirs-personal.txt"
+    list="Personal"
+  fi
+
+  # If folder is not listed in file, append it, else remove it
+  if ! grep -xqF "$folder" "$file"; then
+    echo "$folder" >> $file
+    echo "Appended $folder to $list GoTo fzf list"
+  else
+    grep -xFv "$folder" $file > tmp_$$ && mv -f tmp_$$ $file
+    echo "Removed $folder from $list GoTo fzf list"
   fi
 }
 
