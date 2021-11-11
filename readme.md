@@ -9,8 +9,8 @@ This approach is following [The best way to store your dotfiles: A bare Git repo
 
 ```
 cd ~
-git init --bare $HOME/.config-dot
-alias dot='/usr/bin/git --git-dir=$HOME/.config-dot/ --work-tree=$HOME'
+git init --bare $HOME/._dotfiles.git
+alias dot='/usr/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME'
 dot config --local status.showUntrackedFiles no
 ```
 
