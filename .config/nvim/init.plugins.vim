@@ -15,7 +15,10 @@ Plug 'scrooloose/nerdtree'
 
 " Search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'rking/ag.vim'
+
+" Telescope core
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " Git
 Plug 'airblade/vim-gitgutter'
