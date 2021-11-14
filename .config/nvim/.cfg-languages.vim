@@ -28,4 +28,4 @@ endif
 
 " CSScomplete (improves the built in completion adding CSS3)
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
-
+autocmd FileType scss setlocal iskeyword+=@-@
