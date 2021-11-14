@@ -29,14 +29,11 @@ If you want to do this manually, make sure you backup these files / folders in y
 
 
 ```
-echo Move to $HOME folder
-cd $HOME
-
-echo Clone bare repo
-git clone --bare git@github.com:zigotica/tilde.git $HOME/._dotfiles.git
+echo Clone bare repo using https (to avoid requiring .ssh key)
+git clone --bare https://github.com/zigotica/tilde.git $HOME/._dotfiles.git
 
 echo Hide untracked files
-/usr/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME config status.showUntrackedFiles no
+/usr/local/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME config status.showUntrackedFiles no
 
 echo Add bare repo to .gitignore
 echo ._dotfiles.git >> $HOME/.gitignore
@@ -49,12 +46,13 @@ mv $HOME/.tmux.conf $HOME/.tmux.conf.bk
 mv $HOME/readme.md $HOME/readme.md.bk
 
 echo Checkout
-/usr/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME checkout
+cd $HOME && /usr/local/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME checkout
+
+echo update remote url to use ssh
+/usr/local/bin/git --git-dir=$HOME/._dotfiles.git/ --work-tree=$HOME remote set-url origin git@github.com:zigotica/tilde.git
 
 echo copy .ssh_bk encrypted files into .ssh and decrypt them
-mkdir $HOME/.ssh
-cp $HOME/.ssh_bk/* $HOME/.ssh/
-ansible-vault decrypt $HOME/.ssh/*
+mkdir $HOME/.ssh && cp $HOME/.ssh_bk/* $HOME/.ssh/ && ansible-vault decrypt $HOME/.ssh/*
 
 echo DONE
 echo Note that some of these changes require a logout/restart to take effect
