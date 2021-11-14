@@ -128,6 +128,12 @@ nnoremap <leader>g :Telescope grep_string search=
 nnoremap <leader>b :Telescope buffers <CR>
 
 " ---------------------------
+" coc/tabnine mappings
+" ---------------------------
+" <CR> auto-select the first completion item and notify coc.nvim to format on enter
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" ---------------------------
 " Replacement mappings
 " ---------------------------
 " (2x leader being a destructive command)

@@ -31,6 +31,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'mattn/emmet-vim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'othree/csscomplete.vim'
+Plug 'neoclide/coc-tabnine'
 
 " Status
 Plug 'itchyny/lightline.vim'
