@@ -102,6 +102,8 @@ function gt() {
     else
       tmux switch-client -t "$foldername"
     fi
+  else
+    tmux attach -t "$foldername"
   fi
 }
 
