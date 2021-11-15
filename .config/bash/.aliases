@@ -6,10 +6,6 @@
 # paths
 alias ..='cd ..'
 alias ...='cd ../..'
-alias projectes='cd  ~/Documents/projectes/'
-alias qm='cd  ~/qmk_firmware'
-alias keeb='cd ~/Documents/Dropbox/KEYBOARDS/zigotica-mechanical-keyboards'
-alias profile='s ~/.bash_profile'
 alias reload="source ~/.bash_profile"
 alias fuck='sudo $(history -p \!\!)' # prepend sudo to last command
 # make mv and rm a bit more safe
@@ -20,9 +16,6 @@ alias ls="exa -l --git -h -g -a --sort=type"
 alias lst="exa -l --git -h -g -a -T -L=2"
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
-alias vi="$VISUAL"
-alias vim="$VISUAL"
-alias s="$VISUAL ."
 alias t="tmux"
 alias tl="tmux ls"
 alias ta="tmux attach -t $1"
@@ -36,7 +29,7 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo 
 #####################################################################################
 #                                                                                 Git
 #####################################################################################
-alias dot='/usr/bin/git --git-dir=/Users/$USER/.config-dot/ --work-tree=/Users/$USER'
+alias dot='/usr/bin/git --git-dir=/Users/$USER/._dotfiles.git/ --work-tree=/Users/$USER'
 alias ds="dot status"
 alias da="dot add"
 alias dco="dot commit"
@@ -44,6 +37,7 @@ alias dpoh="dot push origin HEAD"
 alias dl="dot log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
 alias gs="git status"
 alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
+alias gg="git log --oneline --abbrev-commit --branches=* --graph --decorate --color"
 alias glg="git log --graph --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gall="git add ."
 alias gback="git reset --soft HEAD~1 && git reset HEAD ."
@@ -55,5 +49,4 @@ alias gpoh="git push origin HEAD"
 alias gc="git checkout"
 alias gcd="git checkout develop"
 alias gb="git branch --list -a"
-alias gg="git log --oneline --abbrev-commit --branches=* --graph --decorate --color"
 alias gatpc="git branch --merged | grep -Gv '*' | xargs git branch -d"
