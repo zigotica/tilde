@@ -16,3 +16,7 @@ export HISTCONTROL='ignoreboth';
 # locale needed for tmux to digest nerd fonts properly
 export LANG="en_US.UTF-8"
 export LC_ALL=$LANG
+
+# Folders for git / backup purposes
+export DIR_PERSONAL="$HOME/Documents/personal"
+export DIR_WORK="$HOME/Documents/work"
