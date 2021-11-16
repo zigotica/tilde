@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 
 # Bash completion
-bind 'set completion-ignore-case on'
-shopt -s autocd cdspell dirspell dotglob histappend
-complete -d cd
-
 if [ "$(uname -s)" == "Darwin" ]; then
   [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 fi
 
-# ctrl+g: go to favourite folder finder and tmux session
-bind '"\007": "gt\015"'
-# ctrl+f: save folder to gt list of folders
-bind '"\006": "fff\015"'
-# ctrl+h: launch cheatsheet helper
-bind '"\010": "cheatsh\015"'
+shopt -s autocd
+shopt -s cdspell
+shopt -s dirspell
+shopt -s dotglob
+shopt -s histappend
+complete -d cd
+
+if [ -t 1 ]; then
+  bind 'set completion-ignore-case on' # Use case-insensitive TAB autocompletion
+  # ctrl+g: go to favourite folder finder and tmux session
+  bind '"\007": "gt\015"'
+  # ctrl+f: save folder to gt list of folders
+  bind '"\006": "fff\015"'
+  # ctrl+h: launch cheatsheet helper
+  bind '"\010": "cheatsh\015"'
+fi
 
 # pipe fzf searches through ag
 # it's faster and allows filtering out .gitignore content
