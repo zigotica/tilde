@@ -160,10 +160,14 @@ function dev() {
 
     # create splits
     vh=$(echo $layout | tr -cd 'vh')
-    echo "EXPECTED LAYOUT $vh"
     for (( i=0; i<${#vh}; i++ )); do
       what="${vh:$i:1}"
-      tmux splitw -$what
+      if [[ $i = 0 ]]; then
+        # main split 75%
+        tmux splitw -$what -p 25
+      else
+        tmux splitw -$what
+      fi
     done
 
     # run vim in 1st split
