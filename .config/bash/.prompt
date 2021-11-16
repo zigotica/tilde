@@ -24,8 +24,6 @@ function is_tmux() {
 #####################################################################################
 # you might need to install icon fonts and make them available to terminal
 # https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X
-#: ${os_icon:=''}
-: ${node_icon:=''}
 : ${branch_icon:=''}
 : ${clean_icon:='✔'}
 : ${merge_icon:=''}
@@ -97,12 +95,12 @@ function node_v() {
   if [ -r ".nvmrc" ] && [ -f ".nvmrc" ]; then
     expected="$(cat .nvmrc | tr -d '[:space:]' | tr -d '[v]')"
     if version_gt $expected $nv; then
-      [ "$nv" != "" ] && echo -ne "${Red}${node_icon} ${nv}${alert_icon} "
+      [ "$nv" != "" ] && echo -ne "${Red}node ${nv}${alert_icon} "
     else
-      [ "$nv" != "" ] && echo -ne "${Green}${node_icon} ${nv}"
+      [ "$nv" != "" ] && echo -ne "${Green}node ${nv}"
     fi
   else
-    [ "$nv" != "" ] && echo -ne "${Green}${node_icon} ${nv}"
+    [ "$nv" != "" ] && echo -ne "${Green}node ${nv}"
   fi
 }
 
@@ -203,9 +201,9 @@ function real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
   if [ "$HOME" == "$PWD" ]; then
-    PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u \w "
+    PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u@\h\[$(is_ssh)\]\[$(is_tmux)\] \w "
   else
-    PS1+="\n\n\[$(os_detection)\] \u \[${Blue}\]\w "
+    PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_ssh)\]\[$(is_tmux)\] \[${Blue}\]\w "
   fi
 
   # modify prompt adding development info if we are in a git repo folder
@@ -223,7 +221,6 @@ function real_time_prompt() {
     PS1+="\[$(dev_end)\]"
   fi
 
-  PS1+="\[${RESET}\]\[$(is_ssh)\]\[$(is_tmux)\]"
   PS1+="\n\[${RESET}\]$ "
 
   export PS1
