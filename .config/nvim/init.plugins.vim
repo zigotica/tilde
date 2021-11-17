@@ -37,12 +37,7 @@ Plug 'neoclide/coc-tabnine'
 Plug 'itchyny/lightline.vim'
 
 " Colorschemes
-Plug 'morhetz/gruvbox'
-Plug 'tlhr/anderson.vim'
-Plug 'ajmwagar/vim-deus'
 Plug 'jacoborus/tender.vim'
-Plug 'kristijanhusak/vim-hybrid-material'
-Plug 'easysid/mod8.vim'
 
 " Initialize plugin system
 call plug#end()

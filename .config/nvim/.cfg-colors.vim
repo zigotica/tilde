@@ -1,6 +1,7 @@
 " COLORS
 " ---------------------------
 
+syntax enable
 
 if (has("termguicolors"))
   set termguicolors
@@ -13,14 +14,7 @@ endif
 
 set t_Co=256
 
-" colorscheme gruvbox         " 'morhetz/gruvbox'
-" let g:gruvbox_contrast_dark='soft'
-
-" colorscheme deus            " 'ajmwagar/vim-deus'
-" colorscheme hybrid_material " 'kristijanhusak/vim-hybrid-material'
-" colorscheme anderson        " 'tlhr/anderson.vim'
-" colorscheme mod8            " 'easysid/mod8.vim'
-colorscheme tender          " 'jacoborus/tender.vim'
+colorscheme tender
 
 " -----------------------------
 " Helper to create new colorschemes
