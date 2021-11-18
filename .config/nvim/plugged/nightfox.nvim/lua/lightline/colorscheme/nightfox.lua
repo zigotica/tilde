@@ -3,10 +3,11 @@ local colors = require("nightfox.colors").load()
 local nightfox = {}
 
 nightfox.normal = {
-  left = { { colors.black, colors.blue }, { colors.blue, colors.bg } },
   -- zigotica:
-  middle = { { colors.black, colors.blue }, { colors.blue, colors.bg } },
-  right = { { colors.black, colors.blue }, { colors.blue, colors.bg } },
+  left = { { colors.black, colors.fg }, { colors.fg, colors.bg_highlight } },
+  middle = { { colors.black, colors.fg }, { colors.fg, colors.bg_highlight } },
+  right = { { colors.black, colors.fg }, { colors.fg, colors.bg_highlight } },
+  -- left = { { colors.black, colors.blue }, { colors.blue, colors.bg } },
   -- middle = { { colors.blue, colors.fg_gutter } },
   -- right = { { colors.fg_sidebar, colors.bg_statusline }, { colors.blue, colors.bg } },
   error = { { colors.black, colors.error } },
@@ -14,25 +15,27 @@ nightfox.normal = {
 }
 
 nightfox.insert = {
-  --   left = { { colors.black, colors.green }, { colors.blue, colors.bg } },
-  left = { { colors.black, colors.green }, { colors.green, colors.bg_highlight } },
   -- zigotica:
+  left = { { colors.black, colors.green }, { colors.green, colors.bg_highlight } },
   middle = { { colors.black, colors.green }, { colors.green, colors.bg_highlight } },
   right = { { colors.black, colors.green }, { colors.green, colors.bg_highlight } },
+  -- left = { { colors.black, colors.green }, { colors.blue, colors.bg } },
 }
 
 nightfox.visual = {
-  left = { { colors.black, colors.orange }, { colors.blue, colors.bg } },
   -- zigotica:
-  middle = { { colors.black, colors.orange }, { colors.blue, colors.bg } },
-  right = { { colors.black, colors.orange }, { colors.blue, colors.bg } },
+  left = { { colors.black, colors.blue }, { colors.blue, colors.bg_highlight } },
+  middle = { { colors.black, colors.blue }, { colors.blue, colors.bg_highlight } },
+  right = { { colors.black, colors.blue }, { colors.blue, colors.bg_highlight } },
+  -- left = { { colors.black, colors.magenta }, { colors.blue, colors.bg } },
 }
 
 nightfox.replace = {
-  left = { { colors.black, colors.red }, { colors.blue, colors.bg } },
   -- zigotica:
-  middle = { { colors.black, colors.red }, { colors.blue, colors.bg } },
-  right = { { colors.black, colors.red }, { colors.blue, colors.bg } },
+  left = { { colors.black, colors.red }, { colors.red, colors.bg_highlight } },
+  middle = { { colors.black, colors.red }, { colors.red, colors.bg_highlight } },
+  right = { { colors.black, colors.red }, { colors.red, colors.bg_highlight } },
+  -- left = { { colors.black, colors.red }, { colors.blue, colors.bg } },
 }
 
 nightfox.inactive = {
