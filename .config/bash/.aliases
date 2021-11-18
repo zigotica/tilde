@@ -14,7 +14,6 @@ alias rm='rm -i'
 # console
 alias ls="exa -l --git -h -g -a --sort=type" #brew install exa
 alias lst="exa -l --git -h -g -a -T -L=2"
-alias cal="gcal --cc-holidays=ES -H '\e[34m:\e[0m:\e[32m:\e[0m' .+" #brew install gcal
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
 alias t="tmux"
