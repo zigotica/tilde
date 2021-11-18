@@ -37,7 +37,7 @@ Plug 'neoclide/coc-tabnine'
 Plug 'itchyny/lightline.vim'
 
 " Colorschemes
-Plug 'jacoborus/tender.vim'
+Plug 'EdenEast/nightfox.nvim', {'branch': 'main'}
 
 " Initialize plugin system
 call plug#end()

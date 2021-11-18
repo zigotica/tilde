@@ -12,7 +12,6 @@ set autoindent
 set smartindent
 set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 set backspace=indent,eol,start " Allow backspacing over everything in INSERT mode
-syntax on
 
 set noruler
 set wrap " turn on line wrapping

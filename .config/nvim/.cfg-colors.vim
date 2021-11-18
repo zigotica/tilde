@@ -1,20 +1,14 @@
 " COLORS
 " ---------------------------
 
-syntax enable
-
+set t_Co=256
 if (has("termguicolors"))
   set termguicolors
 endif
 
-if (has("nvim"))
-  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
+syntax enable
+colorscheme Nordfox
 
-set t_Co=256
-
-colorscheme tender
 
 " -----------------------------
 " Helper to create new colorschemes

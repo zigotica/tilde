@@ -17,3 +17,5 @@ let g:lightline = {
       \   },
       \ }
 
+let g:lightline = {'colorscheme': 'nightfox'}
+
