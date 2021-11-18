@@ -16,8 +16,8 @@ function M.init()
     none       = "NONE",
     bg         = "#303030", -- 2e3440
 
-    fg         = "#b9bfca",
-    fg_gutter  = "#4b5668",
+    fg         = "#b9b9b9", -- b9bfca
+    fg_gutter  = "#4b4b4b", -- 4b5668
 
     black      = "#3b4252",
     red        = "#bf616a",
