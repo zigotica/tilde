@@ -24,11 +24,11 @@ function M.init()
     green      = "#a3be8c",
     yellow     = "#ebcb8b",
     blue       = "#81a1c1",
-    magenta    = "#b48ead",
+    magenta    = "#9974e3", -- b48ead
     cyan       = "#88c0d0",
     white      = "#e5e9f0",
     orange     = "#c9826b",
-    pink       = "#bf88bc",
+    pink       = "#d4a1d1", -- bf88bc
 
     -- +15 brightness, +15 saturation
     black_br   = "#465780",
