@@ -48,9 +48,9 @@ function dataurl() {
 # i.e. $ cal jan 2022, or $ cal 2022
 function cal() {
 	if [[ -n "$@" ]]; then
-		gcal --cc-holidays=ES -H '\e[32m:\e[0m:\e[34m:\e[0m' $@
+		gcal -s mon --cc-holidays=ES -H '\e[32m:\e[0m:\e[34m:\e[0m' $@
 	else
-		gcal --cc-holidays=ES -H '\e[32m:\e[0m:\e[34m:\e[0m' .+
+		gcal -s mon --cc-holidays=ES -H '\e[32m:\e[0m:\e[34m:\e[0m' .+
 	fi;
 }
 
