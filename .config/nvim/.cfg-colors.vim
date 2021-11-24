@@ -9,6 +9,7 @@ endif
 syntax enable
 colorscheme Nordfox
 
+lua require'colorizer'.setup()
 
 " -----------------------------
 " Helper to create new colorschemes
