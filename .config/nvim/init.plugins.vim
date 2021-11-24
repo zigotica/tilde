@@ -40,6 +40,7 @@ Plug 'itchyny/lightline.vim'
 
 " Colorschemes
 Plug 'EdenEast/nightfox.nvim', {'branch': 'main'}
+Plug 'norcalli/nvim-colorizer.lua'
 
 " Initialize plugin system
 call plug#end()
