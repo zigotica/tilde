@@ -14,21 +14,21 @@ function M.init()
     meta       = { name = "nordfox", light = false },
 
     none       = "NONE",
-    bg         = "#303030", -- 2e3440
+    bg         = "#242220", -- 2e3440
 
-    fg         = "#b9b9b9", -- b9bfca
-    fg_gutter  = "#4b4b4b", -- 4b5668
+    fg         = "#bdb9b9", -- b9bfca
+    fg_gutter  = "#4c4c47", -- 4b5668
 
     black      = "#3b4252",
-    red        = "#bf616a",
-    green      = "#a3be8c",
-    yellow     = "#ebcb8b",
-    blue       = "#81a1c1",
-    magenta    = "#9974e3", -- b48ead
-    cyan       = "#88c0d0",
+    red        = "#bf5454", -- bf616a
+    green      = "#97b87b", -- a3be8c
+    yellow     = "#e0bb70", -- ebcb8b
+    blue       = "#7496b8", -- 81a1c1
+    magenta    = "#a585e6", -- b48ead
+    cyan       = "#99d7e8", -- 88c0d0
     white      = "#e5e9f0",
-    orange     = "#c9826b",
-    pink       = "#d4a1d1", -- bf88bc
+    orange     = "#c98b65", -- c9826b
+    pink       = "#cf95c0", -- bf88bc
 
     -- +15 brightness, +15 saturation
     black_br   = "#465780",
@@ -54,7 +54,7 @@ function M.init()
     orange_dm  = "#b46950",
     pink_dm    = "#a96ca5",
 
-    comment    = "#60728a",
+    comment    = "#44444a", -- 60728a
 
     git = {
       add      = "#70a288",
