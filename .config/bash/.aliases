@@ -12,8 +12,11 @@ alias fuck='sudo $(history -p \!\!)' # prepend sudo to last command
 alias mv='mv -i'
 alias rm='rm -i'
 # console
-alias ls="exa -l --git -h -g -a --sort=type" #brew install exa
-alias lst="exa -l --git -h -g -a -T -L=2"
+[[ `uname -v | grep "ARM64"` != "" ]] && alias brew="arch -arm64 brew"
+if [[ `which exa` != "" ]]; then
+  alias ls="exa -l --git -h -g -a --sort=type"
+  alias lst="exa -l --git -h -g -a -T -L=2"
+fi
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
 alias t="tmux"
