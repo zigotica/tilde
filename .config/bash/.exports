@@ -33,9 +33,15 @@ if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
   '
 fi
 
-PATH=$PATH:$HOME/bin:$HOME/.config/bin:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
-export PATH
+# curl
+export LDFLAGS="-L/${BREW_PREFIX}/opt/curl/lib"
+export CPPFLAGS="-I/{BREW_PREFIX}$/opt/curl/include"
+PATH="${BREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
 
+# nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
+# path
+PATH=$PATH:$HOME/bin:$HOME/.config/bin:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
+export PATH
