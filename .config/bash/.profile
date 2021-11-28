@@ -8,8 +8,10 @@ fi
 shopt -s autocd
 shopt -s cdspell
 shopt -s dirspell
-shopt -s dotglob
+# shopt -s dotglob
+shopt -s globstar
 shopt -s histappend
+shopt -s nullglob
 complete -d cd
 
 if [ -t 1 ]; then

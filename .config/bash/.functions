@@ -19,6 +19,17 @@ function histg() {
   history | grep "$@";
 }
 
+# Bulk rename files/dirs
+# use: ren <original> <changed>
+function ren() {
+  if [ $# -eq 2 ]; then
+    echo "script has exactly 2 arguments $1 $2"
+    rnm -dp -1 -ss "$1" -rs "/$1/$2/" *
+  else
+    echo -e "\nPlease call 'ren <original> <changed>' to run this command!\n"
+  fi
+}
+
 # Determine size of a file or total size of a directory
 function fs() {
 	if du -b /dev/null > /dev/null 2>&1; then
