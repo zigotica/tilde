@@ -13,6 +13,11 @@ alias mv='mv -i'
 alias rm='rm -i'
 # console
 [[ `uname -v | grep "ARM64"` != "" ]] && alias brew="arch -arm64 brew"
+if [[ `which python3` != "" ]]; then
+  echo "python and pip should call the v3"
+  alias python="python3"
+  alias pip="pip3"
+fi
 if [[ `which exa` != "" ]]; then
   alias ls="exa -l --git -h -g -a --sort=type"
   alias lst="exa -l --git -h -g -a -T -L=2"
