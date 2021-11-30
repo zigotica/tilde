@@ -40,7 +40,9 @@ PATH="${BREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "${BREW_PREFIX}/opt/nvm/nvm.sh" ] && . "${BREW_PREFIX}/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "${BREW_PREFIX}/opt/nvm/etc/bash_completion.d/nvm" ] && . "${BREW_PREFIX}/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 
 # Puppeteer needed for visual regression tests
 # recommended: brew install --cask eloston-chromium
