@@ -26,14 +26,13 @@ Plug 'zivyangll/git-blame.vim'
 
 " Languages
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" after :PlugInstall, run :CocInstall coc-eslint coc-tsserver coc-json coc-html coc-css coc-sh
+" after :PlugInstall, run :CocInstall coc-eslint coc-tsserver coc-json coc-html coc-css coc-sh coc-tabnine
 " also :CocCommand eslint.showOutputChannel
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-syntastic/syntastic'
 Plug 'mattn/emmet-vim'
-Plug 'Chiel92/vim-autoformat'
 Plug 'othree/csscomplete.vim'
-Plug 'neoclide/coc-tabnine' " then :CocInstall coc-tabnine
+Plug 'neoclide/coc-tabnine'
 
 " Status
 Plug 'itchyny/lightline.vim'

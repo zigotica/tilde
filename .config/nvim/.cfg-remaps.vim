@@ -10,7 +10,8 @@ let mapleader = " "
 map <F1> :help<CR>
 
 " Autoformat file
-map <F2> :Autoformat<CR>
+nnoremap <F2> gg=G
+vnoremap <F2> =
 
 " resize horizontal splits
 nnoremap <F3>  :resize +2<CR>
@@ -46,7 +47,7 @@ endfunction
 nnoremap <leader>i :call ToggleInvisiblChars()<CR>
 
 " Don't use Ex mode
-nnoremap Q <nop> 
+nnoremap Q <nop>
 
 " toggle NerdTree visibility
 map <leader>m :NERDTreeToggle<CR>
@@ -85,29 +86,29 @@ vnoremap < <gv
 
 lua << EOF
 require('telescope').setup{
-  defaults = {
-    prompt_prefix = "z: ",
-    mappings = {-- change default Enter to open in right split
-      n = {
-        ["<CR>"] = "select_vertical"
-      },
-      i = {
-        ["<CR>"] = "select_vertical",
-        ["<C-h>"] = "which_key"
-      }
+defaults = {
+  prompt_prefix = "z: ",
+  mappings = {-- change default Enter to open in right split
+  n = {
+    ["<CR>"] = "select_vertical"
+    },
+  i = {
+    ["<CR>"] = "select_vertical",
+    ["<C-h>"] = "which_key"
     }
-  },
+  }
+},
   pickers = {
     find_files = {
       find_command=rg,
-    },
+      },
     buffers = {
       mappings = {-- restore default Enter to open in same split
-        n = {
-          ["<CR>"] = "select_default"
+      n = {
+        ["<CR>"] = "select_default"
         },
-        i = {
-          ["<CR>"] = "select_default"
+      i = {
+        ["<CR>"] = "select_default"
         }
       }
     }
