@@ -42,6 +42,10 @@ Plug 'itchyny/lightline.vim'
 Plug 'EdenEast/nightfox.nvim', {'branch': 'main'}
 Plug 'norcalli/nvim-colorizer.lua'
 
+" Lua basics
+Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
+Plug 'akinsho/bufferline.nvim'
+
 " Initialize plugin system
 call plug#end()
  

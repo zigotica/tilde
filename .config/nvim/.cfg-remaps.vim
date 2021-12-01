@@ -128,6 +128,10 @@ nnoremap <leader>g :Telescope grep_string search=
 " nnoremap <leader>b <cmd>lua require("telescope-settings").buffers() <CR>
 nnoremap <leader>b :Telescope buffers <CR>
 
+" Bufferline
+nnoremap <silent><TAB> :BufferLineCycleNext<CR>
+nnoremap <silent><S-TAB> :BufferLineCyclePrev<CR>
+
 " ---------------------------
 " coc/tabnine mappings
 " ---------------------------
