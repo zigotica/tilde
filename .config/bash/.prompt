@@ -24,12 +24,14 @@ function is_tmux() {
 #####################################################################################
 # you might need to install icon fonts and make them available to terminal
 # https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X
+: ${branch_icon:=''}
 : ${clean_icon:='✔'}
+: ${merge_icon:=''}
 : ${ahead_icon:='↑'}
 : ${behind_icon:='↓'}
 : ${staged_icon:='✚'}
 : ${untracked_icon:='✘'}
-: ${alert_icon:='!'}
+: ${alert_icon:=''}
 
 Red="$(tput setaf 1)"
 Green="$(tput setaf 2)"
@@ -55,11 +57,11 @@ function os_detection() {
   fi
 
   if [[ $os == "macos" ]]; then
-     echo -ne "${White} macos"
+     echo -ne "${White} "
   elif [[ $os == "arch" ]]; then
-    echo -ne "${Blue} arch "
+    echo -ne "${Blue} arch "
   elif [[ $os == "raspbian" ]]; then
-    echo -ne "${Pink} raspberrypi "
+    echo -ne "${Pink} pi "
   fi
 }
 
@@ -111,10 +113,10 @@ function git_branch() {
   # show either the branch name or the detached HEAD
   _branch="$(git symbolic-ref --short HEAD)"
   if [[ $_branch != "" ]]; then
-    echo -ne "${Yellow} $_branch"
+    echo -ne "${Yellow} ${branch_icon}$_branch"
   else
     hd="$(git rev-parse --short HEAD | head -n 1)"
-    echo -ne "${Red} detached HEAD $hd"
+    echo -ne "${Red} ${branch_icon} detached HEAD $hd"
   fi
 }
 
@@ -176,9 +178,9 @@ function behindahead() {
 
         if [[ $bh != "0" ]] || [[ $ah != "0" ]]; then
           if [[ $bh != "0" ]]; then
-            echo -ne "${Red} "
+            echo -ne "${Red} ${merge_icon}"
           else
-            echo -ne "${Green} "
+            echo -ne "${Green} ${merge_icon}"
           fi
         fi
         if [[ $bh != "0" ]]; then
