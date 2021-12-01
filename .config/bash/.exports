@@ -35,8 +35,10 @@ fi
 
 # curl
 export LDFLAGS="-L/${BREW_PREFIX}/opt/curl/lib"
-export CPPFLAGS="-I/{BREW_PREFIX}$/opt/curl/include"
+export CPPFLAGS="-I/${BREW_PREFIX}/opt/curl/include"
 PATH="${BREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
+PATH="${BREW_PREFIX}/opt/findutils/libexec/gnubin:$PATH"
+PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:$PATH"
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
