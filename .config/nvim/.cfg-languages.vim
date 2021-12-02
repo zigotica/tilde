@@ -22,25 +22,3 @@ autocmd FileType html,css EmmetInstall
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
 autocmd FileType scss setlocal iskeyword+=@-@
 
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {
-    \ "bash",
-    \ "css",
-    \ "scss",
-    \ "html",
-    \ "json",
-    \ "javascript",
-    \ "typescript",
-    \ "tsx",
-    \ "yaml",
-    \ "lua",
-  \ },
-  sync_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-}
-EOF
-

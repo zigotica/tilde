@@ -80,42 +80,6 @@ vnoremap K :m '<-2<CR>gv=gv
 vnoremap > >gv
 vnoremap < <gv
 
-" ---------------------------
-" Telescope mappings
-" ---------------------------
-
-lua << EOF
-require('telescope').setup{
-defaults = {
-  prompt_prefix = "z: ",
-  mappings = {-- change default Enter to open in right split
-  n = {
-    ["<CR>"] = "select_vertical"
-    },
-  i = {
-    ["<CR>"] = "select_vertical",
-    ["<C-h>"] = "which_key"
-    }
-  }
-},
-  pickers = {
-    find_files = {
-      find_command=rg,
-      },
-    buffers = {
-      mappings = {-- restore default Enter to open in same split
-      n = {
-        ["<CR>"] = "select_default"
-        },
-      i = {
-        ["<CR>"] = "select_default"
-        }
-      }
-    }
-  }
-}
-EOF
-
 " Search content using fzf in current file
 " nnoremap <leader>sc <cmd>lua require("telescope-settings").curr_buff_fzf() <CR>
 nnoremap <leader>sc :Telescope current_buffer_fuzzy_find <CR>

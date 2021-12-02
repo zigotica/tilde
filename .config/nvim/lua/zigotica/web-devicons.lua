@@ -1,4 +1,3 @@
-lua << EOF
 require'nvim-web-devicons'.setup {
   override = {
     ["test.spec.js"] = {
@@ -22,16 +21,5 @@ require'nvim-web-devicons'.setup {
       name = "Markdown"
     }
   },
-  -- globally enable default icons (default to false)
-  -- will get overriden by `get_icons` option
   default = true;
-  }
-EOF
-
-lua << EOF
-require("bufferline").setup{
-options = {
-    diagnostics = "coc"
-  }
 }
-EOF

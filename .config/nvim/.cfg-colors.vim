@@ -1,15 +1,12 @@
 " COLORS
 " ---------------------------
 
-set t_Co=256
 if (has("termguicolors"))
   set termguicolors
 endif
 
 syntax enable
 colorscheme Nordfox
-
-lua require'colorizer'.setup()
 
 " -----------------------------
 " Helper to create new colorschemes
