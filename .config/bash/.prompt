@@ -27,6 +27,7 @@ function is_tmux() {
 : ${branch_icon:=''}
 : ${clean_icon:='✔'}
 : ${merge_icon:=''}
+: ${develop_icon:=''}
 : ${ahead_icon:='⇡'}
 : ${behind_icon:='⇣'}
 : ${staged_icon:='✚'}
@@ -172,7 +173,7 @@ function behindahead() {
           # count/show how many commits behind develop this branch is
           bhd=`timeout 3 git rev-list ${br}..origin/develop --count `;
           bhd=`echo $bhd | xargs`
-          [[ $bhd != "0" ]] && echo -ne "${Red} ${merge_icon}${behind_icon}${bhd} "
+          [[ $bhd != "0" ]] && echo -ne "${Red} ${develop_icon} ${behind_icon}${bhd} "
         fi
 
         if [[ $bh != "0" ]] && [[ $ah == "0" ]]; then
