@@ -97,12 +97,12 @@ function node_v() {
   if [ -r ".nvmrc" ] && [ -f ".nvmrc" ]; then
     expected="$(cat .nvmrc | tr -d '[:space:]' | tr -d '[v]')"
     if version_gt $expected $nv; then
-      [ "$nv" != "" ] && echo -ne "${Red}node ${nv}${alert_icon} "
+      [ "$nv" != "" ] && echo -ne "${Red} ${nv}${alert_icon} "
     else
-      [ "$nv" != "" ] && echo -ne "${Green}node ${nv}"
+      [ "$nv" != "" ] && echo -ne "${Green} ${nv}"
     fi
   else
-    [ "$nv" != "" ] && echo -ne "${Green}node ${nv}"
+    [ "$nv" != "" ] && echo -ne "${Green} ${nv}"
   fi
 }
 
