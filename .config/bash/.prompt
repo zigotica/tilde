@@ -150,7 +150,7 @@ function behindahead() {
     r="$(git remote get-url origin 2>&1 | tail -n1)"
     if [[ $r != "fatal: No such remote 'origin'" ]]; then
       # check if remote branch exists
-      if [[ -z $(timeout 2 git ls-remote --heads --exit-code origin "$(git symbolic-ref --short HEAD)") ]]; then
+      if [[ -z $(timeout 3 git ls-remote --heads --exit-code origin "$(git symbolic-ref --short HEAD)") ]]; then
         # echo"\nremote branch does not exist, use develop as a reference"
         rbr="develop"
       else
@@ -158,7 +158,7 @@ function behindahead() {
         rbr="${br}"
       fi
 
-      ub="$(timeout 2 git ls-remote --heads ${r} ${rbr} 2>&1 | sed -n 2p)"
+      ub="$(timeout 3 git ls-remote --heads ${r} ${rbr} 2>&1 | sed -n 2p)"
       if [[ $ub != 0 ]] && [[ $ub != "fatal: Could not read from remote repository." ]]; then
         # echo "\nwe have upstream branch ${rbr} in remote origin"
         upstream="origin/${rbr}"
@@ -170,7 +170,7 @@ function behindahead() {
         if [[ $br != "develop" ]] && [[ $rbr != "develop" ]]; then
           # echo "\nnot in develop, but origin/develop exists"
           # count/show how many commits behind develop this branch is
-          bhd=`timeout 2 git rev-list ${br}..origin/develop --count `;
+          bhd=`timeout 3 git rev-list ${br}..origin/develop --count `;
           bhd=`echo $bhd | xargs`
           [[ $bhd != "0" ]] && echo -ne "${Red} ${merge_icon}${behind_icon}${bhd} "
         fi
