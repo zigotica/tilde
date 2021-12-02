@@ -36,6 +36,7 @@ function is_tmux() {
 Red="$(tput setaf 1)"
 Green="$(tput setaf 2)"
 Yellow="$(tput setaf 3)"
+Orange="$(tput setaf 208)"
 Blue="$(tput setaf 4)"
 Pink="$(tput setaf 5)"
 RESET="$(tput sgr0)"
@@ -161,9 +162,8 @@ function behindahead() {
     r="$(git remote get-url origin 2>&1 | tail -n1)"
     if [[ $r != "fatal: No such remote 'origin'" ]]; then
       # check if remote branch exists
-      # master/main & squashed branches compare to their remotes
-      # all other branches compare to origin/develop
-      if [[ $br != "main" ]] && [[ $br != "master" ]] && [[ $br != "squashed" ]]; then
+      if [[ -z $(git ls-remote --heads --exit-code origin "$(git symbolic-ref --short HEAD)") ]]; then
+        # if remote branch does not exist, use develop as a reference
         rbr="develop"
       else
         rbr="${br}"
@@ -171,20 +171,35 @@ function behindahead() {
 
       ub="$(timeout 1 git ls-remote --heads ${r} ${rbr} 2>&1 | sed -n 2p)"
       if [[ $ub != 0 ]] && [[ $ub != "fatal: Could not read from remote repository." ]]; then
-        #echo "we have upstream branch in remote origin"
+        # we have upstream branch ${rbr} in remote origin
         upstream="origin/${rbr}"
         bh=`git rev-list ${br}..${upstream} --count `;
         bh=`echo $bh | xargs`
         ah=`git rev-list ${upstream}..${br} --count `;
         ah=`echo $ah | xargs`
 
-        if [[ $bh != "0" ]]; then
-          echo -ne "${Red} ${merge_icon}${behind_icon}${bh}"
+        if [[ $br != "develop" ]] && [[ $rbr != "develop" ]]; then
+          # not in develop, but origin/develop exists
+          # count/show how many commits behind develop this branch is
+          bhd=`git rev-list ${br}..origin/develop --count `;
+          bhd=`echo $bhd | xargs`
+          [[ $bhd != "0" ]] && echo -ne "${Red} ${merge_icon}${behind_icon}${bhd} "
         fi
-        if [[ $ah != "0" ]]; then
+
+        if [[ $bh != "0" ]] && [[ $ah == "0" ]]; then
+          # branch is behind origin
+          echo -ne "${Orange} ${merge_icon}${behind_icon}${bh}"
+        fi
+        if [[ $bh == "0" ]] && [[ $ah != "0" ]]; then
+          # branch is ahead origin
           echo -ne "${Green} ${merge_icon}${ahead_icon}${ah}"
         fi
+        if [[ $bh != "0" ]] && [[ $ah != "0" ]]; then
+          # branch is behind and ahead origin
+          echo -ne "${Orange} ${merge_icon}${behind_icon}${bh}${Green} ${ahead_icon}${ah}"
+        fi
         if [[ $bh == "0" ]] && [[ $ah == "0" ]]; then
+          # branch is synced with origin
           echo -ne "${Green} ${clean_icon}"
         fi
       fi
