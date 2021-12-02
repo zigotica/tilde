@@ -4,7 +4,7 @@
 #####################################################################################
 function is_ssh() {
   if [[ -n $SSH_CONNECTION ]]; then
-    echo -ne " "
+    echo -ne "${Red} "
   else
     echo ""
   fi
@@ -116,7 +116,7 @@ function git_branch() {
   # show either the branch name or the detached HEAD
   _branch="$(git symbolic-ref --short HEAD)"
   if [[ $_branch != "" ]]; then
-    echo -ne "${Yellow} ${branch_icon}$_branch"
+    echo -ne "${Yellow} ${branch_icon} $_branch"
   else
     hd="$(git rev-parse --short HEAD | head -n 1)"
     echo -ne "${Red} ${branch_icon} detached HEAD $hd"
@@ -211,9 +211,9 @@ function real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
   if [ "$HOME" == "$PWD" ]; then
-    PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u@\h\[$(is_ssh)\]\[$(is_tmux)\] \w "
+    PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
   else
-    PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_ssh)\]\[$(is_tmux)\] \[${Blue}\]\w "
+    PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \[${Blue}\]\w "
   fi
 
   # modify prompt adding development info if we are in a git repo folder
@@ -231,7 +231,7 @@ function real_time_prompt() {
     PS1+="\[$(dev_end)\]"
   fi
 
-  PS1+="\n\[${RESET}\]$ "
+  PS1+="\n\[$(is_ssh)\]\[${RESET}\] "
 
   export PS1
 }
