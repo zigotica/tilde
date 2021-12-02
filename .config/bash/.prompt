@@ -4,7 +4,7 @@
 #####################################################################################
 function is_ssh() {
   if [[ -n $SSH_CONNECTION ]]; then
-    echo -ne " [ssh]"
+    echo -ne " "
   else
     echo ""
   fi
@@ -13,7 +13,7 @@ function is_ssh() {
 
 function is_tmux() {
   if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
-    echo -ne " [tmux]"
+    echo -ne " 舘"
   else
     echo ""
   fi
@@ -24,14 +24,14 @@ function is_tmux() {
 #####################################################################################
 # you might need to install icon fonts and make them available to terminal
 # https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X
-: ${branch_icon:=''}
+: ${branch_icon:=''}
 : ${clean_icon:='✔'}
-: ${merge_icon:=''}
-: ${ahead_icon:='↑'}
-: ${behind_icon:='↓'}
+: ${merge_icon:=''}
+: ${ahead_icon:='⇡'}
+: ${behind_icon:='⇣'}
 : ${staged_icon:='✚'}
 : ${untracked_icon:='✘'}
-: ${alert_icon:=''}
+: ${alert_icon:=''}
 
 Red="$(tput setaf 1)"
 Green="$(tput setaf 2)"
@@ -57,11 +57,13 @@ function os_detection() {
   fi
 
   if [[ $os == "macos" ]]; then
-     echo -ne "${White} "
+     echo -ne "${White}"
   elif [[ $os == "arch" ]]; then
-    echo -ne "${Blue} arch "
+    echo -ne "${Blue} "
+  elif [[ $os == "manjaro" ]]; then
+    echo -ne "${Green} "
   elif [[ $os == "raspbian" ]]; then
-    echo -ne "${Pink} pi "
+    echo -ne "${Pink}"
   fi
 }
 
@@ -106,7 +108,7 @@ function node_v() {
 
 function git_dirty() {
   local repo_status=$(git status 2>&1 | tail -n1)
-  [[ $repo_status != "nothing to commit, working directory clean" ]] && echo " ${Red}*"
+  [[ $repo_status != "nothing to commit, working tree clean" ]] && echo " ${Red}*"
 }
 
 function git_branch() {
@@ -176,18 +178,11 @@ function behindahead() {
         ah=`git rev-list ${upstream}..${br} --count `;
         ah=`echo $ah | xargs`
 
-        if [[ $bh != "0" ]] || [[ $ah != "0" ]]; then
-          if [[ $bh != "0" ]]; then
-            echo -ne "${Red} ${merge_icon}"
-          else
-            echo -ne "${Green} ${merge_icon}"
-          fi
-        fi
         if [[ $bh != "0" ]]; then
-          echo -ne "${Red} ${behind_icon}${bh}"
+          echo -ne "${Red} ${merge_icon}${behind_icon}${bh}"
         fi
         if [[ $ah != "0" ]]; then
-          echo -ne "${Green} ${ahead_icon}${ah}"
+          echo -ne "${Green} ${merge_icon}${ahead_icon}${ah}"
         fi
         if [[ $bh == "0" ]] && [[ $ah == "0" ]]; then
           echo -ne "${Green} ${clean_icon}"
