@@ -102,7 +102,11 @@ function node_v() {
 
 function dot_dirty() {
   local repo_status=$(dot status 2>&1 | tail -n1)
-  [[ $repo_status != "nothing to commit, working tree clean" ]] && echo " ${Red}*"
+  if [[ $repo_status != *"nothing to commit"* ]]; then
+    echo " ${Red}*"
+  else
+    echo " ${Green}${clean_icon}"
+  fi
 }
 
 function git_dirty() {
