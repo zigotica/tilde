@@ -282,14 +282,12 @@ function real_time_prompt() {
   if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config/"* ]]; then
     dots=true
     PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
+    PS1+="\n\[$(dot_branch)\]\[$(dot_dirty)\]\[$(dot_staged)\]\[$(dot_unstaged)\]"
   else
     PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \[${Blue}\]\w "
   fi
 
   # modify prompt adding development info if we are in a git repo folder
-  if [[ $dots == true ]] && `dot status &> /dev/null`; then
-    PS1+="\n\[$(dot_branch)\]\[$(dot_dirty)\]\[$(dot_staged)\]\[$(dot_unstaged)\]"
-  fi
   if `git status &> /dev/null`; then
     PS1+="\n\[$(node_v)\]"
     PS1+="\[$(git_branch)\]\[$(git_dirty)\]\[$(staged)\]\[$(unstaged)\]\[$(untracked)\]"
