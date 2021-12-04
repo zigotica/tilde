@@ -118,10 +118,10 @@ function dot_branch() {
   # show either the branch name or the detached HEAD
   _branch="$(dot symbolic-ref --short HEAD)"
   if [[ $_branch != "" ]]; then
-    echo -ne "${Yellow} ${branch_icon} $_branch"
+    echo -ne "${Yellow}${branch_icon} $_branch"
   else
     hd="$(dot rev-parse --short HEAD | head -n 1)"
-    echo -ne "${Red} ${branch_icon} detached HEAD $hd"
+    echo -ne "${Red}${branch_icon} detached HEAD $hd"
   fi
 }
 
@@ -281,14 +281,14 @@ function real_time_prompt() {
 
   if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config/"* ]]; then
     dots=true
-    PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
+    PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
   else
     PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \[${Blue}\]\w "
   fi
 
   # modify prompt adding development info if we are in a git repo folder
   if [[ $dots == true ]] && `dot status &> /dev/null`; then
-    PS1+="\[$(dot_branch)\]\[$(dot_dirty)\]\[$(dot_staged)\]\[$(dot_unstaged)\]"
+    PS1+="\n\[$(dot_branch)\]\[$(dot_dirty)\]\[$(dot_staged)\]\[$(dot_unstaged)\]"
   fi
   if `git status &> /dev/null`; then
     PS1+="\n\[$(node_v)\]"
