@@ -100,9 +100,25 @@ function node_v() {
   fi
 }
 
+function dot_dirty() {
+  local repo_status=$(dot status 2>&1 | tail -n1)
+  [[ $repo_status != "nothing to commit, working tree clean" ]] && echo " ${Red}*"
+}
+
 function git_dirty() {
   local repo_status=$(git status 2>&1 | tail -n1)
   [[ $repo_status != "nothing to commit, working tree clean" ]] && echo " ${Red}*"
+}
+
+function dot_branch() {
+  # show either the branch name or the detached HEAD
+  _branch="$(dot symbolic-ref --short HEAD)"
+  if [[ $_branch != "" ]]; then
+    echo -ne "${Yellow} ${branch_icon} $_branch"
+  else
+    hd="$(dot rev-parse --short HEAD | head -n 1)"
+    echo -ne "${Red} ${branch_icon} detached HEAD $hd"
+  fi
 }
 
 function git_branch() {
@@ -116,11 +132,31 @@ function git_branch() {
   fi
 }
 
+function dot_staged() {
+  count="$(dot diff --cached --name-only | wc -l)"
+  count=`strip_number $count`
+  if [[ $count != "0" ]]; then
+    echo -ne "${Green} ${staged_icon}${count}"
+  else
+    echo ""
+  fi
+}
+
 function staged() {
   count="$(git diff --cached --name-only | wc -l)"
   count=`strip_number $count`
   if [[ $count != "0" ]]; then
     echo -ne "${Green} ${staged_icon}${count}"
+  else
+    echo ""
+  fi
+}
+
+function dot_unstaged() {
+  count="$(dot diff --name-status | wc -l)"
+  count=`strip_number $count`
+  if [[ $count != "0" ]]; then
+    echo -ne "${Red} ?${count}"
   else
     echo ""
   fi
@@ -240,12 +276,16 @@ function real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
   if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config/"* ]]; then
+    dots=true
     PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
   else
     PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \[${Blue}\]\w "
   fi
 
   # modify prompt adding development info if we are in a git repo folder
+  if [[ $dots == true ]] && `dot status &> /dev/null`; then
+    PS1+="\[$(dot_branch)\]\[$(dot_dirty)\]\[$(dot_staged)\]\[$(dot_unstaged)\]"
+  fi
   if `git status &> /dev/null`; then
     PS1+="\n\[$(node_v)\]"
     PS1+="\[$(git_branch)\]\[$(git_dirty)\]\[$(staged)\]\[$(unstaged)\]\[$(untracked)\]"
