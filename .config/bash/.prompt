@@ -239,7 +239,7 @@ function behindahead() {
 function real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
-  if [ "$HOME" == "$PWD" ]; then
+  if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config/"* ]]; then
     PS1+="\n\n\[${Red}\]\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
   else
     PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \[${Blue}\]\w "
