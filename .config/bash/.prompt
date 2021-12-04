@@ -78,6 +78,10 @@ function version_gt() {
   test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1";
 }
 
+function strip_number() {
+  echo $1 | xargs
+}
+
 function node_v() {
   if hash node 2>/dev/null; then
     nv=$(node -v | tr -d '[v]')
@@ -114,7 +118,7 @@ function git_branch() {
 
 function staged() {
   count="$(git diff --cached --name-only | wc -l)"
-  count=`echo $count | xargs`
+  count=`strip_number $count`
   if [[ $count != "0" ]]; then
     echo -ne "${Green} ${staged_icon}${count}"
   else
@@ -124,7 +128,7 @@ function staged() {
 
 function unstaged() {
   count="$(git diff --name-status | wc -l)"
-  count=`echo $count | xargs`
+  count=`strip_number $count`
   if [[ $count != "0" ]]; then
     echo -ne "${Red} ?${count}"
   else
@@ -134,7 +138,7 @@ function unstaged() {
 
 function untracked() {
   count="$(git ls-files --others --exclude-standard | wc -l)"`echo $count | sed 's/ *$//g'`
-  count=`echo $count | xargs`
+  count=`strip_number $count`
   if [[ $count != "0" ]]; then
     echo -ne "${Red} ${untracked_icon}${count}"
   else
@@ -142,57 +146,92 @@ function untracked() {
   fi
 }
 
+function reference_branch_count(){
+  # yes, for simplicity we assume our remote is 'origin'
+  echo strip_number $(git rev-parse --branches=refs/remotes --symbolic-full-name --all | grep origin/$1 | wc -l)
+}
+
+function commits_diff_count(){
+  # yes, for simplicity we assume our remote is 'origin'
+  echo strip_number $(git rev-list $1..$2 --count)
+}
+
 function behindahead() {
   # current branch name
   br="$(git rev-parse --abbrev-ref HEAD)"
+  rbr=""
+
   if [[ $br != "HEAD" ]]; then
     # check if remote 'origin' exists
     # yes, for simplicity we assume our remote is 'origin'
     r="$(git remote get-url origin 2>&1 | tail -n1)"
     if [[ $r != "fatal: No such remote 'origin'" ]]; then
-      # check if remote branch exists
-      if [[ -z $(timeout 3 git ls-remote --heads --exit-code origin "$(git symbolic-ref --short HEAD)") ]]; then
-        # echo"\nremote branch does not exist, use develop as a reference"
-        rbr="develop"
-      else
-        # echo"\nremote ${br} branch exists, use it as a reference"
-        rbr="${br}"
+      # we want two types of behind/ahead references: 
+      # 1. behind count respect reference branch (remote develop/main/master):
+      #    - develop's reference to be main/master, 
+      #    - feature branch's reference to be develop/main/master
+      # 2. behind/ahead count respect same branch in remote
+
+      # check if branch in remote exists (count the refs/remotes)
+      branch_count=`$(reference_branch_count $br)`
+      dev_count=`$(reference_branch_count "develop")`
+      main_count=`$(reference_branch_count "main")`
+      master_count=`$(reference_branch_count "master")`
+
+      if [[ $br != "main" ]] && [[ $br != "master" ]]; then
+        # echo "\nnot main nor master, can be develop or feature branch"
+        if  [[ $br != "develop" ]] && [[ $dev_count != "0" ]]; then
+            # echo "\nfeature branch w/ remote develop"
+            rbr="develop"
+        else
+          # echo "\ndevelop branch or feature branch w/o remote develop"
+          if [[ $main_count != "0" ]]; then
+            # echo "\nw/ remote main"
+            rbr="main"
+          else
+            if [[ $master_count != "0" ]]; then
+              # echo "\nw/ remote master"
+              rbr="master"
+            fi
+          fi
+        fi
       fi
 
-      ub="$(timeout 3 git ls-remote --heads ${r} ${rbr} 2>&1 | sed -n 2p)"
-      if [[ $ub != 0 ]] && [[ $ub != "fatal: Could not read from remote repository." ]]; then
-        # echo "\nwe have upstream branch ${rbr} in remote origin"
-        upstream="origin/${rbr}"
-        bh=`git rev-list ${br}..${upstream} --count `;
-        bh=`echo $bh | xargs`
-        ah=`git rev-list ${upstream}..${br} --count `;
-        ah=`echo $ah | xargs`
+      # echo "\nif current branch not develop/main/master and any of these exist in origin, count behind commits"
+      if [[ $rbr != "" ]]; then
+        # echo "\ncount behind origin/${rbr}"
+        bhr=`$(commits_diff_count "$br" "origin/$rbr")`
+        # echo "\nshow counter behind origin/${rbr} if > 0 bhr:${bhr}"
+        [[ $bhr != "0" ]] && echo -ne "${Red} ${develop_icon} ${behind_icon}${bhr} "
+      fi
 
-        if [[ $br != "develop" ]] && [[ $rbr != "develop" ]]; then
-          # echo "\nnot in develop, but origin/develop exists"
-          # count/show how many commits behind develop this branch is
-          bhd=`timeout 3 git rev-list ${br}..origin/develop --count `;
-          bhd=`echo $bhd | xargs`
-          [[ $bhd != "0" ]] && echo -ne "${Red} ${develop_icon} ${behind_icon}${bhd} "
-        fi
+      # echo "\nif origin/${br} exists we can count behind/ahead commits"
+      if [[ $branch_count != "0" ]]; then
+        # echo "\nremote ${br} branch exists, use it as a reference"
+        upstream="origin/${br}"
+        bh=`$(commits_diff_count "$br" "$upstream")`
+        ah=`$(commits_diff_count "$upstream" "$br")`
+        # echo "\n${br} is bh:${bh} and ah:${ah} upstream ${upstream}"
+
 
         if [[ $bh != "0" ]] && [[ $ah == "0" ]]; then
-          #  echo "\nbranch ${br} is behind origin ${upstream}"
+          # echo "\nbranch ${br} is behind origin ${upstream}"
           echo -ne "${Orange} ${merge_icon}${behind_icon}${bh}"
         fi
         if [[ $bh == "0" ]] && [[ $ah != "0" ]]; then
-          #  echo "\nbranch ${br} is ahead origin ${upstream}"
+          # echo "\nbranch ${br} is ahead origin ${upstream}"
           echo -ne "${Green} ${merge_icon}${ahead_icon}${ah}"
         fi
         if [[ $bh != "0" ]] && [[ $ah != "0" ]]; then
-          #  echo "\nbranch ${br} is behind and ahead origin ${upstream}"
+          # echo "\nbranch ${br} is behind and ahead origin ${upstream}"
           echo -ne "${Orange} ${merge_icon}${behind_icon}${bh}${Green} ${ahead_icon}${ah}"
         fi
         if [[ $bh == "0" ]] && [[ $ah == "0" ]]; then
-          #  echo "\nbranch ${br} is synced with origin ${upstream}"
+          # echo "\nbranch ${br} is synced with origin ${upstream}"
           echo -ne "${Green} ${clean_icon}"
         fi
       fi
+
     fi
   fi
 }
