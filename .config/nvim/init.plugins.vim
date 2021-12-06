@@ -39,7 +39,7 @@ Plug 'neoclide/coc-tabnine'
 Plug 'itchyny/lightline.vim'
 
 " Colorschemes
-Plug 'EdenEast/nightfox.nvim', {'branch': 'main'}
+Plug 'zigotica/nightfox.nvim', {'branch': 'main'}
 Plug 'norcalli/nvim-colorizer.lua'
 
 " Lua basics
