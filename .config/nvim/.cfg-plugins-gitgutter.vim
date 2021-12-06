@@ -2,7 +2,7 @@
 let g:gitgutter_terminal_reports_focus=0
 
 " add colors for git changes
-hi GitGutterAdd guifg=#c9d05c ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi GitGutterChange guifg=#b3deef ctermfg=153 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi GitGutterDelete guifg=#f43753 ctermfg=203 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi GitGutterChangeDelete guifg=#f43753 ctermfg=203 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi GitGutterAdd guifg=#97b87b ctermfg=115 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi GitGutterChange guifg=#7496b8 ctermfg=33 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi GitGutterDelete guifg=#bf5454 ctermfg=198 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi GitGutterChangeDelete guifg=#bf5454 ctermfg=198 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
