@@ -8,6 +8,7 @@ endfor
 require("zigotica.colors")
 require("zigotica.settings")
 require("zigotica.autocmds")
+require("zigotica.search")
 require("zigotica.plugins.bufferline")
 require("zigotica.plugins.web-devicons")
 require("zigotica.plugins.telescope")
