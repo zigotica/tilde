@@ -11,20 +11,15 @@ let g:NERDTreeMouseMode=3
 
 " hidden files
 let NERDTreeShowHidden=1
-let g:NERDTreeIgnore = ['^node_modules$[[dir]]', '^dist$[[dir]]', '^vendor$[[dir]]', '^build$[[dir]]']
+let g:NERDTreeIgnore = ['^node_modules$[[dir]]', '^dist$[[dir]]', '^vendor$[[dir]]', '^build$[[dir]]', '^history$[[dir]]']
 
 " other
-let NERDTreeDirArrowExpandable = "\u00a0" " make arrows invisible instead '▷'
-let NERDTreeDirArrowCollapsible = "\u00a0" " make arrows invisible instead '▼'
+" let NERDTreeDirArrowExpandable = "\u00a0" " make arrows invisible instead '▷'
+" let NERDTreeDirArrowCollapsible = "\u00a0" " make arrows invisible instead '▼'
 
 " Overwrite NERDTree colors
 " (not in .cfg-colors.vim in case I eventually remove nerdtree)
-hi NERDTreeHelp guifg=#eeeeee ctermfg=255 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeHelpKey guifg=#81b29a ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeHelpCommand guifg=#f4a261 ctermfg=215 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeHelpTitle guifg=#63cdcf ctermfg=153 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeCWD guifg=#81b29a ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeDir guifg=#81b29a ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeUp guifg=#719cd6 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeOpenable guifg=#c94f6d ctermfg=203 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi NERDTreeClosable guifg=#f4a261 ctermfg=215 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi NERDTreeCWD guifg=#97b87b ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi NERDTreeDir guifg=#97b87b ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi NERDTreeUp guifg=#7496b8 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+hi NERDTreeHelpTitle guifg=#c98b65 ctermfg=153 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
