@@ -13,10 +13,6 @@ let g:NERDTreeMouseMode=3
 let NERDTreeShowHidden=1
 let g:NERDTreeIgnore = ['^node_modules$[[dir]]', '^dist$[[dir]]', '^vendor$[[dir]]', '^build$[[dir]]', '^history$[[dir]]']
 
-" other
-" let NERDTreeDirArrowExpandable = "\u00a0" " make arrows invisible instead '▷'
-" let NERDTreeDirArrowCollapsible = "\u00a0" " make arrows invisible instead '▼'
-
 " Overwrite NERDTree colors
 " (not in .cfg-colors.vim in case I eventually remove nerdtree)
 hi NERDTreeCWD guifg=#97b87b ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
