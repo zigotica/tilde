@@ -36,7 +36,7 @@ Plug 'othree/csscomplete.vim'
 Plug 'neoclide/coc-tabnine'
 
 " Status
-Plug 'itchyny/lightline.vim'
+Plug 'nvim-lualine/lualine.nvim'
 
 " Colorschemes
 Plug 'zigotica/nightfox.nvim', {'branch': 'main'}
