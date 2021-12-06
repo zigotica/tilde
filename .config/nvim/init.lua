@@ -5,6 +5,7 @@ for fpath in split(globpath('~/.config/nvim/', '.cfg-*'), '\n')
 endfor
 ]])
 
+require("zigotica.colors")
 require("zigotica.settings")
 require("zigotica.autocmds")
 require("zigotica.plugins.bufferline")
