@@ -66,7 +66,7 @@ nnoremap <leader>bc :%bd<CR>:e#<CR>:bd#<CR>:NERDTree<CR><C-w>l
 nnoremap <leader>gb :<C-u>call gitblame#echo()<CR>
 
 " source vim settings
-nnoremap <leader>sv :source ~/.config/nvim/init.vim<CR>
+nnoremap <leader>sv :source ~/.config/nvim/init.lua<CR>
 
 " ---------------------------
 " Visual mode mappings
