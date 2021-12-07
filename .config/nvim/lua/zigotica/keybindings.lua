@@ -77,6 +77,12 @@ map('n', '<S-TAB>', ':BufferLineCyclePrev<CR>', { silent = true })
 map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NERDTree<CR><C-w>l')
 
 
+-- GIT
+----------------------------------------------
+
+map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>') -- git blame for line
+
+
 -- REPLACEMENT
 ----------------------------------------------
 -- (2x leader being a destructive command)

@@ -35,8 +35,7 @@ Plug 'mattn/emmet-vim'
 Plug 'editorconfig/editorconfig-vim'
 
 " Git
-Plug 'airblade/vim-gitgutter'
-Plug 'zivyangll/git-blame.vim'
+Plug 'lewis6991/gitsigns.nvim'
 
 " Status
 Plug 'nvim-lualine/lualine.nvim'
