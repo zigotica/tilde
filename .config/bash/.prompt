@@ -239,10 +239,14 @@ function behindahead() {
 
       # echo "\nif current branch not develop/main/master and any of these exist in origin, count behind commits"
       if [[ $rbr != "" ]]; then
-        # echo "\ncount behind origin/${rbr}"
+        # echo "\ncount behind/ahead origin/${rbr}"
         bhr=`$(commits_diff_count "$br" "origin/$rbr")`
-        # echo "\nshow counter behind origin/${rbr} if > 0 bhr:${bhr}"
-        [[ $bhr != "0" ]] && echo -ne "${Red} ${develop_icon} ${behind_icon}${bhr} "
+        ahr=`$(commits_diff_count "origin/$rbr" "$br")`
+        # echo "\nbranch ${br} is behind/ahead origin/${rbr}"
+        [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne "${Red} ${develop_icon} "
+        [[ $bhr != "0" ]] && echo -ne "${behind_icon}${bhr}"
+        [[ $ahr != "0" ]] && echo -ne "${ahead_icon}${ahr}"
+        [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne " "
       fi
 
       # echo "\nif origin/${br} exists we can count behind/ahead commits"
@@ -256,15 +260,15 @@ function behindahead() {
 
         if [[ $bh != "0" ]] && [[ $ah == "0" ]]; then
           # echo "\nbranch ${br} is behind origin ${upstream}"
-          echo -ne "${Orange} ${merge_icon}${behind_icon}${bh}"
+          echo -ne "${Orange} ${merge_icon} ${behind_icon}${bh}"
         fi
         if [[ $bh == "0" ]] && [[ $ah != "0" ]]; then
           # echo "\nbranch ${br} is ahead origin ${upstream}"
-          echo -ne "${Green} ${merge_icon}${ahead_icon}${ah}"
+          echo -ne "${Green} ${merge_icon} ${ahead_icon}${ah}"
         fi
         if [[ $bh != "0" ]] && [[ $ah != "0" ]]; then
           # echo "\nbranch ${br} is behind and ahead origin ${upstream}"
-          echo -ne "${Orange} ${merge_icon}${behind_icon}${bh}${Green} ${ahead_icon}${ah}"
+          echo -ne "${Orange} ${merge_icon} ${behind_icon}${bh}${Green}${ahead_icon}${ah}"
         fi
         if [[ $bh == "0" ]] && [[ $ah == "0" ]]; then
           # echo "\nbranch ${br} is synced with origin ${upstream}"
