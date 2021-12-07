@@ -13,6 +13,8 @@ require("zigotica.keybindings")
 require("zigotica.plugins.bufferline")
 require("zigotica.plugins.web-devicons")
 require("zigotica.plugins.telescope")
+require("zigotica.plugins.lsp")
 require("zigotica.plugins.treesitter")
 require("zigotica.plugins.colorizer")
 require("zigotica.plugins.lualine")
+

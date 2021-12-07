@@ -7,33 +7,36 @@ call plug#begin('~/.config/nvim/plugged')
 " Basic extensions
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'AndrewRadev/tagalong.vim'
+
+" Lua basics
+Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
+Plug 'akinsho/bufferline.nvim'
 
 " Menu 
 Plug 'scrooloose/nerdtree'
-
-" Search
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 " Telescope core
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
+" Languages
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'onsails/lspkind-nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag'
+Plug 'mattn/emmet-vim'
+Plug 'editorconfig/editorconfig-vim'
+
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'zivyangll/git-blame.vim'
-
-" Languages
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" after :PlugInstall, run :CocInstall coc-eslint coc-tsserver coc-json coc-html coc-css coc-sh coc-tabnine
-" also :CocCommand eslint.showOutputChannel
-Plug 'sheerun/vim-polyglot'
-Plug 'vim-syntastic/syntastic'
-Plug 'mattn/emmet-vim'
-Plug 'othree/csscomplete.vim'
-Plug 'neoclide/coc-tabnine'
 
 " Status
 Plug 'nvim-lualine/lualine.nvim'
@@ -41,10 +44,6 @@ Plug 'nvim-lualine/lualine.nvim'
 " Colorschemes
 Plug 'zigotica/nightfox.nvim', {'branch': 'main'}
 Plug 'norcalli/nvim-colorizer.lua'
-
-" Lua basics
-Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
-Plug 'akinsho/bufferline.nvim'
 
 " Initialize plugin system
 call plug#end()
