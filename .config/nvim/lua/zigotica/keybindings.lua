@@ -60,7 +60,7 @@ map('v', '<', '<gv')
 ----------------------------------------------
 
 map('n', '<leader>sc', ':Telescope current_buffer_fuzzy_find <CR>') -- search content using fuzzy find in current buffer
-map('n', '<leader>ff', ':Telescope find_files hidden=true no_ignore=true <CR>') -- search files using fuzzy find
+map('n', '<leader>f',  ':Telescope find_files hidden=true no_ignore=true <CR>') -- search files using fuzzy find
 map('n', '<leader>g',  ':Telescope grep_string search=') -- grep content and send results to a list that can be fzf'ed
 map('n', '<leader>b',  ':Telescope buffers <CR>') -- search files within open buffers, using fuzzy find
 
