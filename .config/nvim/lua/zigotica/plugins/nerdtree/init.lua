@@ -16,7 +16,8 @@ vim.g.NERDTreeIgnore = {
   '^dist$[[dir]]',
   '^vendor$[[dir]]',
   '^build$[[dir]]',
-  '^history$[[dir]]'
+  '^history$[[dir]]',
+  '.DS_Store'
 }
 
 -- overwrite NERDTree colors
