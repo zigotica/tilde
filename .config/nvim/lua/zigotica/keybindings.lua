@@ -68,9 +68,6 @@ map('n', '<leader>b',  ':Telescope buffers <CR>') -- search files within open bu
 -- BUFFERS
 ----------------------------------------------
 
--- cycle through buffers that look like tabs
-map('n', '<TAB>',   ':BufferLineCycleNext<CR>', { silent = true })
-map('n', '<S-TAB>', ':BufferLineCyclePrev<CR>', { silent = true })
 -- Close all buffers except the one being edited
 -- We also also close all possible remaining splits
 -- Finally, open NERDTree but focus on the file

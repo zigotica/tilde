@@ -10,7 +10,6 @@ Plug 'tpope/vim-commentary'
 
 " Lua basics
 Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
-Plug 'akinsho/bufferline.nvim'
 
 " Menu 
 Plug 'scrooloose/nerdtree'
