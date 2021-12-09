@@ -1,5 +1,4 @@
-vim.cmd[[ source ~/.config/nvim/init.plugins.vim ]]
-
+require("plugins")
 require("zigotica.colors")
 require("zigotica.settings")
 require("zigotica.autocmds")
