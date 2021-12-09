@@ -19,6 +19,9 @@ vim.opt.wrap = true -- turn on line wrapping
 vim.opt.confirm = true
 vim.opt.showmode = false -- we are already showing mode info in status
 
+-- allow mouse
+vim.opt.mouse = 'a'
+
 vim.opt.ic = true
 vim.opt.cmdheight = 1 -- command bar height
 vim.opt.relativenumber = true
