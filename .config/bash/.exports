@@ -24,7 +24,7 @@ export DIR_WORK="~/Documents/work/"
 # pipe fzf searches through ag
 # it's faster and allows filtering out .gitignore content
 if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
-  export FZF_DEFAULT_COMMAND='rg --hidden --no-ignore --files'
+  export FZF_DEFAULT_COMMAND="rg --hidden --no-ignore --glob=!.git/ --files"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
