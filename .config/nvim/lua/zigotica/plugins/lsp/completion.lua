@@ -14,7 +14,6 @@ local lspkind = require('lspkind')
 local source_mapping = {
   buffer = "[Buffer]",
   nvim_lsp = "[LSP]",
-  nvim_lua = "[Lua]",
   cmp_tabnine = "[T9]",
   path = "[Path]",
 }
@@ -43,7 +42,7 @@ cmp.setup({
     }),
     -- Accept currently selected item. If none selected, `select` first item.
     -- Set `select` to `false` to only confirm explicitly selected items.
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
     -- navigate to next/prev vsnip suggestion
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -57,11 +56,13 @@ cmp.setup({
       end
     end, { "i", "s" }),
 
-    ["<S-Tab>"] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        feedkey("<Plug>(vsnip-jump-prev)", "")
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if not cmp.select_prev_item() then
+        if vim.bo.buftype ~= 'prompt' and has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
       end
     end, { "i", "s" }),
   },

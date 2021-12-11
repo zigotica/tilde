@@ -23,7 +23,7 @@ vim.cmd([[
   Plug 'hrsh7th/nvim-cmp'
   Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
   Plug 'hrsh7th/cmp-vsnip'
-  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/cmp-path'
   Plug 'onsails/lspkind-nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'windwp/nvim-autopairs'
