@@ -12,4 +12,3 @@ require("zigotica.plugins.git")
 require("zigotica.plugins.treesitter")
 require("zigotica.plugins.colorizer")
 require("zigotica.plugins.lualine")
-
