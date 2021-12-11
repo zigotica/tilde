@@ -90,6 +90,13 @@ cmp.setup({
     format = function(entry, vim_item)
       -- Kind icons
       vim_item.kind = string.format('%s %s', source_type_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
+      -- tweak Tabnine
+      if entry.source.name == 'cmp_tabnine' then
+        if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+          vim_item.menu = entry.completion_item.data.detail .. ' ' .. vim_item.menu
+        end
+        vim_item.kind = ''
+      end
       -- Sources
       vim_item.menu = ({
         buffer = "[Buffer]",
