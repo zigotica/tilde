@@ -191,7 +191,7 @@ function gt() {
 # Add current folder (in ~ format) to fzf personal/work favourites
 # These can then be used by the gt function above
 # ctrl+f, see .profile
-function fff() {
+function f() {
   folder=$(echo $PWD | sed "s|$HOME|~|g")
 
   # Save in work list by default
