@@ -9,7 +9,7 @@ require'lualine'.setup {
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {{'diagnostics', sources={'nvim_lsp', 'coc'}}},
+    lualine_b = {{'diagnostics', sources={'nvim_diagnostic'}}},
     lualine_c = {'filename'},
     lualine_x = {'encoding'},
     lualine_y = {'progress'},
