@@ -17,10 +17,6 @@ vim.diagnostic.config({
   },
 })
 
--- diagnostic border
-vim.cmd [[autocmd ColorScheme * highlight LspFloatWinNormal guibg=#242220]]
-vim.cmd [[autocmd ColorScheme * highlight LspFloatWinBorder guifg=red guibg=#242220]]
-
 local border = {
       {"🭽", "LspFloatWinBorder"},
       {"▔", "LspFloatWinBorder"},
