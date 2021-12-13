@@ -33,5 +33,14 @@ autocmd BufEnter,FocusGained,VimEnter,WinEnter * call FocusBuffer()
 autocmd FocusLost,WinLeave * call BlurBuffer()
 
 " save file on blur
-autocmd FocusLost,WinLeave * silent! :wa 
+autocmd FocusLost,WinLeave * silent! :wa
+
+" When entering insert mode, relative line numbers are turned off
+" Same when the buffer loses focus
+" see https://jeffkreeftmeijer.com/vim-number/
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+:  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+:augroup END
 ]])

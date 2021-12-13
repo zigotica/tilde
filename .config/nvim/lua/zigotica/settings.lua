@@ -24,6 +24,7 @@ vim.opt.mouse = 'a'
 
 vim.opt.ic = true
 vim.opt.cmdheight = 1 -- command bar height
+vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
 
