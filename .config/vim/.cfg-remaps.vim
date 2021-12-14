@@ -77,6 +77,14 @@ nnoremap <leader>sv :source ~/.config/vim/init.vim<CR>
 " Fuzzy find files, then open in horizontal split
 map <silent> <leader>f :Files<CR>
 
+" Add undo break points
+inoremap . .<c-g>u
+inoremap , ,<c-g>u
+inoremap [ [<c-g>u
+inoremap { {<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+
 " ---------------------------
 " Visual mode mappings
 " ---------------------------

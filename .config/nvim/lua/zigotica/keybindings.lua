@@ -64,6 +64,17 @@ map('n', 'N', 'Nzz')
 map('n', 'J', 'mzJ`z') -- mark position, J (move next line to end of current line), move back to position
 
 
+-- Undo breakpoints
+----------------------------------------------
+
+map('i', ',', ',<c-g>u')
+map('i', '.', '.<c-g>u')
+map('i', '!', '!<c-g>u')
+map('i', '[', '[<c-g>u')
+map('i', '?', '?<c-g>u')
+map('i', '{', '{<c-g>u')
+
+
 -- TELESCOPE
 ----------------------------------------------
 
