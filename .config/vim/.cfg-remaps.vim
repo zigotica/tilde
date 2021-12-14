@@ -86,10 +86,18 @@ inoremap ! !<c-g>u
 inoremap ? ?<c-g>u
 
 " ---------------------------
-" Visual mode mappings
+" Move / indent mappings
 " ---------------------------
 
-" move selected blocks in visual mode
+" move line up/down when in normal mode
+nnoremap <leader>k :m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
+
+" move line up/down when in insert mode
+inoremap <c-k> <esc>:m .-2<CR>==gi
+inoremap <c-j> <esc>:m .+1<CR>==gi
+
+" move selected block up/down in visual mode and reselect
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 

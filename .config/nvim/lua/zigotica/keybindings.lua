@@ -44,15 +44,19 @@ map('n', '<leader>x', ':!chmod +x %<CR>') -- make current file executable
 map('n', '<leader>sv', ':source ~/.config/nvim/init.lua<CR>') -- source vim settings
 
 
--- VISUAL MODE MAPPINGS
+-- MOVE / INDENT MAPPINGS
 ----------------------------------------------
 
--- move selected blocks
-map('v', 'J', ":m '>+1<CR>gv=gv")
-map('v', 'K', ":m '<-2<CR>gv=gv")
+map('n', '<leader>k', ':m .-2<CR>==') -- move line up/down when in normal mode
+map('n', '<leader>j', ':m .+1<CR>==')
 
--- indent
-map('v', '>', '>gv')
+map('i', '<c-k>', '<esc>:m .-2<CR>==gi') -- move line up/down when in insert mode
+map('i', '<c-j>', '<esc>:m .+1<CR>==gi')
+
+map('v', 'K', ":m '<-2<CR>gv=gv") -- move selected visual block up/down and reselect
+map('v', 'J', ":m '>+1<CR>gv=gv")
+
+map('v', '>', '>gv') -- indent visual block
 map('v', '<', '<gv')
 
 
