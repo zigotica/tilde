@@ -83,20 +83,19 @@ function strip_number() {
 }
 
 function node_v() {
-  if hash node 2>/dev/null; then
-    nv=$(node -v | tr -d '[v]')
-  fi
-
-  # do we have a .nvmrc to compare against
-  if [ -r ".nvmrc" ] && [ -f ".nvmrc" ]; then
-    expected="$(cat .nvmrc | tr -d '[:space:]' | tr -d '[v]')"
-    if version_gt $expected $nv; then
-      [ "$nv" != "" ] && echo -ne "${Red} ${nv}${alert_icon} "
+  nv=$(node -v | tr -d '[v]')
+  if [ $nv != "" ]; then
+    # do we have a .nvmrc to compare against
+    if [ -r ".nvmrc" ] && [ -f ".nvmrc" ]; then
+      expected="$(cat .nvmrc | tr -d '[:space:]' | tr -d '[v]')"
+      if version_gt $expected $nv; then
+        echo -ne "${Red} ${nv}${alert_icon} "
+      else
+        echo -ne "${Green} ${nv}"
+      fi
     else
-      [ "$nv" != "" ] && echo -ne "${Green} ${nv}"
+      echo -ne "${Orange} ${nv}"
     fi
-  else
-    [ "$nv" != "" ] && echo -ne "${Green} ${nv}"
   fi
 }
 
