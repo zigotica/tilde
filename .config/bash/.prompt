@@ -91,10 +91,8 @@ function node_v() {
       if version_gt $expected $nv; then
         echo -ne "${Red} ${nv}${alert_icon} "
       else
-        echo -ne "${Green} ${nv}"
+        echo -ne "${Green} ${nv} "
       fi
-    else
-      echo -ne "${Orange} ${nv}"
     fi
   fi
 }
@@ -128,10 +126,10 @@ function git_branch() {
   # show either the branch name or the detached HEAD
   _branch="$(git symbolic-ref --short HEAD)"
   if [[ $_branch != "" ]]; then
-    echo -ne "${Yellow} ${branch_icon} $_branch"
+    echo -ne "${Yellow}${branch_icon} $_branch"
   else
     hd="$(git rev-parse --short HEAD | head -n 1)"
-    echo -ne "${Red} ${branch_icon} detached HEAD $hd"
+    echo -ne "${Red}${branch_icon} detached HEAD $hd"
   fi
 }
 
