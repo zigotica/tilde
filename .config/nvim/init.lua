@@ -1,4 +1,4 @@
-require("plugins")
+require("zigotica.plugins")
 require("zigotica.colors")
 require("zigotica.settings")
 require("zigotica.autocmds")
