@@ -5,6 +5,18 @@ vim.cmd([[
   colorscheme Nordfox
 ]])
 
+
+-- syntax highlighting for some languages in markdown code blocks
+vim.g.markdown_fenced_languages = {
+  "bash",
+  "css", "scss",
+  "html",
+  "javascript", "typescript",
+  "json",
+  "lua",
+  "vim"
+}
+
 -- -----------------------------
 -- Helper to create new colorschemes
 -- Show syntax highlighting groups for word under cursor
