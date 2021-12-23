@@ -4,7 +4,7 @@ vim.cmd([[
 
   " Basic extensions
   Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-commentary'
+  Plug 'numToStr/Comment.nvim'
 
   " Lua basics
   Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
