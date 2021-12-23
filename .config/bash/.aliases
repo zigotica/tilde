@@ -29,6 +29,8 @@ alias ta="tmux attach -t $1"
 alias tk="tmux kill-server"
 # Install npm plugins from package.json and save to devDependencies
 alias npmdev="npm install --save-dev"
+alias yi="yarn install"
+alias ys="yarn start"
 # Empty the Trash on all mounted volumes and the main HDD.
 # Also, clear Apple’s System Logs to improve shell startup speed.
 # Finally, clear download history from quarantine. https://mths.be/bum
