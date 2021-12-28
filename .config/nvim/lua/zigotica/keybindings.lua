@@ -43,6 +43,17 @@ map('n', '<leader>x', ':!chmod +x %<CR>') -- make current file executable
 
 map('n', '<leader>sv', ':source ~/.config/nvim/init.lua<CR>') -- source vim settings
 
+-- SPECIAL CUT (d) / DELETE (x) MAPPINGS
+-- Allows to copy text outside vim, delete in vim, paste copied text
+-- If we want to paste deleted text we just add the leader before p/P
+----------------------------------------------
+
+map('n', 'd', '"1d') -- remap cut and delete to store text to register number 1
+map('v', 'd', '"1d')
+map('n', 'x', '"1x')
+map('v', 'x', '"1x')
+map('n', '<leader>p', '"1p') -- paste last deleted or cut text
+map('n', '<leader>P', '"1P')
 
 -- MOVE / INDENT MAPPINGS
 ----------------------------------------------
