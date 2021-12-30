@@ -13,7 +13,7 @@ function is_ssh() {
 
 function is_tmux() {
   if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
-    echo -ne " 舘"
+    echo -ne " 僧"
   else
     echo ""
   fi
