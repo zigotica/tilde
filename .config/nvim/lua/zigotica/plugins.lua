@@ -10,7 +10,7 @@ vim.cmd([[
   Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
 
   " Menu 
-  Plug 'scrooloose/nerdtree'
+  Plug 'kyazdani42/nvim-tree.lua'
 
   " Telescope core
   Plug 'nvim-lua/plenary.nvim'

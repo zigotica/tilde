@@ -36,8 +36,7 @@ map('n', '<leader>h', ':nohls<CR>') -- remove search highlight
 
 map('n', 'Q', '<NOP>') -- dont use Ex mode
 
-map('n', '<leader>m', ':NERDTreeToggle<CR>') -- toggle Nerd Tree visibility
-map('n', '<leader>sf', ':NERDTreeFind<CR>', { silent = true }) -- show file in enclosing folder
+map('n', '<leader>m', ':NvimTreeToggle<CR>') -- toggle Nerd Tree visibility
 
 map('n', '<leader>x', ':!chmod +x %<CR>') -- make current file executable
 
