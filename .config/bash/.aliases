@@ -18,8 +18,8 @@ if [[ `which python3` != "" ]]; then
   alias pip="pip3"
 fi
 if [[ `which exa` != "" ]]; then
-  alias ls="exa -l --git -h -g -a --group-directories-first --icons"
-  alias lst="exa -l --git -h -g -a -T -L=2 --icons"
+  alias es="exa -l --git -h -g -a --group-directories-first --icons"
+  alias est="es -T -L=2"
 fi
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
