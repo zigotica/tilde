@@ -21,6 +21,9 @@ export LC_ALL=$LANG
 export DIR_PERSONAL="~/Documents/personal/"
 export DIR_WORK="~/Documents/work/"
 
+# exa icons
+export EXA_ICON_SPACING=2
+
 # pipe fzf searches through ag
 # it's faster and allows filtering out .gitignore content
 if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
