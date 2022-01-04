@@ -1,6 +1,10 @@
 require('telescope').setup{
   defaults = {
     prompt_prefix = "z: ",
+    sorting_strategy = "ascending",
+    layout_config = {
+      prompt_position = "top",
+    },
     mappings = {-- change default Enter to open in right split
       n = {
         ["<CR>"] = "select_vertical"
