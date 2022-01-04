@@ -2,22 +2,22 @@ require'nvim-web-devicons'.setup {
   override = {
     ["test.spec.js"] = {
       icon = "ﭧ",
-      color = "#cbcb41",
+      color = "#e0bb70",
       name = "JavascriptTest"
     },
     ["tsx"] = {
       icon = "",
-      color = "#81a1c1",
+      color = "#99d7e8",
       name = "TSReact"
     },
     ["html"] = {
       icon = "",
-      color = "#81a1c1",
+      color = "#99d7e8",
       name = "HTML"
     },
     ["md"] = {
       icon = "",
-      color = "#81a1c1",
+      color = "#99d7e8",
       name = "Markdown"
     }
   },
