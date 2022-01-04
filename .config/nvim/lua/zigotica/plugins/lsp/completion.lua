@@ -83,8 +83,9 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'cmp_tabnine' },
     { name = 'nvim_lsp' },
-    { name = 'vsnip' }, -- For vsnip users.
     { name = 'buffer' },
+    { name = 'path' },
+    { name = 'vsnip' }, -- For vsnip users.
   }),
   formatting = {
     format = function(entry, vim_item)
@@ -99,12 +100,12 @@ cmp.setup({
       end
       -- Sources
       vim_item.menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
         cmp_tabnine = "[Tab9]",
+        nvim_lsp = "[LSP]",
+        buffer = "[Buffer]",
         path = "[Path]",
-        vsnip = "[VSnip]",
         nvim_lua = "[Lua]",
+        vsnip = "[VSnip]",
       })[entry.source.name]
       return vim_item
     end
