@@ -6,48 +6,29 @@
 
 let mapleader = " "
 
-" help
-map <F1> :help<CR>
-
-" Autoformat file
-nnoremap <F2> gg=G
-vnoremap <F2> =
-
-" resize horizontal splits
-nnoremap <F3>  :resize +2<CR>
-nnoremap <F4> :resize -2<CR>
-
-" navigate vertical splits
-nnoremap <F5> <C-w>h
-nnoremap <F6> <C-w>l
-
-" resize vertical splits
-nnoremap <F7> :vertical resize -2<CR>
-nnoremap <F8> :vertical resize +2<CR>
-
-" save file
-map <F10> :w<CR>
-
-" spell checking
-map <F12> :setlocal spell! spelllang=en_gb<CR>
-
-" top/bottom of document/screen
-nnoremap <Home> ggk<CR>
-nnoremap <End> G<CR>
-nnoremap <PageUp> <C-B><CR>
-nnoremap <PageDown> <C-F><CR>
-
-" remove search highlight
-map <leader><ESC> :nohls<CR>
-
-" toggle invisible characters
-function! ToggleInvisiblChars()
-  set list!
-endfunction
-nnoremap <leader>i :call ToggleInvisiblChars()<CR>
-
 " Don't use Ex mode
 nnoremap Q <nop>
+
+" save file
+map <F1> :w<CR>
+
+" resize vertical splits
+nnoremap <F2> :vertical resize -2<CR>
+nnoremap <F3> :vertical resize +2<CR>
+
+" navigate vertical splits
+nnoremap <F4> <C-w>h
+nnoremap <F5> <C-w>l
+
+" spell checking
+map <F8> :setlocal spell! spelllang=en_gb<CR>
+
+" Autoformat file / visually selected block
+nnoremap <F9> gg=G
+vnoremap <F9> =
+
+" remove search highlight
+map <leader>h :nohls<CR>
 
 " toggle NerdTree visibility
 map <leader>m :NERDTreeToggle<CR>
@@ -59,9 +40,7 @@ nnoremap <leader>x :!chmod +x %<CR>
 
 " Display the buffer list and invoke the ':buffer' command. 
 " You can enter the desired buffer number and hit <Enter> to edit the buffer
-nnoremap <leader>b :ls<CR>:buffer<Space>
-" Same but invoking ':vertical sb' command. 
-nnoremap <leader>bv :ls<CR>:vertical sb<Space>
+nnoremap <leader>b :ls<CR>:vertical sb<Space>
 
 " Close all buffers except the one being edited
 " We also also close all possible remaining splits
@@ -77,13 +56,21 @@ nnoremap <leader>sv :source ~/.config/vim/init.vim<CR>
 " Fuzzy find files, then open in horizontal split
 map <silent> <leader>f :Files<CR>
 
-" Add undo break points
-inoremap . .<c-g>u
-inoremap , ,<c-g>u
-inoremap [ [<c-g>u
-inoremap { {<c-g>u
-inoremap ! !<c-g>u
-inoremap ? ?<c-g>u
+" ---------------------------
+" Special c / d / x mappings
+" ---------------------------
+" Allows to copy text outside vim, delete in vim, paste copied text
+" If we want to paste deleted text we just add the leader before p/P
+
+nnoremap d "1d
+vnoremap d "1d
+nnoremap c "1c
+vnoremap c "1c
+nnoremap x "1x
+vnoremap x "1x
+
+nnoremap <leader>p "1p
+nnoremap <leader>P "1P
 
 " ---------------------------
 " Move / indent mappings
@@ -104,6 +91,16 @@ vnoremap K :m '<-2<CR>gv=gv
 " visual mode indent, keeping selection
 vnoremap > >gv
 vnoremap < <gv
+
+" ---------------------------
+" Add undo break points
+" --------------------------- 
+inoremap . .<c-g>u
+inoremap , ,<c-g>u
+inoremap [ [<c-g>u
+inoremap { {<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
 
 " ---------------------------
 " coc/tabnine mappings
