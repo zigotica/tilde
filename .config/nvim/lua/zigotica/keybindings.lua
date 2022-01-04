@@ -70,14 +70,6 @@ map('v', '>', '>gv') -- indent visual block
 map('v', '<', '<gv')
 
 
--- Keep things centered
-----------------------------------------------
-
-map('n', 'n', 'nzz')
-map('n', 'N', 'Nzz')
-map('n', 'J', 'mzJ`z') -- mark position, J (move next line to end of current line), move back to position
-
-
 -- Undo breakpoints
 ----------------------------------------------
 
