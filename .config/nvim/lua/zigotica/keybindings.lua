@@ -14,33 +14,26 @@ end
 map('n', '<Space>', '<NOP>', { silent = true })
 vim.g.mapleader = ' '
 
-map('', '<F1>', ':help<CR>') -- help
+map('n', 'Q', '<NOP>') -- dont use Ex mode
 
-map('n', '<F2>', 'gg=G') -- autoformat file, normal mode
-map('v', '<F2>', '=') -- autoformat file, visual mode
+map('', '<F1>', ':w<CR>') -- save file
 
-map('n', '<F3>', ':resize +2<CR>') -- resize horizontal split
-map('n', '<F4>', ':resize -2<CR>')
+map('n', '<F2>', ':vertical resize -2<CR>') -- resize vertical splits
+map('n', '<F3>', ':vertical resize +2<CR>')
 
-map('n', '<F5>', ':<C-w>h') -- navigate vertical splits
-map('n', '<F6>', ':<C-w>l')
+map('n', '<F4>', ':<C-w>h') -- navigate vertical splits
+map('n', '<F5>', ':<C-w>l')
 
-map('n', '<F7>', ':vertical resize -2<CR>') -- resize vertical split
-map('n', '<F8>', ':vertical resize +2<CR>')
+map('', '<F8>', ':setlocal spell! spelllang=en_gb<CR>') -- toggle english spell checking
 
-map('', '<F10>', ':w<CR>') -- save file
-
-map('', '<F12>', ':setlocal spell! spelllang=en_gb<CR>') -- toggle english spell checking
+map('n', '<F9>', 'gg=G') -- autoformat file
+map('v', '<F9>', '=') -- autoformat visually selected block
 
 map('n', '<leader>h', ':nohls<CR>') -- remove search highlight
 
-map('n', 'Q', '<NOP>') -- dont use Ex mode
-
-map('n', '<leader>m', ':NvimTreeToggle<CR>') -- toggle Nerd Tree visibility
+map('n', '<leader>m', ':NvimTreeToggle<CR>') -- toggle NVimTree visibility
 
 map('n', '<leader>x', ':!chmod +x %<CR>') -- make current file executable
-
-map('n', '<leader>sv', ':source ~/.config/nvim/init.lua<CR>') -- source vim settings
 
 -- SPECIAL CHANGE (c) / CUT (d) / DELETE (x) MAPPINGS
 -- Allows to copy text outside vim, delete in vim, paste copied text
@@ -97,8 +90,8 @@ map('n', '<leader>b',  ':Telescope buffers <CR>') -- search files within open bu
 
 -- Close all buffers except the one being edited
 -- We also also close all possible remaining splits
--- Finally, open NERDTree but focus on the file
-map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NERDTree<CR><C-w>l')
+-- Finally, open NvimTree and focus on the open buffer
+map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NvimTreeOpen<CR><C-w>l')
 
 
 -- GIT
