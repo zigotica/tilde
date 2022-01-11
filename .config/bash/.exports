@@ -59,7 +59,7 @@ export NVM_DIR="$HOME/.nvm"
 # (i.e. installed via brew install node or any formula dependencies)
 for f in $HOME/.nvm/versions/node/*; do
   if [ -d "$f" ]; then
-      export PATH=$f/bin:$PATH
+      PATH=$f/bin:$PATH
   fi
 done
 
