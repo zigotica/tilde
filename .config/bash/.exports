@@ -35,6 +35,8 @@ fi
 # curl
 export LDFLAGS="-L/${BREW_PREFIX}/opt/curl/lib"
 export CPPFLAGS="-I/${BREW_PREFIX}/opt/curl/include"
+export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/curl/lib/pkgconfig"
+PATH="${BREW_PREFIX}/opt/curl/bin:$PATH"
 PATH="${BREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
 PATH="${BREW_PREFIX}/opt/findutils/libexec/gnubin:$PATH"
 PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:$PATH"
@@ -51,5 +53,14 @@ PATH=$PATH:$HOME/bin:$HOME/.config/bin:/usr/local/bin:/usr/local/sbin:usr/bin:/u
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Dynamically add all node versions installed via nvm to beginning of PATH,
+# to take precedence over any other node version 
+# (i.e. installed via brew install node or any formula dependencies)
+for f in $HOME/.nvm/versions/node/*; do
+  if [ -d "$f" ]; then
+      export PATH=$f/bin:$PATH
+  fi
+done
 
 export PATH
