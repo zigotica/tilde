@@ -37,7 +37,7 @@ au FocusLost,WinLeave * :silent! w
 autocmd Filetype * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " allow system clipboard
-set clipboard+=unnamedplus
+set clipboard^=unnamed,unnamedplus
 
 " Splits opens at bottom or right unlike vim defaults
 set splitbelow splitright
