@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
-eval $(/opt/homebrew/bin/brew shellenv)
-BREW_PREFIX=$(brew --prefix)
+if [ "$(uname -s)" == "Darwin" ]; then
+  if [[ `uname -v | grep "ARM64"` != "" ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv)
+  else
+    eval $(/usr/local/bin/brew shellenv)
+  fi
+
+  BREW_PREFIX=$(brew --prefix)
+
+  # curl
+  export LDFLAGS="-L/${BREW_PREFIX}/opt/curl/lib"
+  export CPPFLAGS="-I/${BREW_PREFIX}/opt/curl/include"
+  export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/curl/lib/pkgconfig"
+  PATH="${BREW_PREFIX}/opt/curl/bin:$PATH"
+  PATH="${BREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
+  PATH="${BREW_PREFIX}/opt/findutils/libexec/gnubin:$PATH"
+  PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:$PATH"
+fi
 

@@ -32,15 +32,6 @@ if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-# curl
-export LDFLAGS="-L/${BREW_PREFIX}/opt/curl/lib"
-export CPPFLAGS="-I/${BREW_PREFIX}/opt/curl/include"
-export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/curl/lib/pkgconfig"
-PATH="${BREW_PREFIX}/opt/curl/bin:$PATH"
-PATH="${BREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
-PATH="${BREW_PREFIX}/opt/findutils/libexec/gnubin:$PATH"
-PATH="${BREW_PREFIX}/opt/gnu-sed/libexec/gnubin:$PATH"
-
 # Puppeteer needed for visual regression tests
 # recommended: brew install --cask eloston-chromium
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
