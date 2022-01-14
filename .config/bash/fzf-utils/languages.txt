@@ -1,6 +1,9 @@
 bash
 c
 cpp
+css
 javascript
+html
+lua
 node
 typescript
