@@ -24,4 +24,5 @@ if [ -t 1 ]; then
   bind '"\010": "cheatsh\015"'
 fi
 
-
+# Rust
+. "$HOME/.cargo/env"
