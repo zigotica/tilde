@@ -2,7 +2,7 @@ vim.opt.termguicolors = true
 
 vim.cmd([[
   syntax enable
-  colorscheme Nordfox
+  colorscheme nordfox
 ]])
 
 
