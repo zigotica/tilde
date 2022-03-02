@@ -38,7 +38,7 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo 
 #####################################################################################
 #                                                                                 Git
 #####################################################################################
-alias dot='/usr/bin/git --git-dir=/Users/$USER/._dotfiles.git/ --work-tree=/Users/$USER'
+alias dot='/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME'
 alias ds="dot status"
 alias da="dot add"
 alias dco="dot commit"
