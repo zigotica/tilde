@@ -14,6 +14,7 @@ end
 
 -- setup servers from the list
 local servers = {
+  'ansiblels',
   'bashls',
   'cssls',
   'eslint',
