@@ -89,15 +89,8 @@ cmp.setup({
   }),
   formatting = {
     format = function(entry, vim_item)
-      -- Kind icons
-      vim_item.kind = string.format('%s %s', source_type_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
-      -- tweak Tabnine
-      if entry.source.name == 'cmp_tabnine' then
-        if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-          vim_item.menu = entry.completion_item.data.detail .. ' ' .. vim_item.menu
-        end
-        vim_item.kind = ''
-      end
+      -- This concatenates the icons with the name of the item kind
+      vim_item.kind = string.format('%s %s', source_type_icons[vim_item.kind], vim_item.kind)
       -- Sources
       vim_item.menu = ({
         cmp_tabnine = "[Tab9]",
@@ -107,6 +100,18 @@ cmp.setup({
         nvim_lua = "[Lua]",
         vsnip = "[VSnip]",
       })[entry.source.name]
+      -- tweak Tabnine
+      if entry.source.name == 'cmp_tabnine' then
+        vim_item.kind = ''
+        local detail = (entry.completion_item.data or {}).detail
+        if detail and detail:find('.*%%.*') then
+          vim_item.kind = vim_item.kind .. ' ' .. detail
+        end
+
+        if (entry.completion_item.data or {}).multiline then
+          vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
+        end
+      end
       return vim_item
     end
   },

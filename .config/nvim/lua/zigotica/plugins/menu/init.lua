@@ -1,13 +1,3 @@
-vim.g.nvim_tree_highlight_opened_files = 1
-vim.g.nvim_tree_group_empty = 1
-vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_show_icons = {
-  git= 1,
-  folders= 1,
-  files= 1,
-  folder_arrows= 1
-}
-
 require'nvim-tree'.setup {
   open_on_setup       = true,
   update_cwd          = true,
@@ -37,6 +27,19 @@ require'nvim-tree'.setup {
     }
   },
   view = {
-    auto_resize = true,
+    adaptive_size = true,
+  },
+  renderer = {
+    highlight_opened_files = "none",
+    group_empty = true,
+    highlight_git = true,
+    icons = {
+      show = {
+        git = true,
+        folder = true,
+        file = true,
+        folder_arrow = true,
+      }
+    }
   }
 }
