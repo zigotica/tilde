@@ -24,6 +24,10 @@ export DIR_WORK="~/Documents/work/"
 # exa icons
 export EXA_ICON_SPACING=2
 
+if [[ `which python3` != "" ]]; then
+  export PYTHON=python3
+fi
+
 # pipe fzf searches through ag
 # it's faster and allows filtering out .gitignore content
 if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
