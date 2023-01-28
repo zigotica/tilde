@@ -34,6 +34,7 @@ local servers = {
   'eslint',
   'html',
   'jsonls',
+  'rust_analyzer',
   'tsserver',
   'vuels',
 }
