@@ -22,6 +22,7 @@ vim.cmd([[
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/nvim-cmp'
   Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+  Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
   Plug 'hrsh7th/cmp-vsnip'
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/cmp-path'
