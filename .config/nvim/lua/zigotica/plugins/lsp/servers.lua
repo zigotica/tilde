@@ -19,6 +19,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "<leader>dk", vim.diagnostic.goto_prev, opts)
   -- show diagnostic for all files in fzf list (CTRL + Q to send to quicklist)
   vim.keymap.set("n", "<leader>dl", "<cmd>Telescope diagnostics<CR>", opts)
+  -- code actions
+  vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
   -- rename symbol
   vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)
 
