@@ -41,8 +41,11 @@ fi
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=/Applications/Chromium.app/
 
-# path
-PATH=$PATH:$HOME/bin:$HOME/.config/bin:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
+# Path folders
+PATH=$PATH:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
+
+# Personal folders (recursive)
+PATH=$HOME/bin$(find $HOME/.config/bin -type d -printf :%p):$PATH
 
 # node/nvm
 export NVM_DIR="$HOME/.nvm"
@@ -59,3 +62,4 @@ for f in $HOME/.nvm/versions/node/*; do
 done
 
 export PATH
+
