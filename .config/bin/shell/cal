@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# show calendar with current and holiday days colored, 3 months by default
+# accepts extra arguments for specific month/year
+# example: cal
+# example: cal 2022
+# example: cal jan 2022
+
+if [[ -n "$@" ]]; then
+  gcal -s mon --cc-holidays=ES -H '\e[7m\e[34m:\e[0m:\e[7m\e[31m:\e[0m' $@
+else
+  gcal -s mon --cc-holidays=ES -H '\e[7m\e[34m:\e[0m:\e[7m\e[31m:\e[0m' .+
+fi;
+
