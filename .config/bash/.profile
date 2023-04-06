@@ -19,7 +19,7 @@ if [ -t 1 ]; then
   # ctrl+g: go to favourite folder finder and tmux session
   bind '"\C-g": "gt\015"'
   # ctrl+f: save folder to gt list of folders
-  bind '"\C-f": "f\015"'
+  bind '"\C-f": "folderfav\015"'
   # ctrl+h: launch cheatsheet helper
   bind '"\C-h": "cheatsh\015"'
 fi

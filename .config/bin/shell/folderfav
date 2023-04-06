@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Add/Remove current folder (in ~ format) to/from fzf personal/work favourites
+# These can then be used by the goto function
+# use: folderfav
+# shortcut: Ctrl+f, see .profile
+
+folder=$(echo $PWD | sed "s|$HOME|~|g")
+
+# Save in work list by default
+list="Work"
+file="$HOME/.config/bash/fzf-utils/dirs-work.txt"
+workfolder="~/Documents/work"
+projectsfolder="~/Documents/projectes"
+
+# set personal file as target if not inside work/projectes hierarchy
+if [[ $folder != *"$workfolder"* ]] && [[ $folder != *"$projectsfolder"* ]]; then
+  file="$HOME/.config/bash/fzf-utils/dirs-personal.txt"
+  list="Personal"
+fi
+
+# If folder is not listed in file, append it, else remove it
+if ! grep -xqF "$folder" "$file"; then
+  echo "$folder" >> $file
+  echo "Appended $folder to $list GoTo fzf list"
+else
+  grep -xFv "$folder" $file > tmp_$$ && mv -f tmp_$$ $file
+  echo "Removed $folder from $list GoTo fzf list"
+fi
