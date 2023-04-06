@@ -9,16 +9,6 @@ function mkd() {
 	mkdir -p "$@" && cd "$_";
 }
 
-# Return n number of history items
-function hist() {
-  history | tail -"$@";
-}
-
-# Return history items matching a grep param
-function histg() {
-  history | grep "$@";
-}
-
 # Bulk rename files/dirs
 # use: ren <original> <changed>
 # Requires https://github.com/neurobin/rnm
