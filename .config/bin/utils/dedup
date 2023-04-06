@@ -30,6 +30,7 @@ else
 fi;
 
 # Show a list of files that are duplicates in terms of contents
+# modified from https://www.youtube.com/watch?v=wj7NPnKRh44
 if [[ $(echo $files | wc -w) -gt 0 ]]; then
   md5sum $files | awk '{ count[$1]++; name[$1]=name[$1] " " $2 } END { for (k in count) if(count[k] > 1) print "duplicates: " name[k] }'
 fi
