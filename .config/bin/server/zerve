@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# start quick server from folder, optional port as argument
+# use case: zerve [<port num>]
+if [[ -n "$@" ]]; then
+  python3 -m http.server $@
+else
+  python3 -m http.server 8888
+fi;
+

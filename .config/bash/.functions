@@ -51,11 +51,6 @@ function cal() {
 	fi;
 }
 
-# start quick server from folder
-function zerve() {
-  python -m http.server 7777
-}
-
 # youtube downloader 
 # use: ytd video-url
 function ytd() {
