@@ -20,11 +20,6 @@ function ytda() {
 	youtube-dl -x --audio-format flac $1
 }
 
-# ffmpeg quick edits (remove n secs from start or end of file)
-# use: trims 100 'input-file.extension' 'output-file.extension' 
-function trims(){ ffmpeg -ss $1 -i "$2" -c copy "$3"; }
-function trime(){ ffmpeg -ss 0 -t $1 -i "$2" -c copy "$3"; }
-
 # cheatsheet helper using fzf on predefined languages/utils
 # then create a tmux pane to show the cheatsheet (using less)
 # requires tmux to be already running

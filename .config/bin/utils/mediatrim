@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Remove n secs from start or end of media file into an output file.
+# Mandatory arguments:
+# -s <number of secs>
+# -f(rom) <"s" | "e">
+# -i <input file>
+# -o <output file>
+# example mediatrim -s 10 -f "s" -i i.mp4 -o o.mp4
+
+err() {
+  echo $1
+  echo "Usage: $0 -s <number of secs> -f <'s' | 'e'> -i <input file> -o <output file>" >&2
+  exit 1
+}
+
+while getopts s:f:i:o: option
+do
+  case "${option}" in
+    s) secs=${OPTARG};;
+    f) from=${OPTARG};;
+    i) input=${OPTARG};;
+    o) output=${OPTARG};;
+    *) 
+      err "Not a valid argument. "
+      ;;
+  esac
+done
+
+if [ -z "$secs" ] || [ -z "$from" ] || [ -z "$input" ] || [ -z "$output" ]; then
+  err "Missing arguments. "
+fi
+
+if [ "$from" == "s" ]; then
+  ffmpeg -ss $secs -i "$input" -c copy "$output";
+elif [ "$from" == "e" ]; then
+  ffmpeg -i "$input" -ss $secs  -c copy "$output";
+else
+  err "Wrong argument value. "
+fi
+
