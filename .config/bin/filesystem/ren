@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Bulk rename files/dirs
+# Requires https://github.com/neurobin/rnm
+# use case: ren <original> <changed>
+
+if [[ $# -eq 2 ]] && [[ `which rnm` != "" ]]; then
+  rnm -dp -1 -ss "$1" -rs "/$1/$2/" *
+else
+  echo -e "\nPlease call 'ren <original> <changed>' to run this command!\n"
+fi

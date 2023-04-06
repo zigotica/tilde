@@ -9,17 +9,6 @@ function mkd() {
 	mkdir -p "$@" && cd "$_";
 }
 
-# Bulk rename files/dirs
-# use: ren <original> <changed>
-# Requires https://github.com/neurobin/rnm
-function ren() {
-  if [[ $# -eq 2 ]] && [[ `which rnm` != "" ]]; then
-    rnm -dp -1 -ss "$1" -rs "/$1/$2/" *
-  else
-    echo -e "\nPlease call 'ren <original> <changed>' to run this command!\n"
-  fi
-}
-
 # Create a data URL from a file
 function dataurl() {
 	local mimeType=$(file -b --mime-type "$1");
