@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Detect -f (files) -d (recursion depth) optional arguments
+while getopts d:f: option
+do
+    case "${option}" in
+        d) md=${OPTARG};;
+        f) files=${OPTARG};;
+        *) 
+            echo "usage: $0 [-d <recursion depth>] [-f '<file 1> <file 2> ... <file n>']" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# recursion depth check for valid integer
+# https://stackoverflow.com/a/61835747
+# 1 by default, or if zero or not integer passed through -d
+if [ "$md" ] && [ $md != 0 ] && [ -z "${md//[0-9]}" ]; then
+  md=$md
+else
+  md=1
+fi;
+
+# Use whatever files passed through -f, or use all files otherwise (depth taken into account)
+if [ "$files" ]; then
+  files=$files
+else
+  files=$(find . -maxdepth $md -type f)
+fi;
+
+# Show a list of files that are duplicates in terms of contents
+if [[ $(echo $files | wc -w) -gt 0 ]]; then
+  md5sum $files | awk '{ count[$1]++; name[$1]=name[$1] " " $2 } END { for (k in count) if(count[k] > 1) print "duplicates: " name[k] }'
+fi
