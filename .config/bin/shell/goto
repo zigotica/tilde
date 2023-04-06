@@ -3,7 +3,8 @@
 # GoTo: find and move to favourite folder using fzf
 # then create a tmux session there (starts tmux if not running)
 # Inspired by ThePrimeagen
-# Ctrl+g, see .profile
+# use: goto
+# shortcut: Ctrl+g, see .profile
 
 targets=$(cat ~/.config/bash/fzf-utils/dirs-personal.txt  ~/.config/bash/fzf-utils/dirs-work.txt | tr "\n" " " | sed "s|~|$HOME|g")
 selected=$(find $targets -mindepth 1 -maxdepth 1 -type d | fzf)
