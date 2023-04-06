@@ -10,6 +10,6 @@ fi
 if [[ -n "$@" ]]; then
   du $__LOCAL_FS_ARGS -- "$@";
 else
-  du $__LOCAL_FS_ARGS -- ./*;
+  du $__LOCAL_FS_ARGS -- .[^.]* ./*;
 fi;
 
