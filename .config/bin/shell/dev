@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# setup tmux session for development
+# will create 1 main pane for coding, and two bottom panes for terminal
+# requires being called from inside a tmux window/session
+# optional argument:
+# -l __LOCAL_layout (by default vh meaning 1 main on top, 2 on bottom)
+#    can also be any combination of v / h
+#    for instance:
+#    -l hhh will create 3 horizontal splits, while 
+#    -l hvvv will create one horizontal then 3 vertical
+if [[ ! "$TERM" =~ screen ]]; then
+  echo "You need to start a tmux session before running this function"
+else
+  __LOCAL_layout="vh"
+
+  # get optional __LOCAL_layout from -l argument
+  while getopts 'l:' opt
+  do
+    case $opt in
+      l) __LOCAL_layout="$OPTARG"; ;;
+    esac
+  done
+
+  # create splits
+  vh=$(echo $__LOCAL_layout | tr -cd 'vh')
+  for (( i=0; i<${#vh}; i++ )); do
+    what="${vh:$i:1}"
+    if [[ $i = 0 ]]; then
+      # main split 75%
+      tmux splitw -$what -p 25
+    else
+      tmux splitw -$what
+    fi
+  done
+
+  # run vim in 1st split
+  tmux selectp -t 1 
+  tmux send-keys "v" C-m
+  # run cd . in the other splits so they can get the cdnvm
+  tmux selectp -t 2
+  tmux send-keys "cd ." C-m
+  tmux selectp -t 3
+  tmux send-keys "cd ." C-m
+fi
