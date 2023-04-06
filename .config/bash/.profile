@@ -17,7 +17,7 @@ complete -d cd
 if [ -t 1 ]; then
   bind 'set completion-ignore-case on' # Use case-insensitive TAB autocompletion
   # ctrl+g: go to favourite folder finder and tmux session
-  bind '"\C-g": "gt\015"'
+  bind '"\C-g": "goto\015"'
   # ctrl+f: save folder to gt list of folders
   bind '"\C-f": "folderfav\015"'
   # ctrl+h: launch cheatsheet helper

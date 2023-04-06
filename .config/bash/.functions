@@ -76,26 +76,3 @@ cdnvm(){
 }
 alias cd='cdnvm' # alias after the function, just in case
 
-# GoTo: find and move to favourite folder using fzf
-# then create a tmux session there (starts tmux if not running)
-# Inspired by ThePrimeagen
-# ctrl+g, see .profile
-function gt() {
-  targets=$(cat ~/.config/bash/fzf-utils/dirs-personal.txt  ~/.config/bash/fzf-utils/dirs-work.txt | tr "\n" " " | sed "s|~|$HOME|g")
-  selected=$(find $targets -mindepth 1 -maxdepth 1 -type d | fzf)
-  foldername=$(basename "$selected" | tr . _)
-
-  if ! tmux has-session -t "$foldername" 2> /dev/null; then
-    tmux new-session -s "$foldername" -c "$selected" -d
-    tmux send-keys -t "$foldername" "cd $selected" C-m
-    if [[ ! "$TERM" =~ screen ]]; then
-      tmux attach -t "$foldername"
-    else
-      tmux switch-client -t "$foldername"
-    fi
-  else
-    tmux attach -t "$foldername"
-  fi
-}
-
-
