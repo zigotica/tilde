@@ -21,7 +21,7 @@ if [ -t 1 ]; then
   # ctrl+f: save folder to gt list of folders
   bind '"\C-f": "folderfav\015"'
   # ctrl+h: launch cheatsheet helper
-  bind '"\C-h": "cheatsh\015"'
+  bind '"\C-h": "cheatsheet\015"'
 fi
 
 # Rust

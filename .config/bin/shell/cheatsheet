@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# cheatsheet helper using fzf on predefined languages/utils
+# then create a tmux pane to show the cheatsheet (using less)
+# requires tmux to be already running
+# Inspired by ThePrimeagen
+# use: cheatsheet
+# shortcut: Ctrl+h, see .profile
+
+if [[ ! "$TERM" =~ screen ]]; then
+  echo "You need to start a tmux session before running the chetsheet function"
+else
+  languages=$(cat ~/.config/bash/fzf-utils/languages.txt)
+  utils=$(cat ~/.config/bash/fzf-utils/utils.txt)
+  selected=$(echo -e "$languages\n$utils" | fzf)
+
+  read -p "SEEK IN CHEATSHEET: " what
+
+  if echo "$languages" | grep -qs $selected; then
+    tmux splitw -h bash -c "curl cht.sh/$selected/$(echo "$what" | tr " " "+") | less -R"
+  else
+    tmux splitw -h bash -c "curl cht.sh/$selected~$what | less -R"
+  fi
+fi

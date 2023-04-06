@@ -20,29 +20,6 @@ function ytda() {
 	youtube-dl -x --audio-format flac $1
 }
 
-# cheatsheet helper using fzf on predefined languages/utils
-# then create a tmux pane to show the cheatsheet (using less)
-# requires tmux to be already running
-# Inspired by ThePrimeagen
-# ctrl+h, see .profile
-function cheatsh() {
-  if [[ ! "$TERM" =~ screen ]]; then
-    echo "You need to start a tmux session before running the chetsheet function"
-  else
-    languages=$(cat ~/.config/bash/fzf-utils/languages.txt)
-    utils=$(cat ~/.config/bash/fzf-utils/utils.txt)
-    selected=$(echo -e "$languages\n$utils" | fzf)
-
-    read -p "SEEK IN CHEATSHEET: " what
-
-    if echo "$languages" | grep -qs $selected; then
-      tmux splitw -h bash -c "curl cht.sh/$selected/$(echo "$what" | tr " " "+") | less -R"
-    else
-      tmux splitw -h bash -c "curl cht.sh/$selected~$what | less -R"
-    fi
-  fi
-}
-
 # https://github.com/nvm-sh/nvm#automatically-call-nvm-use
 # use node version defined in .nvmrc file automatically upon cd into a project,
 # if that project folder includes a .nvmrc file,
