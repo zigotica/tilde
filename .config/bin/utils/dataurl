@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Create a data URL from a file
+__LOCAL_mimeType=$(file -b --mime-type "$1");
+if [[ $__LOCAL_mimeType == text/* ]]; then
+  __LOCAL_mimeType="${__LOCAL_mimeType};charset=utf-8";
+fi
+echo "data:${__LOCAL_mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
