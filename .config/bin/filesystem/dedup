@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 # Detect -f (files) -d (recursion depth) optional arguments
+# use case: dedup [-d <recursion depth>] [-f '<file 1> <file 2> ... <file n>']
+# example: dedup -d 3
+# example: dedup -f 'a.txt b.txt'
+
 while getopts d:f: option
 do
     case "${option}" in
