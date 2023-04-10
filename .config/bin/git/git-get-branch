@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Get git branch
+# Optional flag to check dotfiles repo instead
+# example: git-get-branch
+# example: git-get-branch -d
+
+what=git
+while getopts d option
+do
+    case $option in
+        d) what="/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME";;
+        *) what=git;;
+    esac
+done
+
+echo $($what symbolic-ref --short HEAD)

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# count untracked files in repo
+
+strip-string $(echo $(git ls-files --others --exclude-standard | wc -l))

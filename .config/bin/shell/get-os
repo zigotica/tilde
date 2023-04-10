@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+os=""
+krnl="$(uname -s)"
+
+if [ "$krnl" == "Darwin" ]; then
+  os="macos"
+elif [ "$krnl" == "Linux" ]; then
+  if [ -e "/etc/os-release" ]; then
+    os="$(. /etc/os-release; printf "%s" "$ID")"
+  fi
+fi
+
+echo $os;

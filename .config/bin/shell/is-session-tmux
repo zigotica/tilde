@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+function _is_tmux() {
+  if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
+    true; return
+  else
+    false; return
+  fi
+}
+_is_tmux

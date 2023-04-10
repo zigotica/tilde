@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# count remote occurrences of a branch
+# example: git-count-remote-branch dev
+
+strip-string $(echo $(git rev-parse --branches=refs/remotes --symbolic-full-name --all | grep $1 | wc -l))

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# count commits difference between two branches
+# example: git-count-commits-diff dev master
+
+strip-string $(echo $(git rev-list $1..$2 --count))

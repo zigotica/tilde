@@ -2,17 +2,16 @@
 #####################################################################################
 #                                                                          CONNECTION
 #####################################################################################
-function is_ssh() {
-  if [[ -n $SSH_CONNECTION ]]; then
+function __is_ssh() {
+  if is-session-ssh; then
     echo -ne "${Red} "
   else
     echo ""
   fi
-
 }
 
-function is_tmux() {
-  if [ "$TERM" = "screen-256color" ] && [ -n "$TMUX" ]; then
+function __is_tmux() {
+  if is-session-tmux; then
     echo -ne " 僧"
   else
     echo ""
@@ -24,15 +23,15 @@ function is_tmux() {
 #####################################################################################
 # you might need to install icon fonts and make them available to terminal
 # https://github.com/gabrielelana/awesome-terminal-fonts/wiki/OS-X
-: ${branch_icon:=''}
-: ${clean_icon:='✔'}
-: ${merge_icon:=''}
-: ${develop_icon:=''}
-: ${ahead_icon:='⇡'}
-: ${behind_icon:='⇣'}
-: ${staged_icon:='✚'}
-: ${untracked_icon:='✘'}
-: ${alert_icon:=''}
+icon_branch=''
+icon_clean='✔'
+icon_merge=''
+icon_develop=''
+icon_ahead='⇡'
+icon_behind='⇣'
+icon_staged='✚'
+icon_untracked='✘'
+icon_alert=''
 
 Red="$(tput setaf 1)"
 Green="$(tput setaf 2)"
@@ -45,18 +44,8 @@ RESET="$(tput sgr0)"
 #####################################################################################
 #                                                                        OS DETECTION
 #####################################################################################
-function os_detection() {
-  os=""
-  krnl=""
-  krnl="$(uname -s)"
-
-  if [ "$krnl" == "Darwin" ]; then
-    os="macos"
-  elif [ "$krnl" == "Linux" ]; then
-    if [ -e "/etc/os-release" ]; then
-      os="$(. /etc/os-release; printf "%s" "$ID")"
-    fi
-  fi
+function __os_detection() {
+  os=$(get-os)
 
   if [[ $os == "macos" ]]; then
      echo -ne "${White}"
@@ -73,23 +62,14 @@ function os_detection() {
 #                                                                              PROMPT
 #####################################################################################
 
-# https://stackoverflow.com/a/24067243
-function version_gt() {
-  test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1";
-}
-
-function strip_number() {
-  echo $1 | xargs
-}
-
-function node_v() {
-  nv=$(node -v | tr -d '[v]')
+function __node_v() {
+  nv=$(get-node-version-number)
   if [ $nv != "" ]; then
     # do we have a .nvmrc to compare against
     if [ -r ".nvmrc" ] && [ -f ".nvmrc" ]; then
       expected="$(cat .nvmrc | tr -d '[:space:]' | tr -d '[v]')"
-      if version_gt $expected $nv; then
-        echo -ne "${Red} ${nv}${alert_icon} "
+      if is-version-gt $expected $nv; then
+        echo -ne "${Red} ${nv} ${icon_alert} "
       else
         echo -ne "${Green} ${nv} "
       fi
@@ -97,65 +77,36 @@ function node_v() {
   fi
 }
 
-function dot_dirty() {
-  local repo_status=$(dot status 2>&1 | tail -n1)
-  if [[ $repo_status != *"nothing to commit"* ]]; then
+function __git_dirty() {
+  if git-is-dirty $1; then
     echo " ${Red}*"
   else
-    echo " ${Green}${clean_icon}"
+    echo " ${Green}${icon_clean}"
   fi
 }
 
-function git_dirty() {
-  local repo_status=$(git status 2>&1 | tail -n1)
-  [[ $repo_status != "nothing to commit, working tree clean" ]] && echo " ${Red}*"
-}
-
-function dot_branch() {
+function __git_branch() {
   # show either the branch name or the detached HEAD
-  _branch="$(dot symbolic-ref --short HEAD)"
+  _branch="$(git-get-branch $1)"
   if [[ $_branch != "" ]]; then
-    echo -ne "${Yellow}${branch_icon} $_branch"
+    echo -ne "${Yellow}${icon_branch} $_branch"
   else
-    hd="$(dot rev-parse --short HEAD | head -n 1)"
-    echo -ne "${Red}${branch_icon} detached HEAD $hd"
+    hd="$(git-get-head-commit)"
+    echo -ne "${Red}${icon_branch} detached HEAD $hd"
   fi
 }
 
-function git_branch() {
-  # show either the branch name or the detached HEAD
-  _branch="$(git symbolic-ref --short HEAD)"
-  if [[ $_branch != "" ]]; then
-    echo -ne "${Yellow}${branch_icon} $_branch"
-  else
-    hd="$(git rev-parse --short HEAD | head -n 1)"
-    echo -ne "${Red}${branch_icon} detached HEAD $hd"
-  fi
-}
-
-function dot_staged() {
-  count="$(dot diff --cached --name-only | wc -l)"
-  count=`strip_number $count`
+function __git_staged() {
+  count="$(git-count-staged $1)"
   if [[ $count != "0" ]]; then
-    echo -ne "${Green} ${staged_icon}${count}"
+    echo -ne "${Green} ${icon_staged}${count}"
   else
     echo ""
   fi
 }
 
-function staged() {
-  count="$(git diff --cached --name-only | wc -l)"
-  count=`strip_number $count`
-  if [[ $count != "0" ]]; then
-    echo -ne "${Green} ${staged_icon}${count}"
-  else
-    echo ""
-  fi
-}
-
-function dot_unstaged() {
-  count="$(dot diff --name-status | wc -l)"
-  count=`strip_number $count`
+function __git_unstaged() {
+  count="$(git-count-unstaged $1)"
   if [[ $count != "0" ]]; then
     echo -ne "${Red} ?${count}"
   else
@@ -163,42 +114,21 @@ function dot_unstaged() {
   fi
 }
 
-function unstaged() {
-  count="$(git diff --name-status | wc -l)"
-  count=`strip_number $count`
+function __git_untracked() {
+  count="$(git-count-untracked)"
   if [[ $count != "0" ]]; then
-    echo -ne "${Red} ?${count}"
+    echo -ne "${Red} ${icon_untracked}${count}"
   else
     echo ""
   fi
 }
 
-function untracked() {
-  count="$(git ls-files --others --exclude-standard | wc -l)"`echo $count | sed 's/ *$//g'`
-  count=`strip_number $count`
-  if [[ $count != "0" ]]; then
-    echo -ne "${Red} ${untracked_icon}${count}"
-  else
-    echo ""
-  fi
-}
-
-function reference_branch_count(){
-  # yes, for simplicity we assume our remote is 'origin'
-  echo strip_number $(git rev-parse --branches=refs/remotes --symbolic-full-name --all | grep origin/$1 | wc -l)
-}
-
-function commits_diff_count(){
-  # yes, for simplicity we assume our remote is 'origin'
-  echo strip_number $(git rev-list $1..$2 --count)
-}
-
-function behindahead() {
+function __git_behind_ahead() {
   # current branch name
-  br="$(git rev-parse --abbrev-ref HEAD)"
+  br="$(git-get-branch)"
   rbr=""
 
-  if [[ $br != "HEAD" ]]; then
+  if [[ $br != "" ]]; then
     # check if remote 'origin' exists
     # yes, for simplicity we assume our remote is 'origin'
     r="$(git remote get-url origin 2>&1 | tail -n1)"
@@ -210,10 +140,10 @@ function behindahead() {
       # 2. behind/ahead count respect same branch in remote
 
       # check if branch in remote exists (count the refs/remotes)
-      branch_count=`$(reference_branch_count $br)`
-      dev_count=`$(reference_branch_count "develop")`
-      main_count=`$(reference_branch_count "main")`
-      master_count=`$(reference_branch_count "master")`
+      branch_count=$(git-count-remote-branch "origin/$br")
+      dev_count=$(git-count-remote-branch "origin/develop")
+      main_count=$(git-count-remote-branch "origin/main")
+      master_count=$(git-count-remote-branch "origin/master")
 
       if [[ $br != "main" ]] && [[ $br != "master" ]]; then
         # echo "\nnot main nor master, can be develop or feature branch"
@@ -237,12 +167,12 @@ function behindahead() {
       # echo "\nif current branch not develop/main/master and any of these exist in origin, count behind commits"
       if [[ $rbr != "" ]]; then
         # echo "\ncount behind/ahead origin/${rbr}"
-        bhr=`$(commits_diff_count "$br" "origin/$rbr")`
-        ahr=`$(commits_diff_count "origin/$rbr" "$br")`
+        bhr=$(git-count-commits-diff "$br" "origin/$rbr")
+        ahr=$(git-count-commits-diff "origin/$rbr" "$br")
         # echo "\nbranch ${br} is behind/ahead origin/${rbr}"
-        [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne "${Red} ${develop_icon} "
-        [[ $bhr != "0" ]] && echo -ne "${behind_icon}${bhr}"
-        [[ $ahr != "0" ]] && echo -ne "${ahead_icon}${ahr}"
+        [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne "${Red} ${icon_develop} "
+        [[ $bhr != "0" ]] && echo -ne "${icon_behind}${bhr}"
+        [[ $ahr != "0" ]] && echo -ne "${icon_ahead}${ahr}"
         [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne " "
       fi
 
@@ -250,58 +180,55 @@ function behindahead() {
       if [[ $branch_count != "0" ]]; then
         # echo "\nremote ${br} branch exists, use it as a reference"
         upstream="origin/${br}"
-        bh=`$(commits_diff_count "$br" "$upstream")`
-        ah=`$(commits_diff_count "$upstream" "$br")`
+        bh=$(git-count-commits-diff "$br" "$upstream")
+        ah=$(git-count-commits-diff "$upstream" "$br")
         # echo "\n${br} is bh:${bh} and ah:${ah} upstream ${upstream}"
-
 
         if [[ $bh != "0" ]] && [[ $ah == "0" ]]; then
           # echo "\nbranch ${br} is behind origin ${upstream}"
-          echo -ne "${Orange} ${merge_icon} ${behind_icon}${bh}"
+          echo -ne "${Orange} ${icon_merge} ${icon_behind}${bh}"
         fi
         if [[ $bh == "0" ]] && [[ $ah != "0" ]]; then
           # echo "\nbranch ${br} is ahead origin ${upstream}"
-          echo -ne "${Green} ${merge_icon} ${ahead_icon}${ah}"
+          echo -ne "${Green} ${icon_merge} ${icon_ahead}${ah}"
         fi
         if [[ $bh != "0" ]] && [[ $ah != "0" ]]; then
           # echo "\nbranch ${br} is behind and ahead origin ${upstream}"
-          echo -ne "${Orange} ${merge_icon} ${behind_icon}${bh}${Green}${ahead_icon}${ah}"
+          echo -ne "${Orange} ${icon_merge} ${icon_behind}${bh}${Green}${icon_ahead}${ah}"
         fi
         if [[ $bh == "0" ]] && [[ $ah == "0" ]]; then
           # echo "\nbranch ${br} is synced with origin ${upstream}"
-          echo -ne "${Green} ${clean_icon}"
+          echo -ne "${Green} ${icon_clean}"
         fi
       fi
-
-    fi
-  fi
+    fi # origin exists 
+  fi # we are in a branch (not detached)
 }
 
-function real_time_prompt() {
+function __git_real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
-  if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config/"* ]]; then
-    dots=true
-    PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \w "
-    PS1+="\n\[$(dot_branch)\]\[$(dot_dirty)\]\[$(dot_staged)\]\[$(dot_unstaged)\]"
+  if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config"* ]]; then
+    PS1+="\n\n\[$(__os_detection)\] \u@\h\[$(__is_tmux)\] \[${Red}\]\w "
+    PS1+="\n\[$(__git_branch -d)\]\[$(__git_dirty -d)\]\[$(__git_staged -d)\]\[$(__git_unstaged -d)\]"
   else
-    PS1+="\n\n\[$(os_detection)\] \u@\h\[$(is_tmux)\] \[${Blue}\]\w "
-  fi
+    PS1+="\n\n\[$(__os_detection)\] \u@\h\[$(__is_tmux)\] \[${Blue}\]\w "
 
-  # modify prompt adding development info if we are in a git repo folder
-  if `git status &> /dev/null`; then
-    PS1+="\n\[$(node_v)\]"
-    PS1+="\[$(git_branch)\]\[$(git_dirty)\]\[$(staged)\]\[$(unstaged)\]\[$(untracked)\]"
+    # modify prompt adding development info if we are in a git repo folder
+    if `git status &> /dev/null`; then
+      PS1+="\n\[$(__node_v)\]"
+      PS1+="\[$(__git_branch)\]\[$(__git_dirty)\]\[$(__git_staged)\]\[$(__git_unstaged)\]\[$(__git_untracked)\]"
 
-    # show behind/ahead info if branches count>0 (maybe we just init'ed git repo)
-    bc="$(git branch --list | wc -l | xargs)"
-    if [[ $bc != "0" ]]; then
-      PS1+="\[$(behindahead)\]"
+      # show behind/ahead info if branches count>0 (maybe we just init'ed git repo)
+      bc="$(git branch --list | wc -l | xargs)"
+      if [[ $bc != "0" ]]; then
+        PS1+="\[$(__git_behind_ahead)\]"
+      fi
     fi
   fi
 
-  PS1+="\n\[$(is_ssh)\]\[${RESET}\] "
+  PS1+="\n\[$(__is_ssh)\]\[${RESET}\] "
 
   export PS1
 }
-PROMPT_COMMAND='real_time_prompt'
+PROMPT_COMMAND='__git_real_time_prompt'

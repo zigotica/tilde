@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Get HEAD commit
+# Optional flag to check dotfiles repo instead
+# example: git-get-head-commit
+# example: git-get-head-commit -d
+
+what=git
+while getopts d option
+do
+    case $option in
+        d) what="/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME";;
+        *) what=git;;
+    esac
+done
+
+echo $($what rev-parse --short HEAD | head -n 1)

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# count staged files in repo
+# optional flag to check dotfiles repo instead
+# example: git-count-staged
+# example: git-count-staged -d
+
+what=git
+while getopts d option
+do
+    case $option in
+        d) what="/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME";;
+        *) what=git;;
+    esac
+done
+
+strip-string $(echo $($what diff --cached --name-only | wc -l))

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Is repository dirty?
+# Optional flag to check dotfiles repo instead
+# example: git-is-dirty
+# example: git-is-dirty -d
+
+what=git
+while getopts d option
+do
+    case $option in
+        d) what="/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME";;
+        *) what=git;;
+    esac
+done
+
+function _is_dirty() {
+  status=$($what status 2>&1 | tail -n1)
+  if [[ $status != "nothing to commit, working tree clean" ]]; then
+    true; return
+  else
+    false; return
+  fi
+}
+_is_dirty

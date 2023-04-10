@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function _is_ssh() {
+  if [[ -n $SSH_CONNECTION ]]; then
+    true; return
+  else
+    false; return
+  fi
+}
+_is_ssh
+
