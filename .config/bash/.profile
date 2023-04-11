@@ -11,6 +11,8 @@ shopt -s dirspell
 # shopt -s dotglob
 shopt -s globstar
 shopt -s histappend
+HISTIGNORE='ls:v:exit:..:...:cd .'
+trap "history -n;history -w;" EXIT
 shopt -s nullglob
 complete -d cd
 

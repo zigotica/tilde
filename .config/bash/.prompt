@@ -231,4 +231,4 @@ function __git_real_time_prompt() {
 
   export PS1
 }
-PROMPT_COMMAND='__git_real_time_prompt'
+PROMPT_COMMAND='history -a;history -n;__git_real_time_prompt'
