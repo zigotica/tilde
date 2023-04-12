@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [ -n "$1" ] && [ $1 != "-a" ] && [ $1 != " " ]; then
+  echo "killing session $1"
+  tmux kill-session -t $@
+elif [ $1 == "-a" ]; then
+  echo "killing all sessions except current"
+  tmux kill-session -a
+else
+  echo "kill all sessions (server)"
+  tmux kill-server
+fi
