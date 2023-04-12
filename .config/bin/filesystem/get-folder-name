@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# get folder name
+
+echo ${PWD##*/}
+

@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+
+# git worktree wrapper
+# Requires:
+# - git-get-branch, get-folder-parent-path, get-folder-name, split-string (.config/bin/...)
+# - to be run in the root of the repository/worktrees
+# Mandatory options (one of the five):
+# -l: list
+# -p: prune
+# -a <wt>: add worktree
+# -r <wt>: remove worktree
+# -m <wt>: move to worktree
+# Non mandatory options:
+# -n <new branch>
+# -f <from branch>
+# use case: gwt -l | -p | -a <wt> | -r <wt> | -m <wt> [-f <from branch>] [-n <new branch>]
+# example: gwt -l (list worktrees)
+# example: gwt -p (prune worktrees)
+# example: gwt -a name -f dev (add "name" worktree from dev branch)
+# example: gwt -a name -f dev -n fix23 (add "name" worktree from dev branch, checkout new fix23 branch)
+# example: gwt -r name (removes linked "name" worktree)
+# example: gwt -m name (move to linked "name" worktree)
+
+err() {
+  echo $1
+  if [ -n "$2" ]; then
+    shift
+    eval $*
+    # https://askubuntu.com/a/1326059
+    $SHELL
+  fi
+  echo "Usage: gwt -l | -p | -a <wt> | -r <wt> | -m <wt> [-f <from branch>] [-n <new branch>]" >&2
+  exit 1
+}
+
+while getopts lpa:r:m:f:n: option
+do
+  case "${option}" in
+    l) git worktree list;exit 0;;
+    p) git worktree prune;exit 0;;
+    a) action="add";wt=${OPTARG};;
+    r) action="remove";wt=${OPTARG};;
+    m) action="move";wt=${OPTARG};;
+    f) fb=${OPTARG};;
+    n) nb=${OPTARG};;
+    *) 
+      echo "Not a valid argument for gwt. "
+      ;;
+  esac
+done
+
+if [ -z "$action" ]; then
+  err "Missing -a, -r, -m, -p or -l option (one of the five). "
+fi
+
+if [ -z "$fb" ]; then
+  fb=$(git-get-branch)
+  if [[ $fb == "" ]]; then
+    err "Script has to be run from the root of a repository/worktree"
+  fi
+fi
+
+# Generate paths
+parent=$(get-folder-parent-path)
+folder=$(get-folder-name)
+separator="__gwt__"
+base="$parent/$folder"
+dest="$base$separator$fb"
+
+if [ -n $action ]; then
+  # Split current folder to extract the "main worktree" name
+  parts=$(split-string $folder $separator)
+
+  # Build the "linked worktree" path using the name passed as argument
+  dest="$parent/${parts[0]}$separator$wt"
+  base="$parent/${parts[0]}"
+fi
+
+exists=0
+[ -d "$dest" ] && exists=1
+
+# logic
+if [ $exists == 1 ]; then
+  if [ $action == "add" ]; then
+    err "Cannot create an existing folder at $dest, move instead" cd "$dest"
+  elif [ $action == "move" ]; then
+    cd "$dest"
+    # https://askubuntu.com/a/1326059
+    $SHELL
+  else
+    git worktree remove $dest
+  fi
+else
+  if [ $action == "add" ]; then
+    if [ -z $nb ]; then
+      git worktree add $dest $fb
+    else
+      git worktree add -b $nb $dest $fb
+    fi
+  elif [ $action == "move" ]; then
+    err "Cannot move to missing worktree $wt, move to main worktree instead" cd $base
+  else
+    err "Cannot remove a missing worktree $wt, list worktrees" gwt -l
+  fi
+fi
+
