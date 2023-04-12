@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# git interactive add wrapper to be used with fzf
+# Modified from:
+# https://spin.atomicobject.com/2018/04/05/fuzzy-find-git-add/
+# changes include: --intent-to-add, preview, xargs -r and final $@
+# git add -p does not work with untracked files (will return "No changes")
+# the fix is to prepend the command with a git add --intent-to-add
+# xargs -r (--no-run-if-empty) skips patch prompts if no files selected
+# use case: gia
+# use case: gia -p (patch mode)
+# in both cases, shift+tab to multi pick, tab to move
+
+prev="git diff --minimal --color {}"
+win=50%,border-double,right
+git add --intent-to-add . &&
+  git ls-files -m -o --exclude-standard |
+  fzf --print0 -m --preview="$prev" --preview-window=$win |
+  xargs -0 -t -o -r git add $@
+
