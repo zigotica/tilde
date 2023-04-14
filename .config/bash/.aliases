@@ -25,8 +25,8 @@ alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
 alias t="tmux"
 alias tl="tmux ls"
-alias ta="tmux attach -t $1"
-alias tk="tmux-killer"
+alias ta="tmux-attach" # .config/bin/shell/tmux-attach
+alias tk="tmux-killer" # .config/bin/shell/tmux-killer
 # Install npm plugins from package.json and save to devDependencies
 alias npmdev="npm install --save-dev"
 alias yi="yarn install"
