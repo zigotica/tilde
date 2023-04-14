@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# git interactive checkout wrapper
+# if argument is missing, select target using fzf
+# if the target branch is currently checked out in any worktree, move there
+# Requires: $SPLIT_DELIMITER
+# use case: gc (launches fzf)
+# use case: gc dev (moves to worktree currently using dev branch, or checkout dev branch on current worktree)
+
+separator=$(echo $SPLIT_DELIMITER)
+
+if [[ -z $@ ]]; then
+  target=$(git branch --list -a | tr -d '+' | tr -d '*' | fzf --print-query | sed "s/ /$separator/g" | tail -1)
+  ss=($(split-string $target "$separator"))
+  declare -a ss
+  query=${ss[0]}
+else
+  query=$1
+fi
+
+# Checks if the target branch is currently checked out in any worktree
+wtpath=$(git-worktree -l | awk -v q=$query '$3 == "["q"]" {print $1}')
+if [[ $wtpath != "" ]]; then
+  if [[ "$wtpath" == *"$separator"* ]]; then
+    ss=($(split-string $wtpath $separator))
+    declare -a ss
+    linkedwt=${ss[1]}
+    git-worktree -m $linkedwt
+  else
+    git-worktree -m
+  fi
+else
+  git checkout $(git show-ref --verify --quiet refs/heads/"$query" || echo "-b") $query
+fi
+

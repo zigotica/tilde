@@ -51,14 +51,13 @@ alias gg="git log --oneline --abbrev-commit --branches=* --graph --decorate --co
 alias glg="git log --graph --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gall="git add ."
 alias gia="git-interactive-add" # .config/bin/git/git-interactive-add
-alias gic="git-interactive-checkout" # .config/bin/git/git-interactive-checkout
+alias gc="git-interactive-checkout" # .config/bin/git/git-interactive-checkout
+alias gcd="git checkout develop"
 alias gback="git reset --soft HEAD~1 && git reset HEAD ."
 alias grall="git clean -df ." # removes all untracked files
 alias gp="git pull"
 alias gam="git commit -am"
 alias gpoh="git push origin HEAD"
-alias gc="git checkout"
-alias gcd="git checkout develop"
 alias gb="git branch --list -a"
 alias gwt="git-worktree" # .config/bin/git/git-worktree
 alias gatpc="git branch --merged | grep -Gv '*' | xargs git branch -d"
