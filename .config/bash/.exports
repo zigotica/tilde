@@ -32,9 +32,9 @@ if [[ `which python3` != "" ]]; then
   export PYTHON=python3
 fi
 
-# pipe fzf searches through ag
+# pipe fzf searches through rg
 # it's faster and allows filtering out .gitignore content
-if [[ ! -z $(which fzf) ]] && [[ ! -z $(which ag) ]]; then
+if [[ ! -z $(which fzf) ]] && [[ ! -z $(which rg) ]]; then
   export FZF_DEFAULT_COMMAND="rg --hidden --no-ignore --glob=!.git/ --files"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
