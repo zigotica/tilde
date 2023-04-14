@@ -10,7 +10,7 @@
 separator=$(echo $SPLIT_DELIMITER)
 
 if [[ -z $@ ]]; then
-  target=$(git branch --list -a | tr -d '+' | tr -d '*' | fzf --print-query | sed "s/ /$separator/g" | tail -1)
+  target=$(git branch --list -a | tr -d '+' | tr -d '*' | fzf-tmux --print-query | sed "s/ /$separator/g" | tail -1)
   ss=($(split-string $target "$separator"))
   declare -a ss
   query=${ss[0]}

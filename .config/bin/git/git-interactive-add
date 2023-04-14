@@ -17,6 +17,6 @@ prev="git diff --minimal --color {}"
 win=50%,border-double,right
 git add --intent-to-add . &&
   git ls-files -m -o --exclude-standard |
-  fzf --print0 -m --preview="$prev" --preview-window=$win |
+  fzf-tmux --print0 -m --preview="$prev" --preview-window=$win |
   xargs -0 -t -o -r git add $@
 
