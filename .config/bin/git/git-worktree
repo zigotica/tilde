@@ -4,22 +4,24 @@
 # Requires:
 # - git-get-branch, get-folder-parent-path, get-folder-name, split-string (.config/bin/...)
 # - to be run in the root of the repository/worktrees
+# - $SPLIT_DELIMITER
 # Mandatory options (one of the five):
 # -l: list
 # -p: prune
 # -a <wt>: add worktree
 # -r <wt>: remove worktree
-# -m <wt>: move to worktree
+# -m [<wt>]: move to linked worktree (main if option value missing)
 # Non mandatory options:
 # -n <new branch>
 # -f <from branch>
-# use case: gwt -l | -p | -a <wt> | -r <wt> | -m <wt> [-f <from branch>] [-n <new branch>]
+# use case: gwt -l | -p | -a <wt> | -r <wt> | -m [<wt>] [-f <from branch>] [-n <new branch>]
 # example: gwt -l (list worktrees)
 # example: gwt -p (prune worktrees)
 # example: gwt -a name -f dev (add "name" worktree from dev branch)
 # example: gwt -a name -f dev -n fix23 (add "name" worktree from dev branch, checkout new fix23 branch)
 # example: gwt -r name (removes linked "name" worktree)
 # example: gwt -m name (move to linked "name" worktree)
+# example: gwt -m (move to main worktree)
 
 err() {
   echo $1
@@ -29,18 +31,32 @@ err() {
     # https://askubuntu.com/a/1326059
     $SHELL
   fi
-  echo "Usage: gwt -l | -p | -a <wt> | -r <wt> | -m <wt> [-f <from branch>] [-n <new branch>]" >&2
+  echo "Usage: gwt -l | -p | -a <wt> | -r <wt> | -m [<wt>] [-f <from branch>] [-n <new branch>]" >&2
   exit 1
 }
 
-while getopts lpa:r:m:f:n: option
+# https://stackoverflow.com/a/57295993
+getopts_get_optional_argument() {
+  eval next_token=\${$OPTIND}
+  if [[ -n $next_token && $next_token != -* ]]; then
+    OPTIND=$((OPTIND + 1))
+    OPTARG=$next_token
+  else
+    OPTARG=""
+  fi
+}
+
+while getopts lpa:r:mf:n: option
 do
   case "${option}" in
     l) git worktree list;exit 0;;
     p) git worktree prune;exit 0;;
     a) action="add";wt=${OPTARG};;
     r) action="remove";wt=${OPTARG};;
-    m) action="move";wt=${OPTARG};;
+    m) action="move"
+       getopts_get_optional_argument $@
+       wt=${OPTARG}
+       ;;
     f) fb=${OPTARG};;
     n) nb=${OPTARG};;
     *) 
@@ -63,19 +79,35 @@ fi
 # Generate paths
 parent=$(get-folder-parent-path)
 folder=$(get-folder-name)
-separator="__gwt__"
+separator=$(echo $SPLIT_DELIMITER)
 base="$parent/$folder"
 dest="$base$separator$fb"
 
 if [ -n $action ]; then
-  # Split current folder to extract the "main worktree" name
-  parts=$(split-string $folder $separator)
+  # Check to see if $folder includes $separator
+  # If so, split to extract the "main worktree" name
+  # Otherwise skip it, we ar ealready in main
+  main=$folder
 
-  # Build the "linked worktree" path using the name passed as argument
-  dest="$parent/${parts[0]}$separator$wt"
-  base="$parent/${parts[0]}"
+  if [[ "$folder" == *"$separator"* ]]; then
+    parts=($(split-string $folder $separator))
+    declare -a parts
+    main=${parts[0]}
+  fi
+
+  # Build the desired "linked worktree" path using the name passed as argument
+  dest="$parent/$main$separator$wt"
+  base="$parent/$main"
 fi
 
+if [ $action == "move" ] && [[ $wt == "" ]]; then
+  # If move action has no value, change to main worktree
+  cd $base
+  # https://askubuntu.com/a/1326059
+  $SHELL
+fi
+
+# Check if desired destination folder exists
 exists=0
 [ -d "$dest" ] && exists=1
 
@@ -88,7 +120,13 @@ if [ $exists == 1 ]; then
     # https://askubuntu.com/a/1326059
     $SHELL
   else
+    # if removing current, move to main first
+    destfolder=$(get-folder-name $dest)
+    if [[ $folder == $destfolder ]]; then
+      cd "$base"
+    fi
     git worktree remove $dest
+    $SHELL
   fi
 else
   if [ $action == "add" ]; then
@@ -97,8 +135,10 @@ else
     else
       git worktree add -b $nb $dest $fb
     fi
+    cd "$dest"
+    $SHELL
   elif [ $action == "move" ]; then
-    err "Cannot move to missing worktree $wt, move to main worktree instead" cd $base
+    err "Cannot move to missing worktree $wt, move to main worktree instead" cd "$base"
   else
     err "Cannot remove a missing worktree $wt, list worktrees" gwt -l
   fi

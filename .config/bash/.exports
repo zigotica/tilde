@@ -21,6 +21,9 @@ export LC_ALL=$LANG
 export DIR_PERSONAL="~/Documents/personal/"
 export DIR_WORK="~/Documents/work/"
 
+# Delimiters
+export SPLIT_DELIMITER="#####"
+
 # exa icons
 export EXA_ICON_SPACING=2
 

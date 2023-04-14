@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
 # Split a string using a multiple character delimiter
-# https://www.tutorialkart.com/bash-shell-scripting/bash-split-string/
-str=$1$2
-parts=();
-while [[ $str ]]; do
-  parts+=( "${str%%"$2"*}" );
-  str=${str#*"$2"};
-done;
-declare -a parts
+# https://www.javatpoint.com/bash-split-string
 
-echo ${parts[@]}
+str=$1
+del=$2
+arr=($(echo $str | tr "$del" "\n"))
+declare -a arr
+echo ${arr[@]}
