@@ -12,6 +12,7 @@ export HISTSIZE='32768';
 export HISTFILESIZE="${HISTSIZE}";
 # Omit duplicates and commands that begin with a space from history.
 export HISTCONTROL='ignoreboth';
+export HISTIGNORE='ls:v:exit:..:...:cd .'
 
 # locale needed for tmux to digest nerd fonts properly
 export LANG="en_US.UTF-8"
