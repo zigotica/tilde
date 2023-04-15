@@ -30,6 +30,6 @@ if [[ $wtpath != "" ]]; then
     git-worktree -m
   fi
 else
-  git checkout $(git show-ref --verify --quiet refs/heads/"$query" || echo "-b") $query
+  git checkout $(git show-ref --verify --quiet refs/heads/"$query" || git show-ref --verify --quiet refs/tags/"$query" || echo "-b") $query
 fi
 
