@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# git interactive restore (checkout --) wrapper to be used with fzf
+# use case: gir
+# use case: gir .
+# shift+tab to multi pick, tab to move
+
+if [[ -z $@ ]]; then
+  prev="git diff --minimal --color {}"
+  win=50%,border-double,right
+  git add --intent-to-add . &&
+    git ls-files -m -o --exclude-standard |
+    fzf-tmux --print0 -m --preview="$prev" --preview-window=$win |
+    xargs -0 -t -o -r git checkout -- $files
+else
+  git checkout -- $1
+fi
+
+
+
