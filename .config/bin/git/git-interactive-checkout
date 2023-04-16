@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
 
 # git interactive checkout wrapper
-# if argument is missing, select branch, tag or commit using fzf
-# if the target branch is currently checked out in any worktree, move there
+# 
+# If argument is missing, select branch, tag or commit using fzf
+# fzf provides the fzf list in a simple format:
+#   branch/tag/commit (space) [branch] or [tag] or commit message
+# fzf will preview diff of that hash (any of the 3 types above)) with its previous
+# (git diff --color HASH~ HASH)
+#
+# If the target branch is currently checked out in any worktree, move there
+# Otherwise, try to checkout a branch, tag or commit (in that likelihood order)
+# Finally, if nothing found, create a branch with that name
+#
 # Requires: $SPLIT_DELIMITER
+# 
 # use case: gc (launches fzf to choose from branches, tags or commits)
 # use case: gc dev (moves to worktree currently using dev branch, or checkout dev branch on current worktree)
 
 separator=$(echo $SPLIT_DELIMITER)
 
 if [[ -z $@ ]]; then
-  # if no argument, fzf list of branches, tags and commits
-  # provide the fzf in a simple format:
-  # branch/tag/commit (space) [heads] or [tags] or commit message
-  target=$({ git for-each-ref refs/heads/ refs/tags/ ; git log --oneline --abbrev-commit --branches=* ; } | awk '{ if($2=="commit") { split($0,a,/\//); print a[3] " [" a[2] "]" } if($2!="commit") { print $0 } }' | fzf-tmux --print-query | sed "s/ /$separator/g" | tail -1)
+  target=$({ git for-each-ref refs/heads/ refs/tags/ ; git log --oneline --abbrev-commit --branches=* ; } | awk '{ if($2=="commit" || $2=="tag") { sub(/^(refs+\/){1}/,"",$3); sub(/\/{1}/," ",$3); split($3,r," "); sub(/heads/,"branch",r[1]); sub(/tags/,"tag",r[1]); print r[2] " [" r[1] "]"; } else { print $0 } }' | fzf --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git" | sed "s/ /$separator/g" | tail -1)
   if [[ $target != "" ]]; then
     # if selected from fzf list
     ss=($(split-string $target "$separator"))
@@ -21,10 +28,11 @@ if [[ -z $@ ]]; then
     query=${ss[0]}
     len=${#ss[@]}
     last=${ss[ len - 1 ]}
-    if [[ $last != "[heads]" ]] && [[ $last != "[tags]" ]]; then
+    if [[ $last != "[branch]" ]] && [[ $last != "[tag]" ]]; then
       last="commit"
     fi
   else
+    # if escaping fzf, exit
     exit 0;
   fi
 else
@@ -45,14 +53,14 @@ if [[ $wtpath != "" ]]; then
 else
   # no worktree using the same branch/tag/detached commit
   # detect if a branch / tag / commit exist
-  # otherwise create a branc with that name
+  # otherwise create a branch with that name
   if [[ -z $last ]]; then
     # use the value passed manually
-    # try to find the best math, by order (branch > tag > commit)
+    # try to find the best match, by likelihood order (branch > tag > commit)
     git checkout $(git show-ref --verify --quiet refs/heads/"$query" || git show-ref --verify --quiet refs/tags/"$query" || git cat-file -e $query^{commit} || echo "-b") $query
-  elif [[ $type == "[heads]" ]]; then
+  elif [[ $type == "[branch]" ]]; then
     git checkout $(git show-ref --verify --quiet refs/heads/"$query" || echo "-b") $query
-  elif [[ $type == "[tags]" ]]; then
+  elif [[ $type == "[tag]" ]]; then
     git checkout $(git show-ref --verify --quiet refs/tags/"$query" || echo "-b") $query
   else
     git checkout $(git cat-file -e $query^{commit} || echo "-b") $query
