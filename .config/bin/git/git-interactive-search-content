@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# git-interactive-search-content wrapper
+#
+# fzf provides the fzf list of commits including the string in the changed content
+# fzf will preview diff of that hash (any of the 3 types above)) with its previous
+# (git diff --color HASH~ HASH)
+# 
+# use case: gis string
+
+if [[ -n $@ ]]; then
+  git log --color=always --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative -S "$@" --all | fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git"
+else
+  echo "you need to provide a search string"
+fi
+
+
+

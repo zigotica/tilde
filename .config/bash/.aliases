@@ -54,6 +54,7 @@ alias gia="git-interactive-add" # .config/bin/git/git-interactive-add
 alias gc="git-interactive-checkout" # .config/bin/git/git-interactive-checkout
 alias gcd="git checkout develop"
 alias gir="git-interactive-restore" # .config/bin/git/git-interactive-restore
+alias gis="git-interactive-search-content" # .config/bin/git/git-interactive-search-content
 alias gback="git reset --soft HEAD~1 && git reset HEAD ."
 alias grall="git clean -df ." # removes all untracked files
 alias gp="git pull"
