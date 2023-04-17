@@ -79,9 +79,9 @@ function __node_v() {
 
 function __git_dirty() {
   if git-is-dirty $1; then
-    echo " ${Red}*"
+    echo " ${Red} [L]*"
   else
-    echo " ${Green}${icon_clean}"
+    echo " ${Green} [L]${icon_clean}"
   fi
 }
 
@@ -170,7 +170,7 @@ function __git_behind_ahead() {
         bhr=$(git-count-commits-diff "$br" "origin/$rbr")
         ahr=$(git-count-commits-diff "origin/$rbr" "$br")
         # echo "\nbranch ${br} is behind/ahead origin/${rbr}"
-        [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne "${Red} ${icon_develop} "
+        [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne "${Red} [OM]${icon_develop} "
         [[ $bhr != "0" ]] && echo -ne "${icon_behind}${bhr}"
         [[ $ahr != "0" ]] && echo -ne "${icon_ahead}${ahr}"
         [[ $bhr != "0" ]] || [[ $ahr != "0" ]] && echo -ne " "
@@ -186,19 +186,19 @@ function __git_behind_ahead() {
 
         if [[ $bh != "0" ]] && [[ $ah == "0" ]]; then
           # echo "\nbranch ${br} is behind origin ${upstream}"
-          echo -ne "${Orange} ${icon_merge} ${icon_behind}${bh}"
+          echo -ne "${Orange} [OB]${icon_merge} ${icon_behind}${bh}"
         fi
         if [[ $bh == "0" ]] && [[ $ah != "0" ]]; then
           # echo "\nbranch ${br} is ahead origin ${upstream}"
-          echo -ne "${Green} ${icon_merge} ${icon_ahead}${ah}"
+          echo -ne "${Green} [OB]${icon_merge} ${icon_ahead}${ah}"
         fi
         if [[ $bh != "0" ]] && [[ $ah != "0" ]]; then
           # echo "\nbranch ${br} is behind and ahead origin ${upstream}"
-          echo -ne "${Orange} ${icon_merge} ${icon_behind}${bh}${Green}${icon_ahead}${ah}"
+          echo -ne "${Orange} [OB]${icon_merge} ${icon_behind}${bh}${Green}${icon_ahead}${ah}"
         fi
         if [[ $bh == "0" ]] && [[ $ah == "0" ]]; then
           # echo "\nbranch ${br} is synced with origin ${upstream}"
-          echo -ne "${Green} ${icon_clean}"
+          echo -ne "${Green} [OB]${icon_clean}"
         fi
       fi
     fi # origin exists 
@@ -217,13 +217,14 @@ function __git_real_time_prompt() {
     # modify prompt adding development info if we are in a git repo folder
     if `git status &> /dev/null`; then
       PS1+="\n\[$(__node_v)\]"
-      PS1+="\[$(__git_branch)\]\[$(__git_dirty)\]\[$(__git_staged)\]\[$(__git_unstaged)\]\[$(__git_untracked)\]"
+      PS1+="\[$(__git_branch)\]"
 
       # show behind/ahead info if branches count>0 (maybe we just init'ed git repo)
       bc="$(git branch --list | wc -l | xargs)"
       if [[ $bc != "0" ]]; then
         PS1+="\[$(__git_behind_ahead)\]"
       fi
+      PS1+="\[$(__git_dirty)\]\[$(__git_staged)\]\[$(__git_unstaged)\]\[$(__git_untracked)\]"
     fi
   fi
 
