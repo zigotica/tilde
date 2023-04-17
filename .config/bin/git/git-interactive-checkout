@@ -21,14 +21,18 @@
 separator=$(echo $SPLIT_DELIMITER)
 
 is_worktree() {
-  # git-worktree -l | awk -v q=$1 '$3 == "["q"]" {print "[*] "; }'
-  wt=$(git-worktree -l | awk -v q=$1 '$3 == "["q"]" {print "[worktree] "; }')
-  echo -n $wt;
+  # remove color info before match test
+  # https://stackoverflow.com/a/30938702
+  raw=$(echo "[$1]" | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g")
+  wt=$(git-worktree -l | awk -v q=$raw '$3 == q { print "[worktree]" }')
+  if [[ $wt != "" ]]; then
+    echo -ne "\e[31m$wt\e[0m ";
+  fi
 }
 export -f is_worktree;
 
 if [[ -z $@ ]]; then
-  target=$({ git for-each-ref refs/heads/ refs/tags/ ; git log --oneline --abbrev-commit --branches=* ; } | awk '{ if($2=="commit" || $2=="tag") { sub(/^(refs+\/){1}/,"",$3); sub(/\/{1}/," ",$3); split($3,r," "); sub(/heads/,"branch",r[1]); sub(/tags/,"tag",r[1]); printf("%s ",r2); system("bash -c '\''is_worktree "r[2]"'\''"); print " " r[2] " [" r[1] "]"; } else { print $0 } }'  | sed -e 's/^[ \t]*//' | fzf --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git" | sed "s/ /$separator/g" | tail -1)
+  target=$({ git for-each-ref refs/heads/ --format='%(color:green)%(refname:short)%(color:reset) [branch]' --color=always; git for-each-ref refs/tags/  --format='%(color:blue)%(refname:short)%(color:reset) [tag]' --color=always; git log --oneline --abbrev-commit --branches=*  --color=always; } | awk '{ if($2=="[branch]" || $2=="[tag]") { system("bash -c '\''is_worktree "$1"'\''"); print $1 " " $2; } else { print $0 } }' | sed -e 's/^[ \t]*//' | fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git" | sed "s/ /$separator/g")
   if [[ $target != "" ]]; then
     # if selected from fzf list
     ss=($(split-string $target "$separator"))
