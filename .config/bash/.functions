@@ -53,21 +53,15 @@ cdnvm(){
       declare nvm_version
       nvm_version=$(<"$nvm_path"/.nvmrc)
 
-      # Add the `v` suffix if it does not exists in the .nvmrc file
-      if [[ $nvm_version != v* ]]; then
-        nvm_version="v""$nvm_version"
-      fi
-
       # If it is not already installed, install it
       required_version_from_nvm_ls=$(nvm ls --no-colors "$nvm_version" | tail -1 | tr -d '\->*' | tr -d '[:space:]')
       if [[ "$required_version_from_nvm_ls" == "N/A" ]]; then
         nvm install "$nvm_version";
       fi
 
-      nvm_current=$(nvm current)
-      if [[ "$nvm_current" != "$nvm_version" ]]; then
-        nvm use "$nvm_version";
-      fi
+      nvm use "$nvm_version";
+    else
+      nvm use default
     fi
 }
 alias cd='cdnvm' # alias after the function, just in case
