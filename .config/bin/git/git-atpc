@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# git  deletion of merged branches, locally or remote
+# Non mandatory options:
+# -r [<remote>] (default remote is 'origin')
+# -f <from branch> (if used, need to specify a branch name)
+# use case: git-atpc -r [<remote>] [-f <from branch>]
+# example: git-atpc (remove all local branches already merged into current branch)
+# example: git-atpc -r (remove all remote branches merged into current branch in origin)
+# example: git-atpc -r other_origin (remove all remote branches merged into current branch in other_origin)
+# example: git-atpc -r -f develop (remove all remote branches merged into develop branch in origin)
+# modified from https://stackoverflow.com/a/51436631
+
+# https://stackoverflow.com/a/57295993
+getopts_get_optional_argument() {
+  eval next_token=\${$OPTIND}
+  if [[ -n $next_token && $next_token != -* ]]; then
+    OPTIND=$((OPTIND + 1))
+    OPTARG=$next_token
+  else
+    OPTARG=""
+  fi
+}
+
+is_remote=0
+
+while getopts rf: option
+do
+  case "${option}" in
+    f) from=${OPTARG};;
+    r) getopts_get_optional_argument $@
+       is_remote=1
+       remote=${OPTARG}
+       ;;
+    *) 
+      echo "Not a valid argument for git-atpc. "
+      ;;
+  esac
+done
+
+if [ -z "$remote" ] || [ "$remote" == "" ]; then
+  remote="origin"
+fi
+
+# remove all references to remote branches that have already been removed
+echo "git fetch --prune $remote"
+git fetch --prune $remote
+
+
+if [[ "$is_remote" == 1 ]]; then
+  echo "cleanup remote (git push --delete $remote matching_branches):"
+  git branch -r --merged $([[ -n $from ]] && git rev-parse $from) | 
+    grep -E "^\s*$remote/" | 
+    grep -Ev "^\s*$remote\/release" | 
+    grep -Ev "^\s*$remote\/hotfix" | 
+    sed "s/$remote\///" | 
+    grep -Ev "(^\*|^\s*(master|develop|main)$)" | 
+    xargs -r git push --delete $remote
+else
+  echo "cleanup local (git branch -D matching_branches):"
+  git branch --merged $([[ -n $from ]] && git rev-parse $from) | 
+    grep -E "^\s*$remote/" | 
+    grep -Ev "^\s*$remote\/release" | 
+    grep -Ev "^\s*$remote\/hotfix" | 
+    sed "s/$remote\///" | 
+    grep -Ev "(^\*|^\s*(master|develop|main)$)" | 
+    xargs -r git branch -D
+fi
+

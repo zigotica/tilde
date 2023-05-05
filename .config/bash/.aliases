@@ -62,4 +62,4 @@ alias gam="git commit -am"
 alias gpoh="git push origin HEAD"
 alias gb="git branch --list -a"
 alias gwt="git-worktree" # .config/bin/git/git-worktree
-alias gatpc="git branch --merged | grep -Gv '*' | xargs git branch -d"
+alias gatpc="git-atpc" # .config/bin/git/git-atpc
