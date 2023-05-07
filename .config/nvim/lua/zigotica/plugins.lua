@@ -31,6 +31,7 @@ vim.cmd([[
   Plug 'windwp/nvim-ts-autotag'
   Plug 'mattn/emmet-vim'
   Plug 'editorconfig/editorconfig-vim'
+  Plug 'kevinhwang91/nvim-bqf'
 
   " Git
   Plug 'lewis6991/gitsigns.nvim'
