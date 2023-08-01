@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# git-interactive-search-file wrapper
+#
+# fzf provides the fzf list of commits that changed a file
+# fzf will preview diff of that hash with its previous (git diff --color HASH~ HASH)
+# 
+# use case: gisf filepath
+
+if [[ -n $@ ]]; then
+  format="%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset"
+  git log --color=always --pretty=format:"$format" --abbrev-commit --date=relative --follow "$@" |
+    fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git"
+else
+  echo "you need to provide a search string"
+fi
