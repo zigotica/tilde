@@ -2,3 +2,5 @@
   path = ~/.gitconfig-personal
 [includeIf "gitdir:~/Documents/work/"]
   path = ~/.gitconfig-work-hanzo
+[core]
+	excludesFile = ~/.gitignore_global
