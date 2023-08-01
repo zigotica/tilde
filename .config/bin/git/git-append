@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# git append: cherry-pick all the ancestors of the reference $1 that are not included in the current branch
+# optional: passing a second argument will compare/cherry-pick to that hash instead of current branch/head
+#
+# use case: gapp feature/login
+# use case: gapp a63ba8a
+# use case: gapp feature/login hotfix/34
+
+if [[ -z $2 ]]; then
+  target="HEAD"
+else
+  target="$2"
+fi
+
+git cherry-pick $(git merge-base $target $1)..$1"
