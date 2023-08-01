@@ -1,4 +1,4 @@
-vim.g.completeopt = 'menuone,noselect,noinsert'
+vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'noinsert'}
 
 -- Tab completion helper
 local has_words_before = function()

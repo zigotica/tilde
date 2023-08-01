@@ -27,6 +27,7 @@ vim.opt.cmdheight = 1 -- command bar height
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
+vim.opt.guicursor = 'n-v:block,r-cr-o:hor30-blinkwait50-blinkon100-blinkoff50,i-ci-c-sm:ver30-blinkwait50-blinkon100-blinkoff50'
 
 -- Read file when modified outside Vim
 vim.opt.autoread = true

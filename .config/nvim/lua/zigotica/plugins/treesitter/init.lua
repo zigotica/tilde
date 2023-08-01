@@ -9,7 +9,6 @@ require'nvim-treesitter.configs'.setup {
     "typescript",
     "tsx",
     "yaml",
-    "lua",
   },
   sync_install = true,
   highlight = {
