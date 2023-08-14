@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Show unique lines (not repeated) from several files
+# use case: show-unique-lines <file1> <file2> <file3>
+# use case: echo <file1> <file2> <file3> | xargs show-unique-lines
+
+cat $@ \
+  | sort \
+  | uniq -i -u

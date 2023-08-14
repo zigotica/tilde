@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Show repeated lines from several files
+# use case: show-repeated-lines <file1> <file2> <file3>
+# use case: echo <file1> <file2> <file3> | xargs show-repeated-lines
+
+cat $@ \
+  | sort \
+  | uniq -i -d
