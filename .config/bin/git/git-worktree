@@ -15,6 +15,7 @@
 # -n <new branch>
 # -f <from branch>
 # use case: gwt -l | -p | -a <wt> | -r <wt> | -m [<wt>] [-f <from branch>] [-n <new branch>]
+# example: gwt (list worktrees via fzf and moves to the selected wt)
 # example: gwt -l (list worktrees)
 # example: gwt -p (prune worktrees)
 # example: gwt -a name -f dev (add "name" worktree from dev branch)
@@ -22,6 +23,8 @@
 # example: gwt -r name (removes linked "name" worktree)
 # example: gwt -m name (move to linked "name" worktree)
 # example: gwt -m (move to main worktree)
+
+separator=$(echo $SPLIT_DELIMITER)
 
 err() {
   echo $1
@@ -65,6 +68,26 @@ do
   esac
 done
 
+if [[ -z $@ ]]; then
+  # We didn't write any option (gwt)
+  # 1. List all current worktrees
+  # 2. pipe results through fzf (can be filtered)
+  target=$(git worktree list | fzf)
+  if [[ $target != "" ]]; then
+    # if selected anything from fzf list,
+    # parse it to build the vars as if we had passed the options via args
+    target=$(echo "$target" | awk '{print $1}')
+    ss=($(split-string $target "$separator"))
+    declare -a ss
+    query=${ss[1]}
+    action="move"
+    wt="$query"
+  else
+    # escaped fzf, exit
+    exit 0
+  fi
+fi
+
 if [ -z "$action" ]; then
   err "Missing -a, -r, -m, -p or -l option (one of the five). "
 fi
@@ -79,7 +102,6 @@ fi
 # Generate paths
 parent=$(get-folder-parent-path)
 folder=$(get-folder-name)
-separator=$(echo $SPLIT_DELIMITER)
 base="$parent/$folder"
 dest="$base$separator$fb"
 
