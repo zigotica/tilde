@@ -4,21 +4,45 @@
 # 
 # If argument is missing, select branch, tag or commit using fzf
 # fzf provides the fzf list in a simple format:
-#   branch/tag/commit (space) [branch] or [tag] or commit message
-#   if a worktree is currently using the branch, mark as [worktree]
-# fzf will preview diff of that hash (any of the 3 types above)) with its previous
+#   branch/remotebranch/tag/commit (space) [branch] or [remotebranch] or [tag] or commit message
+#   if a worktree is currently using the branch, will be marked as [worktree]
+# fzf will preview diff of that hash with its previous
 # (git diff --color HASH~ HASH)
 #
 # If the target branch is currently checked out in any worktree, move there
-# Otherwise, try to checkout a branch, tag or commit (in that likelihood order)
+# Otherwise, try to checkout a branch, remote branch, commit or tag (in that likelihood order)
 # Finally, if nothing found, create a branch with that name
 #
 # Requires: $SPLIT_DELIMITER
 # 
-# use case: gc (launches fzf to choose from branches, tags or commits)
+# use case: gc (launches fzf to choose from branches, tags or commits; you can filter by typing and intro)
 # use case: gc dev (moves to worktree currently using dev branch, or checkout dev branch on current worktree)
+# use case: gc -r remotename (launches fzf ... same as above but listing remote named remotename)
+# use case: gc branch -r remotename (moves to a remote branch named remotename, if origin is not used; branch must be already fetched)
 
 separator=$(echo $SPLIT_DELIMITER)
+REMOTE="origin"
+
+# https://stackoverflow.com/a/63421397
+script_args=()
+while [ $OPTIND -le "$#" ]
+do
+  if getopts r: option
+  then
+    case $option in
+      r) REMOTE="$OPTARG";;
+    esac
+  else
+    script_args+=("${!OPTIND}")
+    ((OPTIND++))
+  fi
+done
+
+# logic to use a reference optionally when also using -r
+MAIN="$1"
+if [[ "$1" == "-r" ]]; then
+  MAIN=""
+fi
 
 is_worktree() {
   # remove color info before match test
@@ -31,25 +55,48 @@ is_worktree() {
 }
 export -f is_worktree;
 
-if [[ -z $@ ]]; then
-  target=$({ git for-each-ref refs/heads/ --format='%(color:green)%(refname:short)%(color:reset) [branch]' --color=always; git for-each-ref refs/tags/  --format='%(color:blue)%(refname:short)%(color:reset) [tag]' --color=always; git log --oneline --abbrev-commit --branches=*  --color=always; } | awk '{ if($2=="[branch]" || $2=="[tag]") { system("bash -c '\''is_worktree "$1"'\''"); print $1 " " $2; } else { print $0 } }' | sed -e "s/^[ \t]*//" | fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git" | sed -e "s/^[\']*//" | sed "s/ /$separator/g")
+if [[ -z $@ ]] || [[ "$MAIN" == "" ]]; then
+  # We didn't write the desired "reference" manually (gc or gc -r remotename)
+  # TARGET BUILD LOGIC:
+  # 1. Inside the {} we list the references: branches, remote branches, tags and commits
+  #    We give these a special format with color and appending [ref] information
+  # 2. awk: if not a commit, we check the ref via external function is_worktree
+  #      that will prepend the item in list with [worktree]
+  # 3. sed to remove lines starting by space or tab (TODO still needed?)
+  # 4. pipe results through fzf (can be filtered)
+  #      each fzf item will preview diff of that hash with its previous
+  #      (git diff --color HASH~ HASH)
+  # 5. sed to remove lines starting by ' (TODO still needed?)
+  # 6. sed to replace spaces with the $sperator, so it's easier to parse later
+  # 7. tail -n1: target was a 2 line value
+  #      1st line the possibly written filter in the fzf,
+  #      2nd line the built construct with separator string
+  #      we just need the second one, thus the tail
+  target=$({ git for-each-ref refs/heads/ --format='%(color:green)%(refname:short)%(color:reset) [branch]' --color=always; git for-each-ref refs/remotes/$REMOTE/ --format='%(color:blue)%(refname:short)%(color:reset) [remotebranch]' --color=always; git for-each-ref refs/tags/ --format='%(color:red)%(refname:short)%(color:reset) [tag]' --color=always; git log --oneline --abbrev-commit --branches=*  --color=always; } \
+    | awk '{ if($2=="[branch]" || $2=="[remotebranch]" || $2=="[tag]") { system("bash -c '\''is_worktree "$1"'\''"); print $1 " " $2; } else { print $0 } }' \
+    | sed -e "s/^[ \t]*//" \
+    | fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git" \
+    | sed -e "s/^[\']*//" \
+    | sed "s/ /$separator/g" \
+    | tail -n1)
   if [[ $target != "" ]]; then
-    # if selected from fzf list
+    # if selected anything from fzf list, split the separator to get the desired "reference"
     ss=($(split-string $target "$separator"))
     declare -a ss
     query=${ss[0]}
     len=${#ss[@]}
     last=${ss[ len - 1 ]}
     [[ ${ss[0]} == "[worktree]" ]] && query=${ss[1]}
-    if [[ $last != "[branch]" ]] && [[ $last != "[tag]" ]]; then
-      last="commit"
+    if [[ $last != "[branch]" ]] && [[ $last != "[remotebranch]" ]] && [[ $last != "[tag]" ]]; then
+      last="[commit]"
     fi
   else
     # if escaping fzf, exit
     exit 0;
   fi
 else
-  query=$1
+  # We wrote the desired "reference" manually (gc smth or gc smth -r remotename), not using the fzf
+  query=$MAIN
 fi
 
 # Checks if the target branch is currently checked out in any worktree
@@ -64,19 +111,25 @@ if [[ $wtpath != "" ]]; then
     git-worktree -m
   fi
 else
-  # no worktree using the same branch/tag/detached commit
-  # detect if a branch / tag / commit exist
+  # no worktree using the same branch/remotebranch/tag/detached commit
+  # detect if a branch / remotebranch / commit exist
   # otherwise create a branch with that name
-  if [[ -z $last ]]; then
-    # use the value passed manually
-    # try to find the best match, by likelihood order (branch > tag > commit)
-    git checkout $(git show-ref --verify --quiet refs/heads/"$query" || git show-ref --verify --quiet refs/tags/"$query" || git cat-file -e $query^{commit} || echo "-b") $query
-  elif [[ $type == "[branch]" ]]; then
-    git checkout $(git show-ref --verify --quiet refs/heads/"$query" || echo "-b") $query
-  elif [[ $type == "[tag]" ]]; then
-    git checkout $(git show-ref --verify --quiet refs/tags/"$query" || echo "-b") $query
-  else
+  IS_LOCAL_BRANCH=$(git show-ref --verify --quiet -- refs/heads/"$query" || echo "false")
+  IS_REMOTE_BRANCH=$(git show-ref --verify --quiet -- refs/remotes/$REMOTE/"$query" || echo "false")
+  IS_COMMIT=$(git cat-file -e $query^{commit} || echo "false")
+
+  # -z $last: the value was passed manually
+  if [[ -z $last && $IS_LOCAL_BRANCH != "false" ]] || [[ $last == "[branch]" ]]; then
+    git checkout "$query"
+  elif [[ -z $last && $IS_REMOTE_BRANCH != "false" ]] || [[ $last == "[remotebranch]" ]]; then
+    BRANCH=$(echo "$query" | sed "s/^$REMOTE\///g")
+    git checkout -b "$BRANCH" $REMOTE/"$BRANCH" || git checkout "$BRANCH"
+  elif [[ -z $last && $IS_COMMIT != "false" ]] || [[ $last == "[commit]" ]]; then
+    # TODO would it make sense to check remote commits as well?
     git checkout $(git cat-file -e $query^{commit} || echo "-b") $query
+  else
+    # checkout to new or existing branch
+    git checkout -b "$query" ||  git checkout "$query"
   fi
 fi
 
