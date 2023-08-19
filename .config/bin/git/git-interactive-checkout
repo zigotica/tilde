@@ -4,10 +4,8 @@
 # 
 # If argument is missing, select branch, tag or commit using fzf
 # fzf provides the fzf list in a simple format:
-#   branch/remotebranch/tag/commit (space) [branch] or [remotebranch] or [tag] or commit message
-#   if a worktree is currently using the branch, will be marked as [worktree]
-# fzf will preview diff of that hash with its previous
-# (git diff --color HASH~ HASH)
+#   [b] or [r] or [t] or [c] followed by the branch/remotebranch/tag/commit info
+# fzf will preview diff of that hash with its previous (git diff --color HASH~ HASH)
 #
 # If the target branch is currently checked out in any worktree, move there
 # Otherwise, try to checkout a branch, remote branch, commit or tag (in that likelihood order)
@@ -44,38 +42,24 @@ if [[ "$1" == "-r" ]]; then
   MAIN=""
 fi
 
-is_worktree() {
-  # remove color info before match test
-  # https://stackoverflow.com/a/30938702
-  raw=$(echo "[$1]" | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g")
-  wt=$(git-worktree -l | awk -v q=$raw '$3 == q { print "[worktree]" }')
-  if [[ $wt != "" ]]; then
-    echo -ne "\e[31m$wt\e[0m ";
-  fi
-}
-export -f is_worktree;
-
 if [[ -z $@ ]] || [[ "$MAIN" == "" ]]; then
   # We didn't write the desired "reference" manually (gc or gc -r remotename)
   # TARGET BUILD LOGIC:
   # 1. Inside the {} we list the references: branches, remote branches, tags and commits
-  #    We give these a special format with color and appending [ref] information
-  # 2. awk: if not a commit, we check the ref via external function is_worktree
-  #      that will prepend the item in list with [worktree]
-  # 3. sed to remove lines starting by space or tab (TODO still needed?)
-  # 4. pipe results through fzf (can be filtered)
+  #    We give these a special format with color and prepending [ref] information
+  # 2. sed to remove lines starting by space or tab (TODO still needed?)
+  # 3. pipe results through fzf (can be filtered)
   #      each fzf item will preview diff of that hash with its previous
   #      (git diff --color HASH~ HASH)
-  # 5. sed to remove lines starting by ' (TODO still needed?)
-  # 6. sed to replace spaces with the $sperator, so it's easier to parse later
-  # 7. tail -n1: target was a 2 line value
+  # 4. sed to remove lines starting by ' (TODO still needed?)
+  # 5. sed to replace spaces with the $sperator, so it's easier to parse later
+  # 6. tail -n1: target was a 2 line value
   #      1st line the possibly written filter in the fzf,
   #      2nd line the built construct with separator string
   #      we just need the second one, thus the tail
-  target=$({ git for-each-ref refs/heads/ --format='%(color:green)%(refname:short)%(color:reset) [branch]' --color=always; git for-each-ref refs/remotes/$REMOTE/ --format='%(color:blue)%(refname:short)%(color:reset) [remotebranch]' --color=always; git for-each-ref refs/tags/ --format='%(color:red)%(refname:short)%(color:reset) [tag]' --color=always; git log --oneline --abbrev-commit --branches=*  --color=always; } \
-    | awk '{ if($2=="[branch]" || $2=="[remotebranch]" || $2=="[tag]") { system("bash -c '\''is_worktree "$1"'\''"); print $1 " " $2; } else { print $0 } }' \
+  target=$({ git for-each-ref refs/heads/ --format='[b] %(color:green)%(refname:short)%(color:reset)' --color=always; git for-each-ref refs/remotes/$REMOTE/ --format='[r] %(color:blue)%(refname:short)%(color:reset)' --color=always; git for-each-ref refs/tags/ --format='[t] %(color:red)%(refname:short)%(color:reset)' --color=always; git log --oneline --abbrev-commit --branches=* --color=always | awk '{print "[c]",$0}'; } \
     | sed -e "s/^[ \t]*//" \
-    | fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git" \
+    | fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$2\"~ \" \$2 }' | xargs git" \
     | sed -e "s/^[\']*//" \
     | sed "s/ /$separator/g" \
     | tail -n1)
@@ -83,13 +67,9 @@ if [[ -z $@ ]] || [[ "$MAIN" == "" ]]; then
     # if selected anything from fzf list, split the separator to get the desired "reference"
     ss=($(split-string $target "$separator"))
     declare -a ss
-    query=${ss[0]}
+    query=${ss[1]}
     len=${#ss[@]}
-    last=${ss[ len - 1 ]}
-    [[ ${ss[0]} == "[worktree]" ]] && query=${ss[1]}
-    if [[ $last != "[branch]" ]] && [[ $last != "[remotebranch]" ]] && [[ $last != "[tag]" ]]; then
-      last="[commit]"
-    fi
+    reftype=${ss[0]}
   else
     # if escaping fzf, exit
     exit 0;
@@ -118,13 +98,13 @@ else
   IS_REMOTE_BRANCH=$(git show-ref --verify --quiet -- refs/remotes/$REMOTE/"$query" || echo "false")
   IS_COMMIT=$(git cat-file -e $query^{commit} || echo "false")
 
-  # -z $last: the value was passed manually
-  if [[ -z $last && $IS_LOCAL_BRANCH != "false" ]] || [[ $last == "[branch]" ]]; then
+  # -z $reftype: the value was passed manually
+  if [[ -z $reftype && $IS_LOCAL_BRANCH != "false" ]] || [[ $reftype == "[b]" ]]; then
     git checkout "$query"
-  elif [[ -z $last && $IS_REMOTE_BRANCH != "false" ]] || [[ $last == "[remotebranch]" ]]; then
+  elif [[ -z $reftype && $IS_REMOTE_BRANCH != "false" ]] || [[ $reftype == "[r]" ]]; then
     BRANCH=$(echo "$query" | sed "s/^$REMOTE\///g")
     git checkout -b "$BRANCH" $REMOTE/"$BRANCH" || git checkout "$BRANCH"
-  elif [[ -z $last && $IS_COMMIT != "false" ]] || [[ $last == "[commit]" ]]; then
+  elif [[ -z $reftype && $IS_COMMIT != "false" ]] || [[ $reftype == "[c]" ]]; then
     # TODO would it make sense to check remote commits as well?
     git checkout $(git cat-file -e $query^{commit} || echo "-b") $query
   else
