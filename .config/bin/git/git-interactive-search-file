@@ -2,7 +2,8 @@
 
 # git-interactive-search-file wrapper
 #
-# fzf provides the fzf list of commits that changed a file
+# --follow returns commits that changed a file, beyond renames (works only for a single file)
+# fzf provides the fzf list of returned commits
 # fzf will preview diff of that hash with its previous (git diff --color HASH~ HASH)
 # 
 # use case: gisf filepath
@@ -12,5 +13,5 @@ if [[ -n $@ ]]; then
   git log --color=always --pretty=format:"$format" --abbrev-commit --date=relative --follow "$@" |
     fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git"
 else
-  echo "you need to provide a search string"
+  echo "you need to provide a file path"
 fi

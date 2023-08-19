@@ -2,7 +2,8 @@
 
 # git-interactive-search-content wrapper
 #
-# fzf provides the fzf list of commits including the string in the changed content
+# -G: Look for differences whose patch text contains added/removed lines that match <regex>
+# fzf provides the fzf list of returned commits
 # fzf will preview diff of that hash with its previous (git diff --color HASH~ HASH)
 # 
 # use case: gis string

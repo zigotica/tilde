@@ -2,7 +2,8 @@
 
 # git-interactive-search-commit wrapper
 #
-# fzf provides the fzf list of commits including the string in the log and notes message
+# --grep: return commits with log message that matches the specified pattern (regular expression).
+# fzf provides the fzf list of returned commits
 # fzf will preview diff of that hash with its previous (git diff --color HASH~ HASH)
 # 
 # use case: gisc string (or regex)
