@@ -8,9 +8,12 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias reload="source ~/.bash_profile"
 alias fuck='sudo $(history -p \!\!)' # prepend sudo to last command
-# make mv and rm a bit more safe
+# make mv a bit more safe
 alias mv='mv -i'
-alias rm='rm -i'
+# replace rm with trash-cli
+# rm will still work inside a script, and trash-cli will allow us to trash from neovim
+alias rm='trash'
+alias rmbin='empty-trash'
 # console
 [[ `uname -v | grep "ARM64"` != "" ]] && alias brew="arch -arm64 brew"
 if [[ `which python3` != "" ]]; then
@@ -31,10 +34,7 @@ alias tk="tmux-killer" # .config/bin/shell/tmux-killer
 alias npmdev="npm install --save-dev"
 alias yi="yarn install"
 alias ys="yarn start"
-# Empty the Trash on all mounted volumes and the main HDD.
-# Also, clear Apple’s System Logs to improve shell startup speed.
-# Finally, clear download history from quarantine. https://mths.be/bum
-alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+
 #####################################################################################
 #                                                                                 Git
 #####################################################################################

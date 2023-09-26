@@ -1,3 +1,22 @@
+local function custom_on_attach(bufnr)
+  local api = require('nvim-tree.api')
+
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+  -- use all default mappings
+  -- see list at https://github.com/nvim-tree/nvim-tree.lua/blob/master/lua/nvim-tree/keymap.lua
+  api.config.mappings.default_on_attach(bufnr)
+
+  --  override some defaults, add new mappings
+  vim.keymap.set('n', 'm', api.fs.cut, opts('Move')) -- same as cut (x)
+  vim.keymap.set('n', 'b', api.marks.toggle, opts('Toggle Bookmark'))
+  vim.keymap.set('n', 'd', api.fs.trash, opts('Trash'))
+  vim.keymap.set('n', 'bd', api.marks.bulk.trash, opts('Trash Bookmarked'))
+  vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
+end
+
 require'nvim-tree'.setup {
   update_cwd          = true,
   diagnostics = {
@@ -40,7 +59,8 @@ require'nvim-tree'.setup {
         folder_arrow = true,
       }
     }
-  }
+  },
+  on_attach = custom_on_attach
 }
 
 local function open_nvim_tree(data)
@@ -63,3 +83,4 @@ local function open_nvim_tree(data)
   require("nvim-tree.api").tree.open()
 end
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+
