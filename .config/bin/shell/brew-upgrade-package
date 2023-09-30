@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Update (one or multiple) selected application(s)
+# https://github.com/junegunn/fzf/wiki/examples#homebrew
+# use case: bup
+
+bup() {
+  local GRN="$(tput setaf 2)"
+  local RST="$(tput sgr0)"
+  local upd=$(brew leaves | fzf -m)
+
+  if [[ $upd ]]; then
+    for prog in $(echo $upd); do
+      echo -ne "\n${GRN}brew upgrade $prog ${RST}\n";
+      brew upgrade $prog;
+    done;
+  fi
+}
+bup

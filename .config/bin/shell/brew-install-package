@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Install (one or multiple) selected application(s)
+# https://github.com/junegunn/fzf/wiki/examples#homebrew
+# use case: bip <package>
+
+bip() {
+  local GRN="$(tput setaf 2)"
+  local RST="$(tput sgr0)"
+  local inst=$(brew search "$@" | fzf -m)
+
+  if [[ $inst ]]; then
+    for prog in $(echo $inst); do
+      echo -ne "\n${GRN}brew install $prog ${RST}\n";
+      brew install $prog;
+    done;
+  fi
+}
+bip $@

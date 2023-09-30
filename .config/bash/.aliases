@@ -26,6 +26,9 @@ if [[ `which exa` != "" ]]; then
 fi
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
+alias bcp="brew-clean-package" # .config/bin/shell/brew-clean-package
+alias bip="brew-install-package" # .config/bin/shell/brew-install-package
+alias bup="brew-upgrade-package" # .config/bin/shell/brew-upgrade-package
 alias t="tmux"
 alias tl="tmux ls"
 alias ta="tmux-attach" # .config/bin/shell/tmux-attach

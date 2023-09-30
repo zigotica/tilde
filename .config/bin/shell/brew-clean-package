@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Delete (one or multiple) selected application(s)
+# https://github.com/junegunn/fzf/wiki/examples#homebrew
+# use case: bcp
+
+bcp() {
+  local RED="$(tput setaf 1)"
+  local RST="$(tput sgr0)"
+  local upd=$(brew leaves | fzf -m)
+
+  if [[ $upd ]]; then
+    for prog in $(echo $upd); do
+      echo -ne "\n${RED}brew uninstall $prog ${RST}\n";
+      brew uninstall $prog;
+    done;
+  fi
+}
+bcp
