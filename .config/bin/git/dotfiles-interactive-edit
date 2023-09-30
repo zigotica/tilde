@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# git interactive wrapper to select dotfiles with fzf and send to visual editor
+#
+# use case: die
+# shift+tab to multi pick, tab to move
+
+dot="/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME"
+selected=$($dot ls-files ~ --full-name | fzf-tmux --ansi --preview="echo ~/{} | xargs cat")
+
+if [[ $selected != "" ]]; then
+  # echo "Edit ~/$selected"
+  $VISUAL ~/$selected 
+else
+  # if escaping fzf, exit
+  exit 0
+fi
+

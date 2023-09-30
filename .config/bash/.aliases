@@ -43,6 +43,7 @@ alias ys="yarn start"
 #####################################################################################
 alias dot='/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME'
 alias ds="dot status"
+alias die="dotfiles-interactive-edit" # .config/bin/git/dotfiles-interactive-edit
 alias da="dot add"
 alias dco="dot commit"
 alias dpoh="dot push origin HEAD"
