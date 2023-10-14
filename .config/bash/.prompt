@@ -4,7 +4,7 @@
 #####################################################################################
 function __is_ssh() {
   if is-session-ssh; then
-    echo -ne "${Red} "
+    echo -ne "${Red} "
   else
     echo ""
   fi
