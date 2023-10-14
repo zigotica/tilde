@@ -12,7 +12,7 @@ function __is_ssh() {
 
 function __is_tmux() {
   if is-session-tmux; then
-    echo -ne " 僧"
+    echo -ne " "
   else
     echo ""
   fi
