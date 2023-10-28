@@ -1,6 +1,7 @@
 # Basic Customization
 window:
   dynamic_title: true
+  opacity: .99
   dimensions:
     columns: 275 
     lines: 65
@@ -10,7 +11,6 @@ window:
 scrolling:
   history: 10000
   multiplier: 3
-background_opacity: .99
 selection:
   save_to_clipboard: true
 live_config_reload: true
@@ -18,19 +18,19 @@ live_config_reload: true
 # Font Customization
 font:
   normal:
-    family: Menlo
+    family: Hack Nerd Font Mono
     style: Regular
   bold:
-    family: Menlo
+    family: Hack Nerd Font Mono
     style: Bold
   italic:
-    family: Menlo
+    family: Hack Nerd Font Mono
     style: Italic
   size: 14
   offset:
     x: 0
     y: 1
-  use_thin_strokes: false
+  # use_thin_strokes: false
 
 # Nightfox Alacritty Colors
 # Style: nightfox
