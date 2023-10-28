@@ -53,3 +53,8 @@ vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.undoreload = 1000
 
+-- folds using treesitter: zc (create) zo (open) zR (open all)
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- keep them open by default
+vim.opt.foldenable = false
