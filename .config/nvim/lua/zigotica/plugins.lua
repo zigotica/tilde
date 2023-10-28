@@ -27,6 +27,7 @@ vim.cmd([[
   Plug 'hrsh7th/cmp-path'
   Plug 'jxnblk/vim-mdx-js'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'windwp/nvim-autopairs'
   Plug 'windwp/nvim-ts-autotag'
   Plug 'mattn/emmet-vim'
