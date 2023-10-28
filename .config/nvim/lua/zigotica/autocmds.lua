@@ -35,12 +35,19 @@ autocmd FocusLost,WinLeave * call BlurBuffer()
 " save file on blur
 autocmd FocusLost,WinLeave * silent! :wa
 
+" auto highlight yanked content
+" https://jdhao.github.io/2020/05/22/highlight_yank_region_nvim/
+augroup highlight_yank
+  autocmd!
+  au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=400}
+augroup END
+
 " When entering insert mode, relative line numbers are turned off
 " Same when the buffer loses focus
 " see https://jeffkreeftmeijer.com/vim-number/
-:augroup numbertoggle
-:  autocmd!
-:  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-:  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
-:augroup END
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+augroup END
 ]])
