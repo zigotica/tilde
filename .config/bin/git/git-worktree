@@ -124,7 +124,7 @@ fi
 
 if [ $action == "move" ] && [[ $wt == "" ]]; then
   # If move action has no value, change to main worktree
-  cd $base
+  goto $base
   # https://askubuntu.com/a/1326059
   $SHELL
 fi
@@ -136,33 +136,46 @@ exists=0
 # logic
 if [ $exists == 1 ]; then
   if [ $action == "add" ]; then
-    err "Cannot create an existing folder at $dest, move instead" cd "$dest"
+    err "Cannot create an existing folder at $dest, move instead" goto "$dest"
   elif [ $action == "move" ]; then
-    cd "$dest"
+    goto "$dest"
     # https://askubuntu.com/a/1326059
     $SHELL
   else
-    # if removing current, move to main first
     destfolder=$(get-folder-name $dest)
     if [[ $folder == $destfolder ]]; then
-      cd "$base"
+      # if removing current, close vim/neovim first, to avoid widow swap files
+      # https://superuser.com/a/1792460
+      tmux list-panes -sF "#{pane_id} #{pane_current_command}" \
+        | awk '/vim|nvim/ {print $1}' \
+        | xargs -I {} tmux send-keys -t {} "C-[" ":%bdelete" "C-m" "ZQ"
+      # then move to main
+      goto "$base"
     fi
     git worktree remove $dest
+    # kill potentially active tmux session
+    tmux-killer $destfolder
+    # https://askubuntu.com/a/1326059
     $SHELL
   fi
 else
   if [ $action == "add" ]; then
     if [ -z $nb ]; then
+      # if not creating a new branch and is already checked out, skip
+      checkedout=$(git-worktree -l | awk '{print $3}' | grep "[$fb]" | wc -l | xargs)
+      if [ "$checkedout" == 1 ]; then
+        err "Branch $fb already checked out in a worktree" git-worktree -l
+      fi
       git worktree add $dest $fb
     else
       git worktree add -b $nb $dest $fb
     fi
-    cd "$dest"
+    goto "$dest"
     $SHELL
   elif [ $action == "move" ]; then
-    err "Cannot move to missing worktree $wt, move to main worktree instead" cd "$base"
+    err "Cannot move to missing worktree $wt, move to main worktree instead" goto "$base"
   else
-    err "Cannot remove a missing worktree $wt, list worktrees" gwt -l
+    err "Cannot remove a missing worktree $wt, list worktrees" git-worktree -l
   fi
 fi
 

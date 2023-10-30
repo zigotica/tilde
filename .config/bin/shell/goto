@@ -4,10 +4,15 @@
 # then create a tmux session there (starts tmux if not running)
 # Inspired by ThePrimeagen
 # use: goto
+# use: goto /Users/whatever/path/to/project
 # shortcut: Ctrl+g, see .profile
 
-targets=$(cat ~/.config/bash/fzf-utils/dirs-personal.txt  ~/.config/bash/fzf-utils/dirs-work.txt | tr "\n" " " | sed "s|~|$HOME|g")
-selected=$(find $targets -mindepth 1 -maxdepth 1 -type d | fzf)
+if [ $1 ]; then
+  selected=$1
+else
+  targets=$(cat ~/.config/bash/fzf-utils/dirs-personal.txt  ~/.config/bash/fzf-utils/dirs-work.txt | tr "\n" " " | sed "s|~|$HOME|g")
+  selected=$(find $targets -mindepth 1 -maxdepth 1 -type d | fzf)
+fi
 foldername=$(basename "$selected" | tr . _)
 
 if ! tmux has-session -t "$foldername" 2> /dev/null; then
@@ -19,5 +24,6 @@ if ! tmux has-session -t "$foldername" 2> /dev/null; then
     tmux switch-client -t "$foldername"
   fi
 else
-  tmux attach -t "$foldername"
+  # ./~config/bin/shell
+  tmux-attach "$foldername"
 fi

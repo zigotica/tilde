@@ -23,7 +23,7 @@ export DIR_PERSONAL="~/Documents/personal/"
 export DIR_WORK="~/Documents/work/"
 
 # Delimiters
-export SPLIT_DELIMITER="#####"
+export SPLIT_DELIMITER="__________"
 
 # exa icons
 export EXA_ICON_SPACING=2
