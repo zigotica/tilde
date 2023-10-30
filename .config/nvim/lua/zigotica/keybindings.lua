@@ -104,6 +104,9 @@ map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>') -
 ----------------------------------------------
 -- (2x leader being a destructive command)
 
+map('n', '<leader><leader>ee', '<plug>(emmet-expand-abbr)') -- emmet expand abbrv
+map('i', '<c-e>e', '<plug>(emmet-expand-abbr)') 
+
 map('n', '<leader><leader>rf', ':%s/a/b/g') -- replace in file
 map('n', '<leader><leader>rb', ':bufdo %s/a/b/ge | update') -- replace in all open buffers
 map('n', '<leader><leader>rp', ':cdo %s/a/b/g') -- replace in all project (requires a quickfix buffer from a search, like :rg)
