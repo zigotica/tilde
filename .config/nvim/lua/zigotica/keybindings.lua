@@ -107,6 +107,6 @@ map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>') -
 map('n', '<leader><leader>ee', '<plug>(emmet-expand-abbr)') -- emmet expand abbrv
 map('i', '<c-e>e', '<plug>(emmet-expand-abbr)') 
 
-map('n', '<leader><leader>rf', ':%s/a/b/g') -- replace in file
-map('n', '<leader><leader>rb', ':bufdo %s/a/b/ge | update') -- replace in all open buffers
-map('n', '<leader><leader>rp', ':cdo %s/a/b/g') -- replace in all project (requires a quickfix buffer from a search, like :rg)
+map('n', '<leader><leader>rf', ':%s/<C-r><C-w>//g<Left><Left>') -- replace word under cursor in file
+map('n', '<leader><leader>rb', ':bufdo %s/<C-r><C-w>//ge | update<C-Left><C-Left><Left><Left><Left><Left>') -- replace word under cursor in all open buffers
+map('n', '<leader><leader>rp', ':cdo %s/<C-r><C-w>//g<Left><Left>') -- replace word under cursor in all project (requires a quickfix buffer from a search, like :rg)
