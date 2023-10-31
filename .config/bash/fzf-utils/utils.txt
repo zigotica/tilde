@@ -21,6 +21,7 @@ split
 tldr
 tr
 tmux
+uniq
 wc
 wget
 xargs
