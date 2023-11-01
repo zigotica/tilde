@@ -10,9 +10,9 @@ end
 
 -- GENERAL MAPPINGS
 ----------------------------------------------
-
-map('n', '<Space>', '<NOP>', { silent = true })
-vim.g.mapleader = ' '
+-- mapleader defined just before the plugins are listed, lazy.nvim depends on it
+-- map('n', '<Space>', '<NOP>', { silent = true })
+-- vim.g.mapleader = ' '
 
 map('n', 'Q', '<NOP>') -- dont use Ex mode
 

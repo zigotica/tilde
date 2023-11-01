@@ -1,49 +1,86 @@
-vim.cmd([[
-  " Specify a directory for plugins
-  call plug#begin('~/.config/nvim/plugged')
+-- Install lazy plugin manager if needed
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-  " Basic extensions
-  Plug 'tpope/vim-surround'
-  Plug 'numToStr/Comment.nvim'
+-- lazy requires leader key to be defined before plugins are required
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
-  " Lua basics
-  Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
+-- list of plugins and dependencies
+require("lazy").setup({
+  -- Basic extensions
+  'tpope/vim-surround',
+  'numToStr/Comment.nvim',
 
-  " Menu 
-  Plug 'kyazdani42/nvim-tree.lua'
+  -- Menu 
+  {
+    'kyazdani42/nvim-tree.lua',
+    dependencies = 'kyazdani42/nvim-web-devicons',
+  },
 
-  " Telescope core
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'nvim-telescope/telescope.nvim'
+  -- Telescope core
+  {
+    'nvim-telescope/telescope.nvim',
+    dependencies = 'nvim-lua/plenary.nvim',  
+  },
 
-  " Languages
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'hrsh7th/cmp-nvim-lsp'
-  Plug 'hrsh7th/cmp-buffer'
-  Plug 'hrsh7th/nvim-cmp'
-  Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
-  Plug 'hrsh7th/cmp-vsnip'
-  Plug 'hrsh7th/vim-vsnip'
-  Plug 'hrsh7th/cmp-path'
-  Plug 'jxnblk/vim-mdx-js'
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-  Plug 'windwp/nvim-autopairs'
-  Plug 'windwp/nvim-ts-autotag'
-  Plug 'mattn/emmet-vim'
-  Plug 'editorconfig/editorconfig-vim'
-  Plug 'kevinhwang91/nvim-bqf'
+  -- Languages
+  'neovim/nvim-lspconfig',
+  'hrsh7th/cmp-nvim-lsp',
+  'hrsh7th/cmp-buffer',
+  'hrsh7th/nvim-cmp',
+  {
+    'tzachar/cmp-tabnine',
+    build = './install.sh',
+    dependencies = 'hrsh7th/nvim-cmp',
+  },
+  'hrsh7th/cmp-vsnip',
+  'hrsh7th/vim-vsnip',
+  'hrsh7th/cmp-path',
+  'jxnblk/vim-mdx-js',
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+  },
+  'windwp/nvim-autopairs',
+  {
+    'windwp/nvim-ts-autotag',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+  },
+  'mattn/emmet-vim',
+  'editorconfig/editorconfig-vim',
+  {
+    'kevinhwang91/nvim-bqf',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+  },
 
-  " Git
-  Plug 'lewis6991/gitsigns.nvim'
+  -- Git
+  'lewis6991/gitsigns.nvim',
 
-  " Status
-  Plug 'nvim-lualine/lualine.nvim'
+  -- Status
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = 'kyazdani42/nvim-web-devicons',
+  },
 
-  " Colorschemes
-  Plug 'zigotica/nightfox.nvim', {'branch': 'main'}
-  Plug 'norcalli/nvim-colorizer.lua'
-
-  " Initialize plugin system
-  call plug#end()
-]])
+  -- Colorschemes
+  {
+    'zigotica/nightfox.nvim',
+    branch = 'main',
+  },
+  'norcalli/nvim-colorizer.lua',
+})
