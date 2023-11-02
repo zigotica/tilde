@@ -110,5 +110,6 @@ map('n', '<leader><leader>ee', '<plug>(emmet-expand-abbr)') -- emmet expand abbr
 map('i', '<c-e>e', '<plug>(emmet-expand-abbr)') 
 
 map('n', '<leader><leader>rf', ':%s/<C-r><C-w>//g<Left><Left>') -- replace word under cursor in file
+map('v', '<leader><leader>rs', ':s///g<Left><Left><Left>') -- replace in selection
 map('n', '<leader><leader>rb', ':bufdo %s/<C-r><C-w>//ge | update<C-Left><C-Left><Left><Left><Left><Left>') -- replace word under cursor in all open buffers
 map('n', '<leader><leader>rp', ':cdo %s/<C-r><C-w>//g<Left><Left>') -- replace word under cursor in all project (requires a quickfix buffer from a search, like :rg)
