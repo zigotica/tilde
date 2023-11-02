@@ -21,8 +21,8 @@ map('', '<F1>', ':w<CR>') -- save file
 map('n', '<F2>', ':vertical resize -2<CR>') -- resize vertical splits
 map('n', '<F3>', ':vertical resize +2<CR>')
 
-map('n', '<F4>', ':<C-w>h') -- navigate vertical splits
-map('n', '<F5>', ':<C-w>l')
+map('n', '<F4>', '<C-w>h') -- navigate vertical splits
+map('n', '<F5>', '<C-w>l')
 
 map('', '<F8>', ':setlocal spell! spelllang=en_gb<CR>') -- toggle english spell checking
 
