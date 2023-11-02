@@ -41,8 +41,10 @@ map('n', '<leader>x', ':!chmod +x %<CR>') -- make current file executable
 ----------------------------------------------
 
 map('n', 'd', '"1d') -- remap change, cut and delete to store text to register number 1
+map('n', 'D', '"1D')
 map('v', 'd', '"1d')
 map('n', 'c', '"1c')
+map('n', 'C', '"1C')
 map('v', 'c', '"1c')
 map('n', 'x', '"1x')
 map('v', 'x', '"1x')
