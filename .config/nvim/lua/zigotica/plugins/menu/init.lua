@@ -10,10 +10,11 @@ local function custom_on_attach(bufnr)
   api.config.mappings.default_on_attach(bufnr)
 
   --  override some defaults, add new mappings
-  vim.keymap.set('n', 'm', api.fs.cut, opts('Move')) -- same as cut (x)
+  vim.keymap.set('n', 'm', api.fs.rename_full, opts('Move')) -- same as rename_full (u)
   vim.keymap.set('n', 'b', api.marks.toggle, opts('Toggle Bookmark'))
   vim.keymap.set('n', 'd', api.fs.trash, opts('Trash'))
-  vim.keymap.set('n', 'bd', api.marks.bulk.trash, opts('Trash Bookmarked'))
+  vim.keymap.set('n', 'Bd', api.marks.bulk.trash, opts('Trash Bookmarked'))
+  vim.keymap.set('n', 'Bm', api.marks.bulk.move, opts('Move Bookmarked'))
   vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
 end
 
