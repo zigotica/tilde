@@ -8,10 +8,23 @@
   all = add .
   am = commit -am
   b = branch --list -a
-  back = !git reset --soft HEAD~1 && git reset HEAD .
+  back = "!git reset --soft HEAD~1 && git reset HEAD . #"
   cd = checkout develop
-  l = !git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative
+  l = log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative
   p = pull
   poh = push origin HEAD
-  rall = !git clean -df .
+  rall = clean -df .
   s = status
+  new = "!git l $1..HEAD #"
+  missing = "!git l HEAD..$1 #"
+  d = diff
+  ds = d --staged
+  sh = stash save --keep-index --include-untracked
+  m = merge
+  mc = m --continue
+  r = "!git rebase -i HEAD~\"$1\" #"
+[rebase]
+  autoStash = true
+[gc]
+  reflogExpire = 180
+  reflogExpireUnreachable = 180
