@@ -18,6 +18,7 @@ vim.opt.ruler = false
 vim.opt.wrap = true -- turn on line wrapping
 vim.opt.confirm = true
 vim.opt.showmode = false -- we are already showing mode info in status
+vim.opt.laststatus = 3 -- use a single status line
 
 -- allow mouse
 vim.opt.mouse = 'a'
