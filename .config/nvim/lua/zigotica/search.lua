@@ -24,7 +24,7 @@ vim.opt.wildmenu = true
 vim.opt.wildmode = 'longest,list,full'
 
 -- searching
-vim.opt.ignorecase = true -- case insensitive searching
+vim.opt.ignorecase = false -- case sensitive searching
 vim.opt.smartcase = true -- case-sensitive if expresson contains a capital letter
 vim.opt.hlsearch = true -- highlight search results
 vim.opt.incsearch = true -- set incremental search, like modern browsers
