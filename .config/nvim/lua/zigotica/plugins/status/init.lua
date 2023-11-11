@@ -1,4 +1,5 @@
 local palette = require"zigotica.common.colors"
+local shared_icons = require"zigotica.common.icons"
 
 require'lualine'.setup {
   options = {
@@ -63,14 +64,14 @@ require'lualine'.setup {
       {'branch'},
       {'diff'},
       {
-        'diagnostics', source = {'nvim_lsp', 'nvim_diagnostic'},
-        sections = { 'error' },
-        diagnostics_color = { error = { bg = palette.red, fg = palette.fg1 } },
-      },
-      {
-        'diagnostics', source = {'nvim_lsp', 'nvim_diagnostic'},
-        sections = { 'warn' },
-        diagnostics_color = { warn = { bg = palette.yellow, fg = palette.bg1 } },
+        'diagnostics',
+        source = {'nvim_lsp', 'nvim_diagnostic'},
+        symbols = {
+          hint = shared_icons[1]..' ',
+          info = shared_icons[2]..' ',
+          warn = shared_icons[3]..' ',
+          error = shared_icons[4]..' ',
+        },
       },
     },
     lualine_b = {},
@@ -81,10 +82,10 @@ require'lualine'.setup {
         newfile_status = true,
         path = 1,
         symbols = {
-          modified = '', -- 󰅸 * 
-          readonly = '󰌾',
-          unnamed = '',
-          newfile = '',
+          modified = shared_icons[5],
+          readonly = shared_icons[6],
+          unnamed = shared_icons[7],
+          newfile = shared_icons[8],
         }
       },
     },

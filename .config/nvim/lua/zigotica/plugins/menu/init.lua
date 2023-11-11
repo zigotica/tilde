@@ -1,3 +1,5 @@
+local shared_icons = require"zigotica.common.icons"
+
 local function custom_on_attach(bufnr)
   local api = require('nvim-tree.api')
 
@@ -23,10 +25,10 @@ require'nvim-tree'.setup {
   diagnostics = {
     enable = true,
     icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
+      hint = shared_icons[1],
+      info = shared_icons[2],
+      warning = shared_icons[3],
+      error = shared_icons[4],
     }
   },
   update_focused_file = {

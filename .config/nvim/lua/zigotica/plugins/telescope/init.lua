@@ -1,6 +1,8 @@
+local shared_icons = require"zigotica.common.icons"
+
 require('telescope').setup{
   defaults = {
-    prompt_prefix = "z: ",
+    prompt_prefix = ' '..shared_icons[9]..' ',
     sorting_strategy = "ascending",
     layout_config = {
       prompt_position = "top",

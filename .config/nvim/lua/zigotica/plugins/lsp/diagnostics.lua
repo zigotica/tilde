@@ -1,5 +1,8 @@
+local border_style = require"zigotica.common.borders"
+local shared_icons = require"zigotica.common.icons"
+
 -- Change diagnostic symbols in the sign column (gutter)
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+local signs = { Error = shared_icons[4], Warn = shared_icons[3], Hint = shared_icons[1], Info = shared_icons[1] }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -11,8 +14,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     severity_sort = true
   }
 )
-
-local border_style = require"zigotica.common.borders"
 
 -- wrap open_float to inspect diagnostics and use the severity color for border
 -- https://neovim.discourse.group/t/lsp-diagnostics-how-and-where-to-retrieve-severity-level-to-customise-border-color/1679
