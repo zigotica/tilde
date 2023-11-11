@@ -35,6 +35,9 @@ local source_type_icons = {
   TypeParameter = ""
 }
 
+local border_style = require"zigotica.common.borders"
+local hl_style= require"zigotica.common.highlight"
+
 -- Setup nvim-cmp.
 local cmp = require'cmp'
 
@@ -115,6 +118,17 @@ cmp.setup({
       return vim_item
     end
   },
+  window = {
+    completion = {
+      border = border_style,
+      winhighlight = hl_style,
+      side_padding = 0,
+    },
+    documentation = {
+      border = border_style,
+      winhighlight = hl_style,
+    },
+  },
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -132,5 +146,4 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
-
 

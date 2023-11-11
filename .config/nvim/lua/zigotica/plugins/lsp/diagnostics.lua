@@ -12,6 +12,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
+local border_style = require"zigotica.common.borders"
+
 -- wrap open_float to inspect diagnostics and use the severity color for border
 -- https://neovim.discourse.group/t/lsp-diagnostics-how-and-where-to-retrieve-severity-level-to-customise-border-color/1679
 vim.diagnostic.open_float = (function(orig)
@@ -36,14 +38,14 @@ vim.diagnostic.open_float = (function(orig)
             [vim.diagnostic.severity.ERROR] = "DiagnosticError",
         })[max_severity]
         opts.border = {
-            {"🭽", border_color},
-            {"▔", border_color},
-            {"🭾", border_color},
-            {"▕", border_color},
-            {"🭿", border_color},
-            {"▁", border_color},
-            {"🭼", border_color},
-            {"▏", border_color},
+            {border_style[1], border_color},
+            {border_style[2], border_color},
+            {border_style[3], border_color},
+            {border_style[4], border_color},
+            {border_style[5], border_color},
+            {border_style[6], border_color},
+            {border_style[7], border_color},
+            {border_style[8], border_color},
         }
         orig(bufnr, opts)
     end
