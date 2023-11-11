@@ -28,6 +28,16 @@ require("lazy").setup({
     dependencies = 'nvim-lua/plenary.nvim',  
   },
 
+  -- Telescope extensions
+  {
+    -- useful for days when the z12 micropad w/ rotary encoder not at hand
+    -- https://github.com/zigotica/mechanical-keyboards/tree/main/z12
+    'debugloop/telescope-undo.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    }
+  },
+
   -- Languages
   'neovim/nvim-lspconfig',
   'hrsh7th/cmp-nvim-lsp',
