@@ -22,12 +22,6 @@ require("lazy").setup({
   'tpope/vim-surround',
   'numToStr/Comment.nvim',
 
-  -- Menu 
-  {
-    'kyazdani42/nvim-tree.lua',
-    dependencies = 'kyazdani42/nvim-web-devicons',
-  },
-
   -- Telescope core
   {
     'nvim-telescope/telescope.nvim',
@@ -71,16 +65,19 @@ require("lazy").setup({
   -- Git
   'lewis6991/gitsigns.nvim',
 
+  -- Colors
+  'edeneast/nightfox.nvim',
+  'norcalli/nvim-colorizer.lua',
+
+  -- Menu 
+  {
+    'kyazdani42/nvim-tree.lua',
+    dependencies = 'kyazdani42/nvim-web-devicons',
+  },
+
   -- Status
   {
     'nvim-lualine/lualine.nvim',
     dependencies = 'kyazdani42/nvim-web-devicons',
   },
-
-  -- Colorschemes
-  {
-    'zigotica/nightfox.nvim',
-    branch = 'main',
-  },
-  'norcalli/nvim-colorizer.lua',
 })
