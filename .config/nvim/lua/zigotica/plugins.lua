@@ -37,6 +37,18 @@ require("lazy").setup({
       'nvim-telescope/telescope.nvim',
     }
   },
+  {
+    'nvim-telescope/telescope-symbols.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    }
+  },
+  {
+    'ghassan0/telescope-glyph.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    }
+  },
 
   -- Languages
   'neovim/nvim-lspconfig',

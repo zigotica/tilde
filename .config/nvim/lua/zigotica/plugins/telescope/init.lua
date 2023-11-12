@@ -7,12 +7,8 @@ require('telescope').setup{
     layout_config = {
       prompt_position = "top",
     },
-    mappings = {-- change default Enter to open in right split
-      n = {
-        ["<CR>"] = "select_vertical"
-      },
+    mappings = {
       i = {
-        ["<CR>"] = "select_vertical",
         ["<C-h>"] = "which_key"
       }
     },
@@ -41,6 +37,15 @@ require('telescope').setup{
       }
     }
   },
+  extensions = {
+    glyph = {
+      action = function(glyph)
+        -- insert glyph when picked
+        vim.api.nvim_put({ glyph.value }, 'c', false, true)
+      end,
+    },
+  },
 }
 
 require('telescope').load_extension('undo')
+require('telescope').load_extension('glyph')
