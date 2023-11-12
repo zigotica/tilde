@@ -55,11 +55,6 @@ require("lazy").setup({
   'hrsh7th/cmp-nvim-lsp',
   'hrsh7th/cmp-buffer',
   'hrsh7th/nvim-cmp',
-  {
-    'tzachar/cmp-tabnine',
-    build = './install.sh',
-    dependencies = 'hrsh7th/nvim-cmp',
-  },
   'hrsh7th/cmp-vsnip',
   'hrsh7th/vim-vsnip',
   'hrsh7th/cmp-path',
@@ -82,6 +77,20 @@ require("lazy").setup({
   {
     'kevinhwang91/nvim-bqf',
     dependencies = 'nvim-treesitter/nvim-treesitter',
+  },
+
+  -- AI completion
+  {
+    'tzachar/cmp-tabnine',
+    build = './install.sh',
+    dependencies = 'hrsh7th/nvim-cmp',
+  },
+  {
+    'Exafunction/codeium.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'hrsh7th/nvim-cmp',
+    },
   },
 
   -- Git

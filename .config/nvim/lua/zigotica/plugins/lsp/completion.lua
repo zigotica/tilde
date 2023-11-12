@@ -1,4 +1,4 @@
-vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'noinsert'}
+vim.opt.completeopt = {'menu', 'menuone', 'preview', 'noselect', 'noinsert'}
 
 -- Tab completion helper
 local has_words_before = function()
@@ -84,6 +84,7 @@ cmp.setup({
     end, { "i", "s" }),
   },
   sources = cmp.config.sources({
+    { name = "codeium" },
     { name = 'cmp_tabnine' },
     { name = 'nvim_lsp' },
     { name = 'buffer' },
@@ -96,6 +97,7 @@ cmp.setup({
       vim_item.kind = string.format('%s %s', source_type_icons[vim_item.kind], vim_item.kind)
       -- Sources
       vim_item.menu = ({
+        codeium = "[Cod]",
         cmp_tabnine = "[Tab9]",
         nvim_lsp = "[LSP]",
         buffer = "[Buffer]",
@@ -103,7 +105,19 @@ cmp.setup({
         nvim_lua = "[Lua]",
         vsnip = "[VSnip]",
       })[entry.source.name]
-      -- tweak Tabnine
+      -- tweak Codeium icon
+      if entry.source.name == 'codeium' then
+        vim_item.kind = '{…}'
+        local detail = (entry.completion_item.data or {}).detail
+        if detail and detail:find('.*%%.*') then
+          vim_item.kind = vim_item.kind .. ' ' .. detail
+        end
+
+        if (entry.completion_item.data or {}).multiline then
+          vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
+        end
+      end
+      -- tweak Tabnine icon
       if entry.source.name == 'cmp_tabnine' then
         vim_item.kind = ''
         local detail = (entry.completion_item.data or {}).detail
