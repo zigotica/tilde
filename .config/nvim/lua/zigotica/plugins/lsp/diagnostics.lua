@@ -2,7 +2,7 @@ local border_style = require"zigotica.common.borders"
 local shared_icons = require"zigotica.common.icons"
 
 -- Change diagnostic symbols in the sign column (gutter)
-local signs = { Error = shared_icons[4], Warn = shared_icons[3], Hint = shared_icons[1], Info = shared_icons[1] }
+local signs = { Error = shared_icons.error, Warn = shared_icons.warn, Hint = shared_icons.hint, Info = shared_icons.info }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })

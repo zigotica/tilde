@@ -25,10 +25,10 @@ require'nvim-tree'.setup {
   diagnostics = {
     enable = true,
     icons = {
-      hint = shared_icons[1],
-      info = shared_icons[2],
-      warning = shared_icons[3],
-      error = shared_icons[4],
+      hint = shared_icons.hint,
+      info = shared_icons.info,
+      warning = shared_icons.warn,
+      error = shared_icons.error,
     }
   },
   update_focused_file = {

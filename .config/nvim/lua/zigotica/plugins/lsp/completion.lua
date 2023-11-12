@@ -7,33 +7,8 @@ local has_words_before = function()
 end
 
 -- Configure the icons for sources, used in formatting
-local source_type_icons = {
-  Text = "",
-  Method = "",
-  Function = "",
-  Constructor = "",
-  Field = "",
-  Variable = "",
-  Class = "ﴯ",
-  Interface = "",
-  Module = "",
-  Property = "ﰠ",
-  Unit = "",
-  Value = "",
-  Enum = "",
-  Keyword = "",
-  Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
-  EnumMember = "",
-  Constant = "",
-  Struct = "",
-  Event = "",
-  Operator = "",
-  TypeParameter = ""
-}
+local shared_icons = require"zigotica.common.icons"
+local source_type_icons = shared_icons.lsp_completion
 
 local border_style = require"zigotica.common.borders"
 local hl_style= require"zigotica.common.highlight"
@@ -107,7 +82,7 @@ cmp.setup({
       })[entry.source.name]
       -- tweak Codeium icon
       if entry.source.name == 'codeium' then
-        vim_item.kind = '{…}'
+        vim_item.kind = source_type_icons.Codeium
         local detail = (entry.completion_item.data or {}).detail
         if detail and detail:find('.*%%.*') then
           vim_item.kind = vim_item.kind .. ' ' .. detail
@@ -119,7 +94,7 @@ cmp.setup({
       end
       -- tweak Tabnine icon
       if entry.source.name == 'cmp_tabnine' then
-        vim_item.kind = ''
+        vim_item.kind = source_type_icons.Tab9
         local detail = (entry.completion_item.data or {}).detail
         if detail and detail:find('.*%%.*') then
           vim_item.kind = vim_item.kind .. ' ' .. detail
