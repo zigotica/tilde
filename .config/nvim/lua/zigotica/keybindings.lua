@@ -16,7 +16,7 @@ end
 
 map('n', 'Q', '<NOP>') -- dont use Ex mode
 
-map('', '<F1>', ':w<CR>') -- save file
+map('', '<c-s>', ':w<CR>') -- save file
 
 map('n', '<F2>', ':vertical resize -2<CR>') -- resize vertical splits
 map('n', '<F3>', ':vertical resize +2<CR>')
