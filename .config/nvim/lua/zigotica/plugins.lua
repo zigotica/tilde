@@ -93,6 +93,16 @@ require("lazy").setup({
     },
   },
 
+  -- Testing
+  {
+    'nvim-neotest/neotest',
+    dependencies = {
+      'haydenmeade/neotest-jest',
+      'antoinemadec/FixCursorHold.nvim',
+    },
+    ft = { 'js', 'ts', 'jsx', 'tsx' },
+  },
+
   -- Git
   'lewis6991/gitsigns.nvim',
 

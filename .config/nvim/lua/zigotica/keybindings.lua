@@ -102,6 +102,12 @@ map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NvimTreeOpen<CR><C-w>l')
 map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>') -- git blame for line
 
 
+-- TESTING: run test, stop, toggle summary
+map('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest").summary.open()<CR>')
+map('n', '<leader>ts', '<cmd>lua require("neotest").run.stop();require("neotest").summary.close()<CR>')
+map('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>')
+
+
 -- REPLACEMENT
 ----------------------------------------------
 -- (2x leader being a destructive command)
