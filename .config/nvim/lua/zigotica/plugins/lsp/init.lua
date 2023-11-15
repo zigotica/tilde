@@ -1,5 +1,3 @@
-require("zigotica.plugins.lsp.codeium")
-require("zigotica.plugins.lsp.tabnine")
 require("zigotica.plugins.lsp.completion")
 require("zigotica.plugins.lsp.tags")
 require("zigotica.plugins.lsp.diagnostics")
