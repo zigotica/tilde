@@ -20,6 +20,7 @@ vim.g.maplocalleader = ' '
 require("lazy").setup({
   -- Basic extensions
   'tpope/vim-surround',
+  'mg979/vim-visual-multi',
   'numToStr/Comment.nvim',
 
   -- Telescope core
