@@ -39,7 +39,6 @@ require'nvim-tree'.setup {
   filters = {
     dotfiles = false,
     custom = {
-      "build",
       "dist",
       "history",
       "node_modules",
