@@ -38,6 +38,12 @@ if [[ ! -z $(which fzf) ]] && [[ ! -z $(which rg) ]]; then
   export FZF_DEFAULT_COMMAND="rg --hidden --no-ignore --glob=!.git/ --files"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+
+  # Use ~~ as the trigger sequence instead of the default **
+  export FZF_COMPLETION_TRIGGER='~~'
+
+  source "/opt/homebrew/opt/fzf/shell/completion.bash"
+  source "/opt/homebrew/opt/fzf/shell/key-bindings.bash"
 fi
 
 # Puppeteer needed for visual regression tests
