@@ -107,6 +107,9 @@ map('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest")
 map('n', '<leader>ts', '<cmd>lua require("neotest").run.stop();require("neotest").summary.close()<CR>')
 map('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>')
 
+-- AI
+map('n', '<leader>ai', ':Gen<CR>')
+map('v', '<leader>ai', ':Gen<CR>')
 
 -- REPLACEMENT
 ----------------------------------------------

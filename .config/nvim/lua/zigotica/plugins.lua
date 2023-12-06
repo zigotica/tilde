@@ -50,6 +50,12 @@ require("lazy").setup({
       'nvim-telescope/telescope.nvim',
     }
   },
+  {
+    'nvim-telescope/telescope-ui-select.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    }
+  },
 
   -- Languages
   'neovim/nvim-lspconfig',
@@ -93,6 +99,7 @@ require("lazy").setup({
       'hrsh7th/nvim-cmp',
     },
   },
+  { 'David-Kunz/gen.nvim' },
 
   -- Testing
   {

@@ -44,8 +44,16 @@ require('telescope').setup{
         vim.api.nvim_put({ glyph.value }, 'c', false, true)
       end,
     },
+    ['ui-select'] = {
+      require('telescope.themes').get_dropdown{
+        layout_config = {
+          height = 22,
+        },
+      },
+    }
   },
 }
 
 require('telescope').load_extension('undo')
 require('telescope').load_extension('glyph')
+require('telescope').load_extension('ui-select')

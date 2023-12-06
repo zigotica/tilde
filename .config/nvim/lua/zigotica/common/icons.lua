@@ -36,5 +36,17 @@ return {
     TypeParameter = '',
     Tab9 = '',
     Codeium = '{…}', -- 󰞔 →
+  },
+  ai = {
+    Chat = '', --     
+    Test = '', --    
+    Regex = '', --   
+    Comment = '', --  
+    Code = '', --   
+    Text = '', --   
+    Items = '', --    
+    Swap = '', -- 
+    Keep = '', --  
+    into = '', --  
   }
 }
