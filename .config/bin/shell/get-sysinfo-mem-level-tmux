@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Get Memory pressure Info to return color to tmux
+# requires: memory_pressure
+
+function mem() {
+  local level="colour239"
+
+  if [[ ! -z $(which memory_pressure) ]]; then
+    local data=$(get-sysinfo-mem)
+    local freemem=$(echo "$data" \
+      | awk '{print $2}' \
+      | sed s/%//)
+    
+    [[ $freemem -gt 50 ]] && level="yellow";
+    [[ $freemem -gt 80 ]] && level="red";
+  fi
+
+  level="#[fg=$level]"
+
+  echo "$level$data#[fg=colour239]"
+}
+mem

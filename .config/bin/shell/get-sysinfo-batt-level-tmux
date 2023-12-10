@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Get Battery Info to return color to tmux
+# requires: pmset
+
+function battery() {
+  local level="colour239"
+
+  if [[ ! -z $(which pmset) ]]; then
+    local data=$(get-sysinfo-batt)
+    local perc=$(echo "$data" \
+      | awk '{print $3}' \
+      | sed s/%//)
+
+    [[ $perc -lt 30 ]] && level="yellow";
+    [[ $perc -lt 15 ]] && level="red";
+  fi
+
+  level="#[fg=$level]"
+
+  echo "$level$data#[fg=colour239]"
+}
+battery

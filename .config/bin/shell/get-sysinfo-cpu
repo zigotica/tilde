@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Get Total CPU usage from top command
+
+function cpu() {
+  local total=$(top -l1 -n1 -s0 \
+    | grep -E "^CPU" \
+    | awk {'print $7'} \
+    | cut -d '.' -f1 \
+    | xargs -0 -i bash -c 'echo $((100 - $1))%' - '{}')
+  echo "CPU $total"
+}
+cpu

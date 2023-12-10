@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Get Memory pressure Info
+# requires: memory_pressure
+
+function mem() {
+  if [[ ! -z $(which memory_pressure) ]]; then
+    local freemem=$(memory_pressure \
+      | awk '/System-wide/ {print $5}' \
+      | cut -d '%' -f1 \
+      | xargs -0 -i bash -c 'echo $((100 - $1))%' - '{}')
+    echo "MEM ${freemem}"
+  else
+    echo "MEM ?"
+  fi
+}
+mem

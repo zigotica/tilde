@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Get Total CPU usage from top command to return color to tmux
+
+function cpu() {
+  local data=$(get-sysinfo-cpu)
+  local total=$(echo "$data" \
+   | awk '{print $2}' \
+   | sed s/%//)
+
+  local level="red"
+  [[ $total -lt 90 ]] && level="yellow";
+  [[ $total -lt 75 ]] && level="colour239";
+
+  level="#[fg=$level]"
+
+  echo "$level$data#[fg=colour239]"
+}
+cpu

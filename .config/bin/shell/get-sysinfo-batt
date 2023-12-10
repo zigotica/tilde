@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Get Battery Info 󱊡 󱊢 󱊣 󱐥 󱐋 󱐌
+# requires: pmset
+
+function battery() {
+  if [[ ! -z $(which pmset) ]]; then
+    local batt=$(pmset -g batt)
+    local level="󱊣"
+    local draw=""
+    local charge=""
+    local perc=$(echo "$batt" \
+      | grep -o '[0-9]*%' \
+      | sed s/%//)
+    [[ $perc -lt 70 ]] && level="󱊢";
+    [[ $perc -lt 25 ]] && level="󱊡";
+    # AC / Battery
+    local drawfrom=$(echo "$batt" | awk '/drawing/ {print $4}' | sed s/\'//g)
+    # discharging; attached; charging; finishing;
+    local chargestatus=$(echo "$batt" | awk '/;/ {print $4}')
+    # icons
+    [[ $drawfrom == "AC" ]] && [[ $chargestatus != "finishing" ]] && draw="󱐥"
+    [[ $chargestatus == "charging;" ]] && charge="󱐌";
+
+    echo "BATT $draw$charge$level $perc%"
+  else
+    echo "BATT ?"
+  fi
+}
+battery

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Get System Info
+
+echo "$(get-sysinfo-cpu) $(get-sysinfo-batt) $(get-sysinfo-mem)"
