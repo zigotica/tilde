@@ -8,8 +8,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias reload="source ~/.bash_profile"
 alias fuck='sudo $(history -p \!\!)' # prepend sudo to last command
-# make mv a bit more safe
-alias mv='mv -i'
+alias mv='mv -i' # make mv a bit more safe
 # replace rm with trash-cli
 # rm will still work inside a script, and trash-cli will allow us to trash from neovim
 alias rm='trash'
@@ -26,47 +25,48 @@ if [[ `which exa` != "" ]]; then
 fi
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
-alias bcp="brew-clean-package" # .config/bin/shell/brew-clean-package
-alias bip="brew-install-package" # .config/bin/shell/brew-install-package
-alias bup="brew-upgrade-package" # .config/bin/shell/brew-upgrade-package
-alias t="tmux"
-alias tl="tmux ls"
-alias ta="tmux-attach" # .config/bin/shell/tmux-attach
-alias tk="tmux-killer" # .config/bin/shell/tmux-killer
-# Install npm plugins from package.json and save to devDependencies
 alias npmdev="npm install --save-dev"
 alias yi="yarn install"
 alias ys="yarn start"
+alias t="tmux"
+alias tl="tmux ls"
+################################ interactive tmux aliases
+alias ta="tmux-attach" # .config/bin/shell/tmux-attach
+alias tk="tmux-killer" # .config/bin/shell/tmux-killer
+################################ interactive brew aliases
+alias bcp="brew-clean-package" # .config/bin/shell/brew-clean-package
+alias bip="brew-install-package" # .config/bin/shell/brew-install-package
+alias bup="brew-upgrade-package" # .config/bin/shell/brew-upgrade-package
 
 #####################################################################################
-#                                                                                 Git
+#                                                                  Dotfiles Dot / Git
 #####################################################################################
 alias dot='/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME'
 alias ds="dot status"
-alias die="dotfiles-interactive-edit" # .config/bin/git/dotfiles-interactive-edit
 alias da="dot add"
 alias dco="dot commit"
 alias dpoh="dot push origin HEAD"
 alias dl="dot log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gs="git status"
-alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
-alias glp="gl --first-parent"
-alias gg="git log --oneline --abbrev-commit --branches=* --graph --decorate --color"
+alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
+alias gla="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias glg="git log --graph --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gall="git add ."
-alias gapp="git-append" # .config/bin/git/git-append
-alias gia="git-interactive-add" # .config/bin/git/git-interactive-add
-alias gc="git-interactive-checkout" # .config/bin/git/git-interactive-checkout
-alias gcd="git checkout develop"
-alias gir="git-interactive-restore" # .config/bin/git/git-interactive-restore
-alias gisc="git-interactive-search-commit" # .config/bin/git/git-interactive-search-commit
-alias gis="git-interactive-search-content" # .config/bin/git/git-interactive-search-content
-alias gisf="git-interactive-search-file" # .config/bin/git/git-interactive-search-file
 alias gback="git reset --soft HEAD~1 && git reset HEAD ."
 alias grall="git clean -df ." # removes all untracked files
 alias gp="git pull"
 alias gam="git commit -am"
 alias gpoh="git push origin HEAD"
-alias gb="git branch --list -a"
+alias gb="git branch"
+alias gcd="git checkout develop"
+################################ interactive dot/git aliases
+alias die="dotfiles-interactive-edit" # .config/bin/git/dotfiles-interactive-edit
+alias gapp="git-append" # .config/bin/git/git-append
+alias gia="git-interactive-add" # .config/bin/git/git-interactive-add
+alias gc="git-interactive-checkout" # .config/bin/git/git-interactive-checkout
+alias gir="git-interactive-restore" # .config/bin/git/git-interactive-restore
+alias gisc="git-interactive-search-commit" # .config/bin/git/git-interactive-search-commit
+alias gis="git-interactive-search-content" # .config/bin/git/git-interactive-search-content
+alias gisf="git-interactive-search-file" # .config/bin/git/git-interactive-search-file
 alias gwt="git-worktree" # .config/bin/git/git-worktree
 alias gatpc="git-atpc" # .config/bin/git/git-atpc
