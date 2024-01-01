@@ -15,3 +15,9 @@ vim.api.nvim_create_autocmd("FocusLost,WinLeave", {
   command = "silent! :wa",
 })
 
+vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+  desc = "Interpret inventory files as an Ansible inventory",
+  pattern = "*/**/inventory",
+  command = "set filetype=yaml.ansible",
+})
+

@@ -27,6 +27,7 @@ map('n', '<F5>', '<C-w>l')
 map('', '<F8>', ':setlocal spell! spelllang=en_gb<CR>') -- toggle english spell checking
 
 map('n', '<F9>', 'gg=G') -- autoformat file
+map('n', '<leader>=', ':lua vim.lsp.buf.format()<CR>') -- autoformat file using LSP
 map('v', '<F9>', '=') -- autoformat visually selected block
 
 map('n', '<leader>h', ':nohls<CR>') -- remove search highlight

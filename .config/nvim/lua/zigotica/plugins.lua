@@ -26,7 +26,9 @@ require("lazy").setup({
   -- Telescope core
   {
     'nvim-telescope/telescope.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',  
+    dependencies = {
+      'nvim-lua/plenary.nvim'
+    },
   },
 
   -- Telescope extensions
@@ -74,6 +76,10 @@ require("lazy").setup({
     'nvim-treesitter/nvim-treesitter-textobjects',
     dependencies = 'nvim-treesitter/nvim-treesitter',
   },
+  {
+    'nvimtools/none-ls.nvim',
+    dependencies = 'nvim-lua/plenary.nvim',
+  },
   'windwp/nvim-autopairs',
   {
     'windwp/nvim-ts-autotag',
@@ -85,6 +91,7 @@ require("lazy").setup({
     'kevinhwang91/nvim-bqf',
     dependencies = 'nvim-treesitter/nvim-treesitter',
   },
+  'pearofducks/ansible-vim',
 
   -- AI completion
   {
