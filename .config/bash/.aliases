@@ -23,6 +23,9 @@ if [[ `which eza` != "" ]]; then
   alias es="eza -l --git -h -g -a --group-directories-first --icons"
   alias est="es -T -L=2"
 fi
+if [[ `which bat` != "" ]]; then
+  alias cat="bat"
+fi
 alias host="sudo $VISUAL /etc/hosts"
 alias v="$VISUAL"
 alias npmdev="npm install --save-dev"
