@@ -38,7 +38,7 @@ Green="$(tput setaf 2)"
 Yellow="$(tput setaf 3)"
 Orange="$(tput setaf 130)"
 Blue="$(tput setaf 4)"
-Pink="$(tput setaf 5)"
+Pink="$(tput setaf 161)"
 RESET="$(tput sgr0)"
 
 #####################################################################################
@@ -53,6 +53,8 @@ function __os_detection() {
     echo -ne "${Blue} "
   elif [[ $os == "manjaro" ]]; then
     echo -ne "${Green} "
+  elif [[ $os == "debian" ]]; then
+    echo -ne "${Pink} "
   elif [[ $os == "raspbian" ]]; then
     echo -ne "${Pink}"
   fi
