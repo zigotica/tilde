@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# modified by zigotica from:
+# https://blog.ktz.me/secret-management-with-docker-compose-and-ansible/
+
+# Colors to create a prettier output
+RED="$(tput setaf 1)"
+GRN="$(tput setaf 2)"
+YEL="$(tput setaf 3)"
+BLU="$(tput setaf 4)"
+RST="$(tput sgr0)"
+
+secrets=".bash_env_vars.bk .gitconfig-work-hanzo.bk .ssh_bk/config .ssh_bk/id_ed25519 .ssh_bk/id_ed25519.pub .ssh_bk/id_rsa .ssh_bk/id_rsa.pub .ssh_bk/sergiathanzo .ssh_bk/sergiathanzo.pub"
+
+for file in $secrets; do
+  if ( cat "$file" | grep -q "\$ANSIBLE_VAULT;" ); then
+    echo -ne "\n${GRN}${file} encrypted. Safe to commit.${RST}"
+  else
+    echo -ne "\n${RED}${file} not encrypted! Commit failed.${RST}"
+    exit 1
+  fi
+done
+
+
+echo -ne "\n${YEL}All good, proceeding to commit ...${RST}\n"
