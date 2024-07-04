@@ -72,5 +72,8 @@ for f in $HOME/.nvm/versions/node/*; do
   fi
 done
 
+# Rust
+. "$HOME/.cargo/env"
+
 export PATH
 

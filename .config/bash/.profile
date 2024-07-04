@@ -24,6 +24,3 @@ if [ -t 1 ]; then
   # ctrl+h: launch cheatsheet helper
   bind '"\C-h": "cheatsheet\015"'
 fi
-
-# Rust
-. "$HOME/.cargo/env"
