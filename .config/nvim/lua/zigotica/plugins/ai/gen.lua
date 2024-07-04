@@ -2,7 +2,7 @@
 local icn = require"zigotica.common.icons".ai
 
 require('gen').setup({
-  model = "deepseek-coder",
+  model = "llama3:latest",
   display_mode = "split",
   show_prompt = true,
   show_model = true,
