@@ -1,0 +1,95 @@
+version: 2
+final_space: true
+console_title_template: "{{ .Shell }} in {{ .Folder }}"
+
+blocks:
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: os
+        style: plain
+        background: transparent
+        foreground: white
+        template: "{{.Icon}} "
+
+      - type: session
+        style: diamond
+        background: transparent
+        foreground: white
+        template: "{{ .UserName }} {{ if .SSHSession }}<red>SSH </>{{ end }}"
+
+      - type: path
+        style: plain
+        background: transparent
+        foreground: blue
+        template: "{{ .Path }}"
+        properties:
+          style: full
+
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: node
+        style: plain
+        fetch_package_manager: true
+        fetch_version: true
+        display_mode: context
+        foreground: green
+        background: transparent
+        template:
+          "{{ if .Mismatch }}<red> {{ .Expected }}</>{{ else }} {{ .Full }}{{ end }}</> "
+
+      - type: git
+        style: plain
+        foreground: yellow
+        background: transparent
+        template:
+          "{{ .HEAD }} <p:orange>{{ .Working }} {{ if gt .Behind 0 }}{{ .Behind }}⇣{{ end }}{{ if gt .Ahead 0 }}{{ .Ahead }}⇡{{ end }}</>"
+        properties:
+          branch_icon: " "
+          commit_icon: "@"
+          fetch_status: true
+
+
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: text
+        style: plain
+        foreground_templates:
+          - "{{if gt .Code 0}}red{{end}}"
+          - "{{if eq .Code 0}}p:purple{{end}}"
+        background: transparent
+        template:
+          "{{ if .Root }}<red>#</>{{ else }}${{ end }}"
+
+  - type: rprompt
+    overflow: hidden
+    segments:
+      - type: executiontime
+        style: plain
+        foreground: p:grey
+        background: transparent
+        template: "{{ .FormattedMs }}"
+        properties:
+          threshold: 5000
+
+transient_prompt:
+  foreground_templates:
+    - "{{if gt .Code 0}}red{{end}}"
+    - "{{if eq .Code 0}}p:grey{{end}}"
+  background: transparent
+  template: "{{ if .Root }}<red>#</>{{ else }}${{ end }}"
+
+secondary_prompt:
+  foreground: p:purple
+  background: transparent
+  template: "❯❯ "
+
+palette:
+  orange: "#c98b65"
+  purple: "#a585e6"
+  grey: "#3b4252"
