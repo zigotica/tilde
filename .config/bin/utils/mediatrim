@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-# Remove n secs from start or end of media file into an output file.
+# Remove n secs from start or to end of media file
 # Mandatory arguments:
 # -s <number of secs>
 # -f(rom) <"s" | "e">
 # -i <input file>
 # -o <output file>
-# example mediatrim -s 10 -f "s" -i i.mp4 -o o.mp4
+# example mediatrim -s 10 -f "s" -i i.mp4 -o o.mp4 (remove 10 secs from start)
+# example mediatrim -s 10 -f "e" -i i.mp4 -o o.mp4 (remove the end, final video has 10 secs from start)
 
 err() {
   echo $1
@@ -32,9 +33,13 @@ if [ -z "$secs" ] || [ -z "$from" ] || [ -z "$input" ] || [ -z "$output" ]; then
 fi
 
 if [ "$from" == "s" ]; then
-  ffmpeg -ss $secs -i "$input" -c copy "$output";
+  # Remove $secs seconds from the start
+  echo "ffmpeg -i '$input' -ss $secs -c copy '$output'"
+  ffmpeg -i "$input" -ss $secs -c copy "$output"
 elif [ "$from" == "e" ]; then
-  ffmpeg -i "$input" -ss $secs  -c copy "$output";
+  # Remove the end, output file has $secs duration
+  echo "ffmpeg -i '$input' -ss 0 -t -$secs -c copy '$output'"
+  ffmpeg -i "$input" -ss 0 -t $secs -c copy "$output"
 else
   err "Wrong argument value. "
 fi
