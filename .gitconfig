@@ -14,17 +14,21 @@
   p = pull
   poh = push origin HEAD
   rall = clean -df .
-  s = status
+  s = status -s
+  st = status
   new = "!git l $1..HEAD #"
   missing = "!git l HEAD..$1 #"
-  d = diff
+  d = diff --word-diff
   ds = d --staged
   sh = stash save --keep-index --include-untracked
   m = merge
   mc = m --continue
   r = "!git rebase -i HEAD~\"$1\" #"
+  bl = blame -w -C -C -C
 [rebase]
   autoStash = true
 [gc]
   reflogExpire = 180
   reflogExpireUnreachable = 180
+[rerere]
+	enabled = true
