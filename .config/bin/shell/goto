@@ -17,6 +17,9 @@ foldername=$(basename "$selected" | tr . _)
 
 if ! tmux has-session -t "$foldername" 2> /dev/null; then
   tmux new-session -s "$foldername" -c "$selected" -d
+  while ! tmux capture-pane -p -t 1 | grep " "; do
+    sleep 1
+  done
   tmux send-keys -t "$foldername" "cd $selected" C-m
   if [[ ! "$TERM" =~ screen ]]; then
     tmux attach -t "$foldername"

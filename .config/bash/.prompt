@@ -211,10 +211,10 @@ function __git_real_time_prompt() {
   PS1="\[\033]0;\W\007\]";
 
   if [[ "$HOME" == "$PWD" ]] || [[ "$PWD" == "$HOME/.config"* ]]; then
-    PS1+="\n\n\[$(__os_detection)\] \u@\h\[$(__is_tmux)\] \[${Red}\]\w "
+    PS1+="\n\n\[$(__os_detection)\] \u\[$(__is_tmux)\] \[${Red}\]\w "
     PS1+="\n\[$(__git_branch -d)\]\[$(__git_dirty -d)\]\[$(__git_staged -d)\]\[$(__git_unstaged -d)\]"
   else
-    PS1+="\n\n\[$(__os_detection)\] \u@\h\[$(__is_tmux)\] \[${Blue}\]\w "
+    PS1+="\n\n\[$(__os_detection)\] \u\[$(__is_tmux)\] \[${Blue}\]\w "
 
     # modify prompt adding development info if we are in a git repo folder
     if `git status &> /dev/null`; then

@@ -40,6 +40,8 @@ alias tk="tmux-killer" # .config/bin/shell/tmux-killer
 alias bcp="brew-clean-package" # .config/bin/shell/brew-clean-package
 alias bip="brew-install-package" # .config/bin/shell/brew-install-package
 alias bup="brew-upgrade-package" # .config/bin/shell/brew-upgrade-package
+################################ fixes for oh-my-posh and tmux
+alias dev="dev $@ && cd . &&  $VISUAL"
 
 #####################################################################################
 #                                                                  Dotfiles Dot / Git
