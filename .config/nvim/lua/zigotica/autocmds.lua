@@ -21,3 +21,9 @@ vim.api.nvim_create_autocmd({"BufRead","BufNewFile"}, {
   command = "set filetype=yaml.ansible",
 })
 
+vim.api.nvim_create_autocmd({"BufRead","BufNewFile"}, {
+  desc = "Interpret yml files inside a playbooks folder as Ansible files",
+  pattern = "*/playbooks/*.yml",
+  command = "set filetype=yaml.ansible",
+})
+

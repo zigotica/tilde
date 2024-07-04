@@ -136,3 +136,13 @@ cmp.setup.cmdline(':', {
   })
 })
 
+-- remove some sources when buffer is not a language filetype
+require("cmp").setup.filetype("", {
+  sources = {
+    {
+      name = 'buffer',
+      path = 'path'
+    }
+  }
+})
+
