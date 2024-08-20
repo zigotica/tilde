@@ -17,6 +17,7 @@ local hl_style= require"zigotica.common.highlight"
 local cmp = require'cmp'
 
 cmp.setup({
+  preselect = cmp.PreselectMode.None,
   snippet = { -- REQUIRED
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
