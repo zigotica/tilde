@@ -1,0 +1,246 @@
+#!/usr/bin/env bash
+
+# git-summary
+# 
+# Summarize git repos status at given path.
+#
+# Created by zigotica, inspired from:
+# https://github.com/MirkoLedda/git-summary/blob/master/git-summary
+# and https://gist.github.com/mzabriskie/6631607
+#
+# Requirements:
+# - exported list of colors from ~/.config/bash/.exports
+# - color scripts:
+#   ~/.config/bin/shell/colored-task and
+#   ~/.config/bin/shell/colored-msg
+# - git scritps:
+#   ~/.config/bin/git/git-count-commits-diff
+#   ~/.config/bin/git/git-count-remote-branch
+#   ~/.config/bin/git/git-count-staged
+#   ~/.config/bin/git/git-count-unstaged
+#   ~/.config/bin/git/git-get-branch
+#
+# Features:
+# - Gives info of two remotes:
+#   MAIN_REMOTE: default origin (normally github)
+#   LAB_REMOTE: default lab (normaly self-hosted server)
+# - Allows to batch pull from main when behind and clean worktree
+# - Allows to batch push to lab when ahead
+# - Allows to search repos in a subfolder, using optional maxdepth
+#
+# usage: git-summary [-b] [-m <main remote>] [-l <lab remote>] [-d] [parent to repos' subfolders]
+#        git-summary [parent to repos' subfolders] [-b] [-m <main remote>] [-l <lab remote>] [-d]
+#        (or any order combination, https://stackoverflow.com/a/63421397)
+
+
+MAIN_REMOTE="origin"
+LAB_REMOTE="lab"
+MAXDEPTH=1
+
+script_args=()
+while [ $OPTIND -le "$#" ]; do
+  if getopts "bm:l:d:" option; then
+    case $option in
+      b) BACKUPABLE=1;;
+      m) MAIN_REMOTE=${OPTARG};;
+      l) LAB_REMOTE=${OPTARG};;
+      d) MAXDEPTH=${OPTARG};;
+    esac
+  else
+    script_args+=("${!OPTIND}")
+    ((OPTIND++))
+  fi
+done
+
+# Utility to return parent folder and project name
+function folder_project () {
+  BN=$(basename $1)
+  PT=$(basename ${1%/*})
+  echo "[${PT}] ${BN}"
+}
+
+DIR="${script_args[@]}"
+
+# Array of repos with local changes
+WT_CHANGED=()
+
+# Array of working tree clean repos
+WT_CLEAN=()
+
+# Array of repos to be updated from main remote
+UPDATE_PENDING=()
+
+# Array of repos to be added to lab remote
+ADD_PENDING=()
+
+# Array of repos to be backed up to lab remote
+BACKUP_PENDING=()
+
+# No directory has been provided, use current
+[[ -z "$DIR" ]] && DIR="$(pwd)"
+
+# Make sure directory/ies end with "/"
+[[ $DIR != */ ]] && DIR="$DIR/"
+
+# Build array of directories using find and default/specified maxdepth
+IFS=$'\n' read -d '' -r -a FOLDERS < <(find "$DIR" -maxdepth "$MAXDEPTH" -type d)
+
+# Print table headers
+printf "%-55s %-15s %-12s %-12s %-12s\n" \
+  "Repositories" "Branch" "Local" "Work" "Lab"
+printf "%-55s %-15s %-12s %-12s %-12s\n" \
+  "--------------------------------------------------" "----------" "----------" "----------" "----------"
+
+# Loop all sub-directories
+for SUBDIR in ${FOLDERS[@]}; do
+  # Only want to parse git repositories
+  if [[ -d "$SUBDIR/.git" ]]; then
+    cd $SUBDIR
+    PROJECT=$(folder_project $SUBDIR)
+    BRANCH="$(git-get-branch)"
+    ICON_OK="OK"
+    ICON_MISS="MISS"
+    ICON_BEHIND='BEHIND'
+    ICON_AHEAD='AHEAD'
+    ICON_STAGED='+'
+    ICON_CHANGED='?'
+    COL1="${PROJECT}"
+    COL2="${BRANCH}"
+    COL3=" "
+    COL4="${ICON_MISS}"
+    COL5="${ICON_MISS}"
+    # Default colors for each column
+    COL3COL="GRN"
+    COL4COL="RED"
+    COL5COL="RED"
+
+    # Column 2, local info
+    # Check for staged files
+    STAGED_COUNT=$(git-count-staged)
+    if [[ $STAGED_COUNT -gt 0 ]]; then
+      [[ $COL3 == " " ]] && COL3=""
+      COL3+="${ICON_STAGED}(${STAGED_COUNT})"
+    fi
+
+    # Check for unstaged files
+    CHANGED_COUNT=$(git-count-unstaged)
+    if [[ $CHANGED_COUNT -gt 0 ]]; then
+      [[ $COL3 == " " ]] && COL3=""
+      COL3+="${ICON_CHANGED}(${CHANGED_COUNT})"
+    fi
+
+    # Check if everything is updated locally and prepend color
+    if [[ $COL3 != " " ]]; then
+      COL3COL="YEL"
+      COL3="${COL3}"
+      # Push folder to array of repos with local changes
+      WT_CHANGED+=("$SUBDIR")
+    else
+      COL3="${ICON_OK}"
+      # Push folder to array of working tree clean repos
+      WT_CLEAN+=("$SUBDIR")
+    fi
+
+    # Column 4, main remote info
+    HAS_MAIN_REMOTE="$(git remote | grep $MAIN_REMOTE)"
+    if [[ -n $HAS_MAIN_REMOTE ]]; then
+      # If $MAIN_REMOTE/$BRANCH exists
+      if [[ $(git-count-remote-branch "$MAIN_REMOTE/$BRANCH") -gt 0 ]]; then
+        # Check for unpulled changes from $MAIN_REMOTE (BEHIND_MAIN)
+        BEHIND_MAIN=$(git-count-commits-diff "$BRANCH" "$MAIN_REMOTE/$BRANCH")
+        AHEAD_MAIN=$(git-count-commits-diff "$MAIN_REMOTE/$BRANCH" "$BRANCH")
+
+        if [[ $BEHIND_MAIN -gt 0 ]]; then
+          COL4COL="YEL"
+          COL4="${ICON_BEHIND}(${BEHIND_MAIN})"
+          # Push folder to array of repos to be updated from main
+          UPDATE_PENDING+=("$SUBDIR")
+        else
+          COL4COL="GRN"
+          COL4="${ICON_OK}"
+        fi
+      fi
+    fi
+
+    # Column 5, lab remote info
+    HAS_LAB_REMOTE="$(git remote | grep $LAB_REMOTE)"
+    if [[ -n $HAS_LAB_REMOTE ]]; then
+      # If $LAB_REMOTE/$BRANCH exists
+      if [[ $(git-count-remote-branch "$LAB_REMOTE/$BRANCH") -gt 0 ]]; then
+        # Check for unpushed changes to $LAB_REMOTE (AHEAD_LAB)
+        BEHIND_LAB=$(git-count-commits-diff "$BRANCH" "$LAB_REMOTE/$BRANCH")
+        AHEAD_LAB=$(git-count-commits-diff "$LAB_REMOTE/$BRANCH" "$BRANCH")
+
+        if [[ $AHEAD_LAB -gt 0 ]]; then
+          COL5COL="YEL"
+          COL5="${ICON_AHEAD}(${AHEAD_LAB})"
+          # Push folder to array of repos to be backed up to lab
+          BACKUP_PENDING+=("$SUBDIR")
+        else
+          COL5COL="GRN"
+          COL5="${ICON_OK}"
+        fi
+      else
+        COL5COL="YEL"
+        # $LAB_REMOTE/$BRANCH does not exist
+        # Push folder to array of repos to be backed up to lab
+        BACKUP_PENDING+=("$SUBDIR")
+      fi
+    else
+      # Push folder to array of repos to be added to lab remote
+      ADDED_PENDING+=("$SUBDIR")
+    fi
+
+    # TRICK: to avoid colored chars to be misleading the printf cols lenght,
+    # put them around the lenght of the columns definition,
+    # instead of passing them inside the column values.
+    printf "${CYN}%-55s${RST} %-15s ${!COL3COL}%-12s${RST} ${!COL4COL}%-12s${RST} ${!COL5COL}%-12s${RST}\n" "${COL1}" "${COL2}" "${COL3}" "${COL4}" "${COL5}"
+
+    cd ../
+  fi
+done
+
+if [[ "${#UPDATE_PENDING[@]}" -gt 0 ]]; then
+  echo ""
+  colored-msg "PRL" "List of repos to be updated from $MAIN_REMOTE remote:"
+  for upd in "${UPDATE_PENDING[@]}"; do
+    PROJECT=$(folder_project $upd)
+    if [[ ${WT_CLEAN[@]} =~ $upd ]]; then
+      cd "$upd"
+      BRANCH="$(git-get-branch)"
+      colored-task "Update $PROJECT" "git pull $MAIN_REMOTE $BRANCH"
+      cd "$DIR"
+    else
+      colored-msg "RED" "$PROJECT behind $MAIN_REMOTE not clean, do not update"
+    fi
+  done
+fi
+
+if [[ "${#ADDED_PENDING[@]}" -gt 0 ]]; then
+  echo ""
+  colored-msg "PRL" "List of repos missing in $LAB_REMOTE remote:"
+  for mising in "${ADDED_PENDING[@]}"; do
+    colored-msg "YEL" "$mising"
+  done
+fi
+
+if [[ "${#BACKUP_PENDING[@]}" -gt 0 ]] && [[ $BACKUPABLE -eq 1 ]]; then
+  echo ""
+  colored-msg "PRL" "List of repos to be backed up to $LAB_REMOTE remote:"
+  for bkp in "${BACKUP_PENDING[@]}"; do
+    PROJECT=$(folder_project $bkp)
+    cd "$bkp"
+    # push while skipping pre-push hook
+    colored-task "Backup $PROJECT" "git push --no-verify $LAB_REMOTE HEAD"
+    cd "$DIR"
+  done
+fi
+
+if [[ "${#WT_CHANGED[@]}" -gt 0 ]]; then
+  echo ""
+  colored-msg "PRL" "List of repos having local changes:"
+  for chgd in "${WT_CHANGED[@]}"; do
+    colored-msg "YEL" "$chgd"
+  done
+fi
+
