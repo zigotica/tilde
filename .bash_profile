@@ -10,3 +10,6 @@ source "$HOME/.bash_env_vars";
 
 # oh-my-posh prompt
 eval "$(oh-my-posh init bash --config $HOME/.config/oh-my-posh/config.yml)"
+
+# terminal decorators
+eval $(ls $HOME/.config/bin/terminal-decorators/ | shuf -n 1)
