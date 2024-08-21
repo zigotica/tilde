@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# converts hex color to bash setaf color
+# https://unix.stackexchange.com/a/269085
+# use: hex2setaf 00fc7b
+
+if [ -z "$1" ]; then
+  echo "Missing hex color argument"
+  exit 1
+fi
+
+h2s(){
+  hex=${1#"#"}
+  r=$(printf '0x%0.2s' "$hex")
+  g=$(printf '0x%0.2s' ${hex#??})
+  b=$(printf '0x%0.2s' ${hex#????})
+  printf '%03d' "$(( (r<75?0:(r-35)/40)*6*6 + \
+    (g<75?0:(g-35)/40)*6   + \
+    (b<75?0:(b-35)/40)     + 16 ))"
+}
+h2s "$1"
