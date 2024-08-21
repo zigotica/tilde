@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
-# git-interactive-search-commit wrapper
+# git-interactive-search wrapper
 #
-# --grep: return commits with log message that matches the specified pattern (regular expression).
+# -G: Look for differences whose patch text contains added/removed lines that match <regex>
 # fzf provides the fzf list of returned commits
 # fzf will preview diff of that hash with its previous (git diff --color HASH~ HASH)
 # 
-# use case: gisc string (or regex)
+# use case: gis string
 
 if [[ -n $@ ]]; then
   format="%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset"
-  git log --color=always --pretty=format:"$format" --abbrev-commit --date=relative --grep="$@" --all |
+  git log --color=always --pretty=format:"$format" --abbrev-commit --date=relative -G "$@" --all |
     fzf --ansi --print-query --preview="echo {} | awk '{ print \"diff --color \" \$1\"~ \" \$1 }' | xargs git"
 else
   echo "you need to provide a search string"
 fi
+
+
+
