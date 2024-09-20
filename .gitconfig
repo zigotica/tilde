@@ -31,4 +31,6 @@
   reflogExpire = 180
   reflogExpireUnreachable = 180
 [rerere]
-	enabled = true
+  enabled = true
+[init]
+  defaultBranch = main
