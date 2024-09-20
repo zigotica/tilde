@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+#####################################################################################
+#                                                                          _   _
+#                                                              _ __   __ _| |_| |__
+#                                                             | '_ \ / _` | __| '_ \
+#                                                             | |_) | (_| | |_| | | |
+#                                                             | .__/ \__,_|\__|_| |_|
+#                                                             |_|
+#                                                               
+#####################################################################################
+
+# Path folders
+PATH=$PATH:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
+
+# Personal folders (recursive)
+PATH=$HOME/bin$(find $HOME/.config/bin -type d -printf :%p):$PATH
+
+# node/nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Dynamically add all node versions installed via nvm to beginning of PATH,
+# to take precedence over any other node version 
+# (i.e. installed via brew install node or any formula dependencies)
+for f in $HOME/.nvm/versions/node/*; do
+  if [ -d "$f" ]; then
+      PATH=$f/bin:$PATH
+  fi
+done
+
+# Rust
+. "$HOME/.cargo/env"
+
+# Go
+PATH=$PATH:$BREW_PREFIX/bin/go:$BREW_PREFIX/bin/gofmt:$BREW_PREFIX/bin/gopls
+
+export PATH
+

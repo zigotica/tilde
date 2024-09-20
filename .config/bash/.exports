@@ -1,11 +1,29 @@
 #!/usr/bin/env bash
 
 #####################################################################################
-#                                                                      EXPORTS / PATH
+#                                                                            _
+#                                                  _____  ___ __   ___  _ __| |_ ___
+#                                                 / _ \ \/ / '_ \ / _ \| '__| __/ __|
+#                                                |  __/>  <| |_) | (_) | |  | |_\__ \
+#                                                 \___/_/\_\ .__/ \___/|_|   \__|___/
+#                                                          |_|
+#                                                 
 #####################################################################################
 
+# Editors
 export EDITOR="vi"
 export VISUAL="nvim"
+
+# Colors
+export RED="$(tput setaf 1)"
+export GRN="$(tput setaf 2)"
+export YEL="$(tput setaf 3)"
+export BLU="$(tput setaf 4)"
+export PRL="$(tput setaf 5)"
+export CYN="$(tput setaf 6)"
+export ORN="$(tput setaf 130)"
+export PNK="$(tput setaf 161)"
+export RST="$(tput sgr0)"
 
 # Increase Bash history size. Allow 32³ entries; the default is 500.
 export HISTSIZE='32768';
@@ -40,7 +58,7 @@ if [[ ! -z $(which fzf) ]] && [[ ! -z $(which rg) ]]; then
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 
   # Set up fzf key bindings and fuzzy completion (fzf v0.48+)
-  # This MUST be sourced AFTER bash completion (.profile)
+  # This MUST be sourced AFTER bash completion (.behavior)
   eval "$(fzf --bash)"
   # or set up manually (older)
   # source "/opt/homebrew/opt/fzf/shell/completion.bash"
@@ -51,29 +69,4 @@ fi
 # recommended: brew install --cask eloston-chromium
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=/Applications/Chromium.app/
-
-# Path folders
-PATH=$PATH:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
-
-# Personal folders (recursive)
-PATH=$HOME/bin$(find $HOME/.config/bin -type d -printf :%p):$PATH
-
-# node/nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Dynamically add all node versions installed via nvm to beginning of PATH,
-# to take precedence over any other node version 
-# (i.e. installed via brew install node or any formula dependencies)
-for f in $HOME/.nvm/versions/node/*; do
-  if [ -d "$f" ]; then
-      PATH=$f/bin:$PATH
-  fi
-done
-
-# Rust
-. "$HOME/.cargo/env"
-
-export PATH
 

@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 
 #####################################################################################
-#                                                                           SHORTCUTS
+#                                             _                _             _
+#                                         ___| |__   ___  _ __| |_ ___ _   _| |_ ___
+#                                        / __| '_ \ / _ \| '__| __/ __| | | | __/ __|
+#                                        \__ \ | | | (_) | |  | || (__| |_| | |_\__ \
+#                                        |___/_| |_|\___/|_|   \__\___|\__,_|\__|___/
+#                                        
 #####################################################################################
+
 # paths
 alias ..='cd ..'
 alias ...='cd ../..'
 alias reload="source ~/.bash_profile"
 alias fuck='sudo $(history -p \!\!)' # prepend sudo to last command
 alias mv='mv -i' # make mv a bit more safe
+
 # replace rm with trash-cli
 # rm will still work inside a script, and trash-cli will allow us to trash from neovim
 alias rm='trash'
 alias rmbin='empty-trash'
-# console
 [[ `uname -v | grep "ARM64"` != "" ]] && alias brew="arch -arm64 brew"
 if [[ `which python3` != "" ]]; then
   alias python="python3"
@@ -33,19 +39,28 @@ alias yi="yarn install"
 alias ys="yarn start"
 alias t="tmux"
 alias tl="tmux ls"
+
 ################################ interactive tmux aliases
 alias ta="tmux-attach" # .config/bin/shell/tmux-attach
 alias tk="tmux-killer" # .config/bin/shell/tmux-killer
+
 ################################ interactive brew aliases
 alias bcp="brew-clean-package" # .config/bin/shell/brew-clean-package
 alias bip="brew-install-package" # .config/bin/shell/brew-install-package
 alias bup="brew-upgrade-package" # .config/bin/shell/brew-upgrade-package
+
 ################################ fixes for oh-my-posh and tmux
 alias dev="dev $@ && cd . &&  $VISUAL"
 
 #####################################################################################
-#                                                                  Dotfiles Dot / Git
+#                                 _       _    __ _ _                __   ____ _ _
+#                              __| | ___ | |_ / _(_) | ___  ___     / /  / ___(_) |_
+#                             / _` |/ _ \| __| |_| | |/ _ \/ __|   / /  | |  _| | __|
+#                            | (_| | (_) | |_|  _| | |  __/\__ \  / /   | |_| | | |_
+#                             \__,_|\___/ \__|_| |_|_|\___||___/ /_/     \____|_|\__|
+#                             
 #####################################################################################
+
 alias dot='/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME'
 alias ds="dot status"
 alias da="dot add"
@@ -66,6 +81,7 @@ alias gam="git commit -am"
 alias gpoh="git push origin HEAD"
 alias gb="git branch"
 alias gcd="git checkout develop"
+
 ################################ interactive dot/git aliases
 alias die="dotfiles-interactive-edit" # .config/bin/git/dotfiles-interactive-edit
 alias gapp="git-append" # .config/bin/git/git-append

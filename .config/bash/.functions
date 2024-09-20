@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 
 #####################################################################################
-#                                                                           FUNCTIONS
+#                                          __                  _   _
+#                                         / _|_   _ _ __   ___| |_(_) ___  _ __  ___
+#                                        | |_| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+#                                        |  _| |_| | | | | (__| |_| | (_) | | | \__ \
+#                                        |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+#                                          
 #####################################################################################
 
 # youtube downloader 
 # use: ytd video-url
 function ytd() {
-  youtube-dl -f 'bestvideo+bestaudio/best/best' --merge-output-format mkv $1
+  yt-dlp -f 'bestvideo+bestaudio/best/best' --merge-output-format mkv $1
 }
 
 # only audio
 function ytda() {
-	youtube-dl -x --audio-format flac $1
+  yt-dlp -x --audio-format flac $1
 }
 
 # Return history entries filtered by grep or number of items
