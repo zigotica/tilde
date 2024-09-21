@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# see list of available colors at ~/.config/bash/.exports
+
+# Spinner icon positions (will be animated)
+spinner=( '|' '/' '-' '\' );
+
+# Message to show
+MSG=$1
+# Remove $1 from arguments
+shift
+# Rest of the arguments will be the command
+COMMAND=$@
+# If only one original argument, it will be the command
+if [[ -z $COMMAND ]]; then
+  COMMAND=$MSG
+fi
+
+# Print the message (or command) to be run in yellow
+printf "${YEL}[.] %s${RST}" "$MSG"
+
+# Run command in background (&), silent stdout (1>...), colorize stderr in red (>2...)
+eval "$COMMAND" \
+  1> /dev/null \
+  2> >(while read line; do echo -e "\n${RED}$line${RST}" >&2; done) \
+  &
+
+# Save the PID of last command run in background to a variable
+pid=$!
+
+# kill eventual running process when script exits
+trap "kill $pid 2> /dev/null" EXIT
+
+# Print a spinner in current line while process is running
+while ps -p $pid &>/dev/null; do
+  for i in ${spinner[@]}; do
+    # Artificially wait for the spinner to be animated
+    sleep 0.025;
+    if ps -p $pid >/dev/null; then
+      # If process still running after sleep, print spinner
+      printf "\r${YEL}[$i";
+    else
+      # Otherwise, clean up line
+      printf "\r";
+    fi
+  done;
+done
+
+# wait for the process to complete and return its exit status
+wait $pid
+
+if [[ $? == 0 ]]; then
+  # If exit status was OK, print green check and message in previous line
+  printf "\r${GRN}[] %s${RST}\n" "$MSG"
+else
+  # Otherwise, print red error icon and message in previous line
+  printf "\r${RED}[] %s${RST}\n" "$MSG"
+  # Exit the script
+  exit 1
+fi
+

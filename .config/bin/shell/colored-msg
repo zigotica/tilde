@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# see list of available colors at ~/.config/bash/.exports
+COL=$1
+MSG=$2
+
+printf "${!COL}%s${RST}\n" "$MSG"
+
