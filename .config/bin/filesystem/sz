@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
-# Determine size of a file or total size of a directory
-__LOCAL_FS_ARGS=-sh
-
-if du -b /dev/null > /dev/null 2>&1; then
-  __LOCAL_FS_ARGS=-sbh;
-fi
+# Show the total size of files and subfolders, displayed in descending order
+# use case: sz [<file 1> <file 2> <folder 1> ... <file n>]
+# example: sz
+# example: sz a.txt b.txt
 
 if [[ -n "$@" ]]; then
-  du $__LOCAL_FS_ARGS -- "$@";
+  du -sh -- "$@" | sort -hr;
 else
-  du $__LOCAL_FS_ARGS -- .[^.]* ./*;
+  du -sh -- .[^.]* ./* | sort -hr;
 fi;
 
