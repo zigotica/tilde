@@ -36,7 +36,10 @@ Plug 'neoclide/coc-tabnine'
 Plug 'itchyny/lightline.vim'
 
 " Colorschemes
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
+
+" Health Check ala NeoVim
+Plug 'rhysd/vim-healthcheck'
 
 " Initialize plugin system
 call plug#end()

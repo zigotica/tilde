@@ -2,13 +2,13 @@
 " ---------------------------
 
 set t_Co=256
-if (has("termguicolors"))
-  set termguicolors
-endif
+" if (has("termguicolors"))
+"   set termguicolors
+" endif
 
 syntax enable
 set bg=dark
-colorscheme gruvbox
+colorscheme default
 
 " -----------------------------
 " Helper to create new colorschemes
