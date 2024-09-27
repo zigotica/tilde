@@ -64,7 +64,7 @@ alias dev="dev $@ && cd . &&  $VISUAL"
 alias dot='/usr/bin/git --git-dir=/$HOME/._dotfiles.git/ --work-tree=/$HOME'
 alias ds="dot status"
 alias da="dot add"
-alias dco="dot commit"
+alias dco="dot commit -m"
 alias dpoh="dot push origin HEAD"
 alias dl="dot log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gs="git status -s"
@@ -74,6 +74,7 @@ alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cbl
 alias gla="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias glg="git log --graph --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gall="git add ."
+alias gco="git commit -m"
 alias gback="git reset --soft HEAD~1 && git reset HEAD ."
 alias grall="git clean -df ." # removes all untracked files
 alias gp="git pull"
@@ -87,7 +88,7 @@ alias die="dotfiles-interactive-edit" # .config/bin/git/dotfiles-interactive-edi
 alias gapp="git-append" # .config/bin/git/git-append
 alias gia="git-interactive-add" # .config/bin/git/git-interactive-add
 alias gc="git-interactive-checkout" # .config/bin/git/git-interactive-checkout
-alias gir="git-interactive-restore" # .config/bin/git/git-interactive-restore
+alias giR="git-interactive-restore" # .config/bin/git/git-interactive-restore
 alias gis="git-interactive-search" # .config/bin/git/git-interactive-search
 alias gisf="git-interactive-search-file" # .config/bin/git/git-interactive-search-file
 alias gisl="git-interactive-search-log" # .config/bin/git/git-interactive-search-log
