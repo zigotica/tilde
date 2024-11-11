@@ -1,0 +1,20 @@
+{
+  "name": "Snippets compatible with VSCode format",
+  "author": "Hanzo <hello@hanzo.es> (http://hanzo.es)",
+  "contributors": [
+    "Sergi Meseguer <sergi@hanzo.es>"
+  ],
+  "notes": [
+    "This package contains VSCode compatible snippets",
+    "The snippets are stored in separate files based on the target language",
+    "Symlink for Neovim & VSCode compatibility, see readme"
+  ],
+  "contributes": {
+    "snippets": [
+      {
+        "language": ["all"],
+        "path": "./all.code-snippets"
+      }
+    ]
+  }
+}

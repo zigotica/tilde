@@ -112,6 +112,11 @@ map('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>')
 map('n', '<leader>ai', ':Gen<CR>')
 map('v', '<leader>ai', ':Gen<CR>')
 
+-- SNIPPETS jump to prev/next insertion positions
+----------------------------------------------
+map('i', '<c-l>', '<cmd>lua require("luasnip").jump(-1)<CR>', { silent = true })
+map('i', '<c-n>', '<cmd>lua require("luasnip").jump(1)<CR>', { silent = true })
+
 -- REPLACEMENT
 ----------------------------------------------
 -- (2x leader being a destructive command)

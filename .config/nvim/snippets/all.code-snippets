@@ -1,0 +1,7 @@
+{
+  "Email completion": {
+    "prefix": ["zigotica"],
+    "body": ["zigotica@gmail.com"],
+    "description": "Insert email signature"
+  }
+}

@@ -1,5 +1,20 @@
 vim.opt.completeopt = {'menu', 'menuone', 'preview', 'noselect', 'noinsert'}
 
+-- Snippets
+local luasnip = require("luasnip")
+require("luasnip.loaders.from_vscode").lazy_load({paths = {
+  "~/.config/nvim/snippets/", -- personal snippets
+  vim.fn.expand("$DIR_WORK/HNZ/snippets/") -- work snippets
+}})
+luasnip.config.set_config({
+  -- update dynamic snippets as you type
+  updateevents = 'TextChanged,TextChangedI',
+  -- to move in & out of snippets
+  history = true,
+  -- Disable autotriggered snippets, we'll only use them from completion
+  enable_autosnippets = false,
+})
+
 -- Tab completion helper
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -18,9 +33,9 @@ local cmp = require'cmp'
 
 cmp.setup({
   preselect = cmp.PreselectMode.None,
-  snippet = { -- REQUIRED
+  snippet = {
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   mapping = {
@@ -36,12 +51,26 @@ cmp.setup({
 
     -- Accept currently selected item.
     -- Set `select` to `false` to only confirm explicitly selected items.
-    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+    ['<CR>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+            if luasnip.expandable() then
+                luasnip.expand()
+            else
+                cmp.confirm({ select = false })
+            end
+        else
+            fallback()
+        end
+    end),
 
     -- navigate to next/prev suggestions
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_next_item()
+        if luasnip.locally_jumpable(1) then
+          luasnip.jump(1)
+        else
+          cmp.select_next_item()
+        end
       elseif has_words_before() then
         cmp.complete()
       else
@@ -51,7 +80,11 @@ cmp.setup({
 
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_prev_item()
+        if luasnip.locally_jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          cmp.select_prev_item()
+        end
       elseif has_words_before() then
         cmp.complete()
       else
@@ -60,12 +93,12 @@ cmp.setup({
     end, { "i", "s" }),
   },
   sources = cmp.config.sources({
+    { name = 'luasnip' },
     { name = "codeium" },
     { name = 'cmp_tabnine' },
     { name = 'nvim_lsp' },
     { name = 'buffer' },
     { name = 'path' },
-    { name = 'vsnip' }, -- For vsnip users.
   }),
   formatting = {
     format = function(entry, vim_item)
@@ -73,13 +106,13 @@ cmp.setup({
       vim_item.kind = string.format('%s %s', source_type_icons[vim_item.kind], vim_item.kind)
       -- Sources
       vim_item.menu = ({
+        luasnip = "[Snip]",
         codeium = "[Cod]",
         cmp_tabnine = "[Tab9]",
         nvim_lsp = "[LSP]",
         buffer = "[Buffer]",
         path = "[Path]",
         nvim_lua = "[Lua]",
-        vsnip = "[VSnip]",
       })[entry.source.name]
       -- tweak Codeium icon
       if entry.source.name == 'codeium' then
