@@ -1,0 +1,22 @@
+{
+	"name": "Snippets compatible with VSCode format",
+	"author": "Sergi Meseguer",
+	"notes": [
+		"This package contains VSCode compatible snippets",
+		"The snippets are stored in separate files based on the target language",
+		"Symlink for Neovim & VSCode compatibility:",
+		"ln -s ~/.config/nvim/snippets ~/Library/Application\\ Support/Code/User"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": ["all"],
+				"path": "./all.code-snippets"
+			},
+			{
+				"language": ["typescriptreact"],
+				"path": "./typescriptreact.code-snippets"
+			}
+		]
+	}
+}

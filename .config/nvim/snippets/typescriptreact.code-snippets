@@ -1,0 +1,202 @@
+{
+  "Basics - Accordion": {
+	  "prefix": ["<Accordion", "bacc"],
+	  "body": [
+      "<Accordion",
+      "  className={styles['$1']}",
+      "  collapsible",
+      "  disableLineAnimation",
+      "  tag='dl'",
+      "  type='single'",
+      ">",
+      "  <>",
+      "    <AccordionItem value='$2'>",
+      "      <AccordionTrigger titleTag='dt'>",
+      "        $3",
+      "      </AccordionTrigger>",
+      "      <AccordionContent textTag='dd'>",
+      "        $4",
+      "      </AccordionContent>",
+      "    </AccordionItem>",
+      "  </>",
+      "</Accordion>"
+      ]
+    },
+    "Basics - Box": {
+      "prefix": ["<Box", "bbox"],
+      "body": [
+        "<Box",
+        "  className={styles['$1']}",
+        "  decorators={{",
+        "    backgroundColor: 'primary-0.2',",
+        "    borderColor: 'primary',",
+        "    borderRadius: 12,",
+        "    borderWidth: 1,",
+        "    xl: {",
+        "      paddingBlock: 8,",
+        "      paddingInline: 24,",
+        "    }",
+        "  }}",
+        ">",
+        "  $2",
+        "</Box>"
+      ]
+    },
+    "Basics - ClickableArea": {
+      "prefix": ["<ClickableArea", "bcli"],
+      "body": [
+        "<ClickableArea",
+        "  className={styles['$1']}",
+        "  aria-label={$2}",
+        "  href={$3}",
+        "  role=\"link\"",
+        "  tabIndex=\"-1\"",
+        "  onClick={$4}",
+        "  role=\"button\"",
+        ">",
+        "  $5",
+        "</ClickableArea>"
+      ]
+    },
+  "Basics - Flex": {
+    "prefix": ["<Flex", "bfle"],
+    "body": [
+      "<Flex",
+      "  className={styles['$1']}",
+      "  decorators={{",
+      "    direction: 'column',",
+      "    gap: 1,",
+      "    lg: {",
+      "      direction: 'row',",
+      "      justifyContent: 'space-between',",
+      "      alignItems: 'flex-end',",
+      "    },",
+      "  }}",
+      ">",
+      "  <Flex.Item",
+      "    decorators={{",
+      "      alignSelf: 'flex-end',",
+      "      order: -99,",
+      "      grow: 1,",
+      "      basis: '60%',",
+      "    }}",
+      "  >",
+      "    $2",
+      "  </Flex.Item>",
+      "</Flex>"
+    ]
+  },
+  "Basics - Grid": {
+    "prefix": ["<Grid", "bgri"],
+    "body": [
+      "<Grid",
+      "  className={styles['$1']}",
+      "  gutter='narrow'",
+      "  decorators={{",
+      "    cols: 12,",
+      "    rows: 3,",
+      "    flow: 'row-dense',",
+      "    gap: 4,",
+      "  }}",
+      ">",
+      "  <>",
+      "    <Grid.Cell",
+      "      className={styles['$2']}",
+      "      decorators={{",
+      "        colSpan: 9,",
+      "        rowSpan: 3,",
+      "      }}",
+      "    >",
+      "      $3",
+      "    </Grid.Cell>",
+      "  </>",
+      "</Grid>"
+    ]
+  },
+  "Basics - Marquee": {
+    "prefix": ["<Marquee", "bmar"],
+    "body": [
+      "<Marquee",
+      "  className={styles['$1']}",
+      "  texts={[",
+      "    '$2'",
+      "  ]}",
+      "  textsClassName={styles['$3']}",
+      "/>"
+    ]
+  },
+  "Basics - Modal": {
+    "prefix": ["<Modal", "bmod"],
+    "body": [
+      "<Modal>",
+      "  <>",
+      "    <Modal.Trigger",
+      "      asChild",
+      "      className={styles['$1']}",
+      "    >",
+      "      $2",
+      "    </Modal.Trigger>",
+      "    <Modal.Content>",
+      "      <Modal.Title>",
+      "        $3",
+      "      </Modal.Title>",
+      "      <Modal.Description>",
+      "        $4",
+      "      </Modal.Description>",
+      "      $5",
+      "    </Modal.Content>",
+      "  </>",
+      "</Modal>"
+    ]
+  },
+  "Basics - Panel": {
+    "prefix": ["<Panel", "bpan"],
+    "body": [
+      "<Panel>",
+      "  <>",
+      "    <Panel.Trigger",
+      "      asChild",
+      "      className={styles['$1']}",
+      "    >",
+      "      $2",
+      "    </Panel.Trigger>",
+      "    <Panel.Content>",
+      "      <Panel.Title>",
+      "        $3",
+      "      </Panel.Title>",
+      "      <Panel.Description>",
+      "        $4",
+      "      </Panel.Description>",
+      "      $5",
+      "    </Panel.Content>",
+      "  </>",
+      "</Panel>"
+    ]
+  },
+  "Basics - Text": {
+    "prefix": ["<Text", "btex"],
+    "body": [
+      "<Text",
+      "  className={styles['$1']}",
+      "  color='$2'",
+      "  textAlign='$3'",
+      "  type='$4-xl'",
+      "  textTag='p'",
+      "  text='$5'",
+      "/>"
+    ]
+  },
+  "Basics - Title": {
+    "prefix": ["<Title", "btit"],
+    "body": [
+      "<Title",
+      "  className={styles['$1']}",
+      "  color='$2'",
+      "  textAlign='$3'",
+      "  type='$4-xl'",
+      "  titleTag='$5'",
+      "  title={$6}",
+      "/>"
+    ]
+  }
+}
