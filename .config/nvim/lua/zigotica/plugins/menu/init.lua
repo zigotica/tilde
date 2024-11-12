@@ -21,7 +21,7 @@ local function custom_on_attach(bufnr)
 end
 
 require'nvim-tree'.setup {
-  update_cwd          = true,
+  update_cwd = false,
   diagnostics = {
     enable = true,
     icons = {
@@ -39,6 +39,9 @@ require'nvim-tree'.setup {
   filters = {
     dotfiles = false,
     custom = {
+      ".ccls-cache",
+      ".repro",
+      ".swc",
       "dist",
       "history",
       "node_modules",
