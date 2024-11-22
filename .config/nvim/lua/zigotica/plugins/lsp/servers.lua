@@ -29,11 +29,11 @@ local on_attach = function(client, bufnr)
 end
 
 -- setup servers from the list
+-- C lang, see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ccls
+-- and https://www.reddit.com/r/olkb/comments/bhdzxe/comment/elur31t/
 local servers = {
   'ansiblels',
   'bashls',
-  -- C lang, see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ccls
-  -- and https://www.reddit.com/r/olkb/comments/bhdzxe/comment/elur31t/
   'ccls',
   'cssls',
   'eslint',
@@ -41,7 +41,7 @@ local servers = {
   'jsonls',
   -- 'lua_ls',
   'rust_analyzer',
-  'tsserver',
+  'ts_ls',
   'vuels',
 }
 
