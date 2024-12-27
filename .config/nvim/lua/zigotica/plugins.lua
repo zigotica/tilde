@@ -135,6 +135,19 @@ require("lazy").setup({
   'edeneast/nightfox.nvim',
   'norcalli/nvim-colorizer.lua',
 
+  -- Markdown viewer; other options:
+  --   "OXY2DEV/markview.nvim",
+  --   "toppair/peek.nvim",
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons'
+    },
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+
   -- Menu 
   {
     'kyazdani42/nvim-tree.lua',
