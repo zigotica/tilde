@@ -70,3 +70,8 @@ fi
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=/Applications/Chromium.app/
 
+# cURL no proxy for localhost
+# This allows neovim (codeium) to work w/o ERR on localhost
+# Another potential solution (but requires sudo):
+# https://wilsonmar.github.io/maximum-limits/
+export no_proxy="localhost,127.0.0.1"
