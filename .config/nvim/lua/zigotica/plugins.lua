@@ -59,6 +59,15 @@ require("lazy").setup({
     }
   },
 
+  -- FZF direct replacement for telescope find_files (was too slow)
+  {
+    'ibhagwan/fzf-lua',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      { 'junegunn/fzf', build = './install --bin' }
+    }
+  },
+
   -- Languages
   'neovim/nvim-lspconfig',
   'hrsh7th/cmp-nvim-lsp',

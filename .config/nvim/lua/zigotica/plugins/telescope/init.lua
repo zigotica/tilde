@@ -57,3 +57,16 @@ require('telescope').setup{
 require('telescope').load_extension('undo')
 require('telescope').load_extension('glyph')
 require('telescope').load_extension('ui-select')
+
+require('fzf-lua').setup({
+  files = { fzf_opts = { ["--ansi"] = false } },
+  defaults = { git_icons = false, file_icons = false },
+  grep = {
+    fzf_opts  = { ["--ansi"] = false },
+    grep_opts = require("fzf-lua.utils").is_darwin()
+        and "--color=never --binary-files=without-match --line-number --recursive --extended-regexp -e"
+        or "--color=never --binary-files=without-match --line-number --recursive --perl-regexp -e",
+    rg_opts   =
+    " --color=never --column --line-number --no-heading --smart-case --max-columns=4096 -e",
+  },
+})

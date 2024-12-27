@@ -83,10 +83,10 @@ map('i', '{', '{<c-g>u')
 ----------------------------------------------
 
 map('n', '<leader>t', ':Telescope ') -- Show telescope builtin pickers (press Tab)
-map('n', '<leader>f',  ':Telescope find_files hidden=true no_ignore=true <CR>') -- search files using fuzzy find
-map('n', '<leader>g',  ':Telescope grep_string search=') -- grep content and send results to a list that can be fzf'ed
-map('n', '<leader>b',  ':Telescope buffers <CR>') -- search files within open buffers, using fuzzy find
-map('n', '<leader>u',  ':Telescope undo<cr>') -- show undo tree
+map('n', '<leader>f', ':FzfLua files<CR>') -- search files using fuzzy find
+map('n', '<leader>g', ':Telescope grep_string search=') -- grep content and send results to a list that can be fzf'ed
+map('n', '<leader>b', ':Telescope buffers <CR>') -- search files within open buffers, using fuzzy find
+map('n', '<leader>u', ':Telescope undo<cr>') -- show undo tree
 
 -- BUFFERS
 ----------------------------------------------
@@ -95,7 +95,6 @@ map('n', '<leader>u',  ':Telescope undo<cr>') -- show undo tree
 -- We also also close all possible remaining splits
 -- Finally, open NvimTree and focus on the open buffer
 map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NvimTreeOpen<CR><C-w>l')
-
 
 -- GIT
 ----------------------------------------------
