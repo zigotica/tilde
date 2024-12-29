@@ -29,17 +29,18 @@ local on_attach = function(client, bufnr)
 end
 
 -- setup servers from the list
--- C lang, see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ccls
--- and https://www.reddit.com/r/olkb/comments/bhdzxe/comment/elur31t/
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 local servers = {
   'ansiblels',
+  'awk_ls',
   'bashls',
   'ccls',
   'cssls',
   'eslint',
+  'gopls',
   'html',
   'jsonls',
-  -- 'lua_ls',
+  'lua_ls',
   'rust_analyzer',
   'ts_ls',
   'vuels',
@@ -54,4 +55,23 @@ for _, server in ipairs(servers) do
     }
   }
 end
+
+require("lspconfig").lua_ls.setup({
+  settings = {
+    runtime = {
+      version = 'LuaJIT'
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = {
+        vim.env.VIMRUNTIME
+      }
+    },
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
+})
 
