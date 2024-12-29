@@ -10,37 +10,20 @@ end
 
 -- GENERAL MAPPINGS
 ----------------------------------------------
--- mapleader defined just before the plugins are listed, lazy.nvim depends on it
--- map('n', '<Space>', '<NOP>', { silent = true })
--- vim.g.mapleader = ' '
-
-map('n', 'Q', '<NOP>') -- dont use Ex mode
-
-map('', '<c-s>', ':w<CR>') -- save file
-
-map('n', '<F2>', ':vertical resize -2<CR>') -- resize vertical splits
-map('n', '<F3>', ':vertical resize +2<CR>')
-
-map('n', '<F4>', '<C-w>h') -- navigate vertical splits
-map('n', '<F5>', '<C-w>l')
-
-map('', '<F8>', ':setlocal spell! spelllang=en_gb<CR>') -- toggle english spell checking
-
-map('n', '<F9>', 'gg=G') -- autoformat file
-map('n', '<leader>=', ':lua vim.lsp.buf.format()<CR>') -- autoformat file using LSP
-map('v', '<F9>', '=') -- autoformat visually selected block
-
-map('n', '<leader>h', ':nohls<CR>') -- remove search highlight
-
-map('n', '<leader>m', ':NvimTreeToggle<CR>') -- toggle NVimTree visibility
-
-map('n', '<leader>x', ':!chmod +x %<CR>') -- make current file executable
+map('n', 'Q', '<NOP>', {desc='Avoid Ex mode'})
+map('', '<c-s>', ':w<CR>', {desc='[S]ave file'})
+map('', '<F8>', ':setlocal spell! spelllang=en_gb<CR>', {desc='Toggle english spell checking'})
+map('n', '<F9>', 'gg=G', {desc='Autoformat file'})
+map('n', '<leader>=', ':lua vim.lsp.buf.format()<CR>', {desc='Autoformat file using LSP'})
+map('v', '<F9>', '=', {desc='Autoformat visually selected block'})
+map('n', '<ESC>', ':nohls<CR>', {desc='Remove search Highlight'})
+map('n', '<leader>m', ':NvimTreeToggle<CR>', {desc='Toggle [M]emu'})
+map('n', '<leader>x', ':!chmod +x %<CR>', {desc='Make current file e[X]ecutable'})
 
 -- SPECIAL CHANGE (c) / CUT (d) / DELETE (x) MAPPINGS
 -- Allows to copy text outside vim, delete in vim, paste copied text
 -- If we want to paste deleted text we just add the leader before p/P
 ----------------------------------------------
-
 map('n', 'd', '"1d') -- remap change, cut and delete to store text to register number 1
 map('n', 'D', '"1D')
 map('v', 'd', '"1d')
@@ -49,28 +32,26 @@ map('n', 'C', '"1C')
 map('v', 'c', '"1c')
 map('n', 'x', '"1x')
 map('v', 'x', '"1x')
-map('n', '<leader>p', '"1p') -- paste last changed, deleted or cut text
-map('n', '<leader>P', '"1P')
+map('n', '<leader>p', '"1p', {desc='[p]aste last changed, deleted or cut text'})
+map('n', '<leader>P', '"1P', {desc='[P]prepend last changed, deleted or cut text'})
 
 -- MOVE / INDENT MAPPINGS
 ----------------------------------------------
+map('n', '<leader>k', ':m .-2<CR>==', {desc='Move line up when in normal mode'})
+map('n', '<leader>j', ':m .+1<CR>==', {desc='Move line down when in normal mode'})
 
-map('n', '<leader>k', ':m .-2<CR>==') -- move line up/down when in normal mode
-map('n', '<leader>j', ':m .+1<CR>==')
+map('i', '<c-k>', '<esc>:m .-2<CR>==gi', {desc='Move line up when in insert mode'})
+map('i', '<c-j>', '<esc>:m .+1<CR>==gi', {desc='Move line down when in insert mode'})
 
-map('i', '<c-k>', '<esc>:m .-2<CR>==gi') -- move line up/down when in insert mode
-map('i', '<c-j>', '<esc>:m .+1<CR>==gi')
+map('v', 'K', ":m '<-2<CR>gv=gv", {desc='Move selected visual block up and reselect'})
+map('v', 'J', ":m '>+1<CR>gv=gv", {desc='Move selected visual block down and reselect'})
 
-map('v', 'K', ":m '<-2<CR>gv=gv") -- move selected visual block up/down and reselect
-map('v', 'J', ":m '>+1<CR>gv=gv")
-
-map('v', '>', '>gv') -- indent visual block
-map('v', '<', '<gv')
+map('v', '>', '>gv', {desc='Indent visual block'})
+map('v', '<', '<gv', {desc='Outdent visual block'})
 
 
 -- Undo breakpoints
 ----------------------------------------------
-
 map('i', ',', ',<c-g>u')
 map('i', '.', '.<c-g>u')
 map('i', '!', '!<c-g>u')
@@ -79,51 +60,44 @@ map('i', '?', '?<c-g>u')
 map('i', '{', '{<c-g>u')
 
 
--- TELESCOPE
+-- TELESCOPE / FUZZY FINDER
 ----------------------------------------------
-
-map('n', '<leader>t', ':Telescope ') -- Show telescope builtin pickers (press Tab)
-map('n', '<leader>f', ':FzfLua files<CR>') -- search files using fuzzy find
-map('n', '<leader>g', ':Telescope grep_string search=') -- grep content and send results to a list that can be fzf'ed
-map('n', '<leader>b', ':Telescope buffers <CR>') -- search files within open buffers, using fuzzy find
-map('n', '<leader>u', ':Telescope undo<cr>') -- show undo tree
+map('n', '<leader>t', ':Telescope ', {desc='Show [T]elescope builtin pickers'})
+map('n', '<leader>f', ':FzfLua files<CR>', {desc='[F]uzzy find files'})
+map('n', '<leader>g', ':Telescope grep_string search=', {desc='[G]rep content'})
+map('n', '<leader>b', ':Telescope buffers <CR>', {desc='[B]uffers'})
+map('n', '<leader>u', ':Telescope undo<cr>', {desc='[U]ndo tree'})
 
 -- BUFFERS
 ----------------------------------------------
-
--- Close all buffers except the one being edited
--- We also also close all possible remaining splits
--- Finally, open NvimTree and focus on the open buffer
-map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NvimTreeOpen<CR><C-w>l')
+map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NvimTreeOpen<CR><C-w>l', {desc='[B]uffers [C]lose all but current'})
 
 -- GIT
 ----------------------------------------------
+map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>', {desc='[G]it [B]lame'})
 
-map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>') -- git blame for line
+-- TESTING
+----------------------------------------------
+map('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest").summary.open()<CR>', {desc='[T]est [R]un'})
+map('n', '<leader>ts', '<cmd>lua require("neotest").run.stop();require("neotest").summary.close()<CR>', {desc='[T]est [S]top'})
+map('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>', {desc='[T]est [T]oggle summary'})
 
-
--- TESTING: run test, stop, toggle summary
-map('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest").summary.open()<CR>')
-map('n', '<leader>ts', '<cmd>lua require("neotest").run.stop();require("neotest").summary.close()<CR>')
-map('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>')
+-- SNIPPETS / EMMET expansions
+----------------------------------------------
+map('i', '<c-l>', '<cmd>lua require("luasnip").jump(-1)<CR>', { silent=true, desc='Luasnip jumop to prev insert position' })
+map('i', '<c-n>', '<cmd>lua require("luasnip").jump(1)<CR>', { silent=true, desc='Luasnip jumop to next insert position' })
+map('n', '<leader><leader>ee', '<plug>(emmet-expand-abbr)', {desc='[E]mmet [E]expand abbrv'})
+map('i', '<c-e>e', '<plug>(emmet-expand-abbr)', {desc='[E]mmet [E]expand abbrv'})
 
 -- AI
-map('n', '<leader>ai', ':Gen<CR>')
-map('v', '<leader>ai', ':Gen<CR>')
-
--- SNIPPETS jump to prev/next insertion positions
 ----------------------------------------------
-map('i', '<c-l>', '<cmd>lua require("luasnip").jump(-1)<CR>', { silent = true })
-map('i', '<c-n>', '<cmd>lua require("luasnip").jump(1)<CR>', { silent = true })
+map('n', '<leader>ai', ':Gen<CR>', {desc='[AI] menu'})
+map('v', '<leader>ai', ':Gen<CR>', {desc='[AI] menu'})
 
 -- REPLACEMENT
 ----------------------------------------------
 -- (2x leader being a destructive command)
-
-map('n', '<leader><leader>ee', '<plug>(emmet-expand-abbr)') -- emmet expand abbrv
-map('i', '<c-e>e', '<plug>(emmet-expand-abbr)') 
-
-map('n', '<leader><leader>rf', ':%s/<C-r><C-w>//g<Left><Left>') -- replace word under cursor in file
-map('v', '<leader><leader>rs', ':s///g<Left><Left><Left>') -- replace in selection
-map('n', '<leader><leader>rb', ':bufdo %s/<C-r><C-w>//ge | update<C-Left><C-Left><Left><Left><Left><Left>') -- replace word under cursor in all open buffers
-map('n', '<leader><leader>rp', ':cdo %s/<C-r><C-w>//g<Left><Left>') -- replace word under cursor in all project (requires a quickfix buffer from a search, like :rg)
+map('n', '<leader><leader>rf', ':%s/<C-r><C-w>//g<Left><Left>', {desc='[R]eplace word under cursor in [F]ile'})
+map('v', '<leader><leader>rs', ':s///g<Left><Left><Left>', {desc='[R]eplace in [S]election'})
+map('n', '<leader><leader>rb', ':bufdo %s/<C-r><C-w>//ge | update<C-Left><C-Left><Left><Left><Left><Left>', {desc='[R]eplace word under cursor in all open [B]uffers'})
+map('n', '<leader><leader>rp', ':cdo %s/<C-r><C-w>//g<Left><Left>', {desc='[R]eplace word under cursor in [P]roject (requires quickfix buffer)'})
