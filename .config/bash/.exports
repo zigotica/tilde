@@ -50,6 +50,11 @@ if [[ `which python3` != "" ]]; then
   export PYTHON=python3
 fi
 
+# Ghostty
+if [[ `which ghostty` != "" ]]; then
+  export GHOSTTY_RESOURCES_DIR=/Applications/Ghostty.app/Contents/Resources/ghostty
+fi
+
 # pipe fzf searches through rg
 # it's faster and allows filtering out .gitignore content
 if [[ ! -z $(which fzf) ]] && [[ ! -z $(which rg) ]]; then

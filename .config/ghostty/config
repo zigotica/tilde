@@ -1,0 +1,35 @@
+# Fonts
+font-family = "Hack Nerd Font Mono"
+
+# Nightfox colors for Ghostty
+## name: nordfox
+background = #242220
+foreground = #bdb9b9
+selection-background = #3e4655
+selection-foreground = #bdb9b9
+cursor-color = #97b87b
+## normal
+palette = 0=#3b4252
+palette = 1=#bf616a
+palette = 2=#a3be8c
+palette = 3=#ebcb8b
+palette = 4=#81a1c1
+palette = 5=#b48ead
+palette = 6=#88c0d0
+palette = 7=#e5e9f0
+## bright
+palette = 8=#465780
+palette = 9=#d06f79
+palette = 10=#b1d196
+palette = 11=#f0d399
+palette = 12=#8cafd2
+palette = 13=#c895bf
+palette = 14=#93ccdc
+palette = 15=#e7ecf4
+## extended colors
+palette = 16=#c9826b
+
+# Other
+copy-on-select = clipboard
+shell-integration = bash
+shell-integration-features = cursor,sudo,title
