@@ -1,11 +1,13 @@
-vim.opt.completeopt = {'menu', 'menuone', 'preview', 'noselect', 'noinsert'}
+vim.opt.completeopt = { 'menu', 'menuone', 'preview', 'noselect', 'noinsert' }
 
 -- Snippets
 local luasnip = require("luasnip")
-require("luasnip.loaders.from_vscode").lazy_load({paths = {
-  "~/.config/nvim/snippets/", -- personal snippets
-  vim.fn.expand("$DIR_WORK/HNZ/snippets/") -- work snippets
-}})
+require("luasnip.loaders.from_vscode").lazy_load({
+  paths = {
+    "~/.config/nvim/snippets/",              -- personal snippets
+    vim.fn.expand("$DIR_WORK/HNZ/snippets/") -- work snippets
+  }
+})
 luasnip.config.set_config({
   -- update dynamic snippets as you type
   updateevents = 'TextChanged,TextChangedI',
@@ -22,14 +24,14 @@ local has_words_before = function()
 end
 
 -- Configure the icons for sources, used in formatting
-local shared_icons = require"zigotica.common.icons"
+local shared_icons = require "zigotica.common.icons"
 local source_type_icons = shared_icons.lsp_completion
 
-local border_style = require"zigotica.common.borders"
-local hl_style= require"zigotica.common.highlight"
+local border_style = require "zigotica.common.borders"
+local hl_style = require "zigotica.common.highlight"
 
 -- Setup nvim-cmp.
-local cmp = require'cmp'
+local cmp = require 'cmp'
 
 cmp.setup({
   preselect = cmp.PreselectMode.None,
@@ -51,17 +53,18 @@ cmp.setup({
 
     -- Accept currently selected item.
     -- Set `select` to `false` to only confirm explicitly selected items.
-    ['<CR>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-            if luasnip.expandable() then
-                luasnip.expand()
-            else
-                cmp.confirm({ select = false })
-            end
-        else
-            fallback()
-        end
-    end),
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+    -- ['<CR>'] = cmp.mapping(function(fallback)
+    --     if cmp.visible() then
+    --         if luasnip.expandable() then
+    --             luasnip.expand()
+    --         else
+    --             cmp.confirm({ select = false })
+    --         end
+    --     else
+    --         fallback()
+    --     end
+    -- end),
 
     -- navigate to next/prev suggestions
     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -179,4 +182,3 @@ require("cmp").setup.filetype("", {
     }
   }
 })
-
