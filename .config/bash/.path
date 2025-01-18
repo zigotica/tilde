@@ -36,5 +36,8 @@ done
 # Go
 PATH=$PATH:$BREW_PREFIX/bin/go:$BREW_PREFIX/bin/gofmt:$BREW_PREFIX/bin/gopls
 
+# Lua LSP
+PATH=$PATH:$HOME/.config/lua-language-server/bin
+
 export PATH
 
