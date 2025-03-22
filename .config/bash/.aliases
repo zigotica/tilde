@@ -70,11 +70,12 @@ alias dl="dot log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cbl
 alias gs="git status -s"
 alias gst="git status"
 alias gsh="git stash save --keep-index --include-untracked"
-alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative --first-parent"
+alias gl="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=iso --first-parent"
 alias gla="git log --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias glg="git log --graph --pretty=format:'%Cgreen%h%Creset -%Creset %s%C(yellow)%d %Cblue(%aN, %cr)%Creset' --abbrev-commit --date=relative"
 alias gall="git add ."
 alias gco="git commit -m"
+alias gra="git remote add"
 alias gback="git reset --soft HEAD~1 && git reset HEAD ."
 alias grall="git clean -df ." # removes all untracked files
 alias gp="git pull"
@@ -94,3 +95,4 @@ alias gisf="git-interactive-search-file" # .config/bin/git/git-interactive-searc
 alias gisl="git-interactive-search-log" # .config/bin/git/git-interactive-search-log
 alias gwt="git-worktree" # .config/bin/git/git-worktree
 alias gatpc="git-atpc" # .config/bin/git/git-atpc
+alias git-backup="git-summary $HOME/Documents/ -d 3 -b"
