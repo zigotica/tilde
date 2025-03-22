@@ -119,6 +119,26 @@ require("lazy").setup({
   -- AI menu with code and english actions
   { "David-Kunz/gen.nvim" },
 
+  -- AI with filesystem / diff apply support
+	{
+		"yetone/avante.nvim",
+		-- commit = "ba9f014b", checker = { check_pinned = true },
+		event = "VeryLazy",
+		lazy = false,
+		version = false, -- always pull the latest change
+		opts = {
+			debug = true,
+		},
+		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+		build = "make",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"stevearc/dressing.nvim",
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+		},
+	},
+
   -- Testing
   {
     "nvim-neotest/neotest",

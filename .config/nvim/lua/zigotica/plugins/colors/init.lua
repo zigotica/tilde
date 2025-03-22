@@ -37,6 +37,24 @@ local groups = {
     LspFloatWinNormal = { bg = "palette.bg0" },
     BqfPreviewBorder = { bg = "palette.bg0" },
     BqfPreviewFloat = { bg = "palette.bg0" },
+
+    -- Avante
+    AvanteSubtitle = { fg = "palette.bg1", bg = "palette.cyan" },
+    AvanteReversedSubtitle = { fg = "palette.cyan" },
+    AvanteTitle = { fg = "palette.bg1", bg = "palette.green" },
+    AvanteReversedTitle = { fg = "palette.green" },
+    AvanteThirdTitle = { fg = "palette.fg1", bg = "palette.bg0" },
+    AvanteReversedThirdTitle = { fg = "palette.bg0" },
+    AvantePopupHint = { link = "NormalFloat" },
+    AvanteAnnotation = { link = "Comment" },
+    AvanteSuggestion = { link = "Comment" },
+    AvanteInlineHint = { link = "Keyword" },
+    AvanteConflictAncestorLabel = { bg = "palette.red" },
+    AvanteConflictAncestor = { bg = "palette.red", style = "bold" },
+    AvanteConflictIncomingLabel = { fg = "palette.bg1", bg = "palette.green" },
+    AvanteConflictIncoming = { link = "Normal" },
+    AvanteConflictCurrentLabel = { bg = "palette.orange" },
+    AvanteConflictCurrent = { link = "Normal" },
   },
 }
 
