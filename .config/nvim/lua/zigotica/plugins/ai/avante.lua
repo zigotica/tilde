@@ -1,11 +1,13 @@
 local avante_config = {
-  ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "vertex" | "cohere" | "copilot" | "bedrock" | string
+  ---@alias Provider "claude" | "ollama" | "openai" | "azure" | "gemini" | "vertex" | "cohere" | "copilot" | "bedrock" | string
   ---------------- PROVIDERS
   -- Switch by using :AvanteSwitchProvider name, or <leader>ap
   provider = "gemini",
   -- Show prices next to the model name in the <leader>ap picker
   prices = {
-    ollama_R1 = "FREE",
+    gemini = "FREE",
+    google_Flash = "FREE",
+    ollama = "FREE",
     ollama_Llama_32 = "FREE",
     requesty_Deepseek_v3 = "Input (1M)$0.850 Output (1M)$0.900",
     requesty_GPT4mini = "Input (1M)$0.150 Output (1M)$0.600",
@@ -14,19 +16,9 @@ local avante_config = {
   },
   ---------------- PROVIDER SETUPS
   vendors = {
-    ollama_R1 = {
-      __inherited_from = "openai",
-      endpoint = "http://127.0.0.1:11434/v1",
-      api_key_name = "",
-      model = "deepseek-r1",
-      max_tokens = 16384,
-    },
     ollama_Llama_32 = {
-      __inherited_from = "openai",
-      endpoint = "http://127.0.0.1:11434/v1",
-      api_key_name = "",
+      __inherited_from = "ollama",
       model = "llama3.2",
-      max_tokens = 16384,
     },
     requesty_Deepseek_v3 = {
       __inherited_from = "openai",
@@ -56,6 +48,12 @@ local avante_config = {
       __inherited_from = "gemini",
       model = "gemini-2.0-flash",
     },
+  },
+  ollama = {
+    endpoint = "http://127.0.0.1:11434",
+    model = "deepseek-r1",
+    temperature = 0,
+    max_tokens = 16384,
   },
   gemini = {
     endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
@@ -176,7 +174,8 @@ function M.get_providers()
   end
 
   -- List of additional providers to check
-  local additional_providers = { "claude", "openai", "azure", "gemini", "vertex", "cohere", "copilot", "bedrock" }
+  local additional_providers =
+  { "claude", "ollama", "openai", "azure", "gemini", "vertex", "cohere", "copilot", "bedrock" }
 
   -- Check for additional providers
   for _, provider in ipairs(additional_providers) do
