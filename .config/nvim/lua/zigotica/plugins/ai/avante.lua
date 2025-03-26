@@ -52,13 +52,17 @@ local avante_config = {
       temperature = 0,
       max_tokens = 16384,
     },
+    google_Flash = {
+      __inherited_from = "gemini",
+      model = "gemini-2.0-flash",
+    },
   },
   gemini = {
     endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
     api_key_name = "GEMINI_API_KEY",
-    model = "gemini-2.0-flash",
+    model = "gemini-2.5-pro-exp-03-25",
     temperature = 0,
-    max_tokens = 20480,
+    max_tokens = 32768,
   },
   claude = { -- Claude does not use the vendors object
     endpoint = "https://api.anthropic.com",
