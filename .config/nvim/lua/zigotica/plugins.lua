@@ -58,6 +58,14 @@ require("lazy").setup({
       "nvim-telescope/telescope.nvim",
     },
   },
+  {
+    "zigotica/telescope-docker-commands.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+  },
 
   -- FZF direct replacement for telescope find_files (was too slow)
   {
