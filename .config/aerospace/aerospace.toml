@@ -1,0 +1,149 @@
+after-login-command = []
+after-startup-command = [
+  'exec-and-forget sketchybar --reload',
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=2.0'
+]
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
+start-at-login = true
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+accordion-padding = 10
+default-root-container-layout = 'accordion'
+default-root-container-orientation = 'auto'
+
+automatically-unhide-macos-hidden-apps = false
+
+[key-mapping]
+    preset = 'qwerty'
+
+[gaps]
+    inner.horizontal = 2
+    inner.vertical =   2
+    outer.left =       2
+    outer.bottom =     2
+    outer.top =        2
+    outer.right =      2
+
+[mode.main.binding]
+    alt-slash = 'layout tiles horizontal vertical'
+    alt-comma = 'layout accordion horizontal vertical'
+
+    alt-f = 'fullscreen'
+
+    alt-h = 'focus left'
+    alt-j = 'focus down'
+    alt-k = 'focus up'
+    alt-l = 'focus right'
+
+    alt-shift-h = 'move left'
+    alt-shift-j = 'move down'
+    alt-shift-k = 'move up'
+    alt-shift-l = 'move right'
+
+    alt-minus = 'resize smart -50'
+    alt-equal = 'resize smart +50'
+
+    # WORK --------------
+    alt-p = 'workspace Project' # (figma / ghostty / simulators / docker)
+    alt-t = 'workspace Talk' # (slack / teams / zoom)
+    alt-w = 'workspace Web' # (firefox / chrome)
+    # PERSONAL --------------
+    alt-c = 'workspace Code' # (kitty)
+    alt-s = 'workspace Surf' # (safari / FF Nightly)
+    alt-u = 'workspace User' # (obsidian / spotify)
+
+    alt-shift-p = 'move-node-to-workspace Project'
+    alt-shift-t = 'move-node-to-workspace Talk'
+    alt-shift-w = 'move-node-to-workspace Web'
+    alt-shift-c = 'move-node-to-workspace Code'
+    alt-shift-s = 'move-node-to-workspace Surf'
+    alt-shift-u = 'move-node-to-workspace User'
+
+    alt-shift-r = 'reload-config'
+
+# Automatically assign workspaces to monitors
+[workspace-to-monitor-force-assignment]
+Project = 'secondary'
+Talk = 'main'
+Web = 'secondary'
+Code = 'secondary'
+Surf = 'main'
+User = 'main'
+
+# Automatically move apps to specific workspaces
+[[on-window-detected]]
+if.app-id = 'com.google.android.studio'
+run = "move-node-to-workspace Project"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iphonesimulator'
+run = "move-node-to-workspace Project"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.dt.Xcode'
+run = "move-node-to-workspace Project"
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = "move-node-to-workspace Project"
+
+[[on-window-detected]]
+if.app-id = 'com.figma.Desktop'
+run = "move-node-to-workspace Project"
+
+[[on-window-detected]]
+if.app-id = 'com.electron.dockerdesktop'
+run = "move-node-to-workspace Project"
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = "move-node-to-workspace Talk"
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.teams2'
+run = "move-node-to-workspace Talk"
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.teams'
+run = "move-node-to-workspace Talk"
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = "move-node-to-workspace Talk"
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = "move-node-to-workspace Web"
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = "move-node-to-workspace Web"
+
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
+run = "move-node-to-workspace Code"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = "move-node-to-workspace Surf"
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.nightly'
+run = "move-node-to-workspace Surf"
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = "move-node-to-workspace User"
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = "move-node-to-workspace User"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = "move-node-to-workspace User"
+

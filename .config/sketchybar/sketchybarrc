@@ -1,0 +1,51 @@
+# https://github.com/FelixKratz/SketchyBar
+source "$CONFIG_DIR/vars.sh"
+
+bar=(
+  position=top
+  height="$HEIGHT"
+  blur_radius="$BLUR"
+  color="$COLOR_DARK"
+)
+sketchybar --bar "${bar[@]}"
+
+default=(
+  padding_left="$PADDING"
+  padding_right="$PADDING"
+  icon.font="$ICON_FONT:$ICON_SIZE"
+  icon.padding_left="$ICON_PADDING_L"
+  icon.padding_right="$ICON_PADDING_R"
+  label.font="$FONT:$LABEL_SIZE"
+  icon.color="$SKBAR_COLOR_ICON"
+  label.color="$SKBAR_COLOR_LABEL_ACTIVE"
+  label.padding_left="$LABEL_PADDING_L"
+  label.padding_right="$LABEL_PADDING_R"
+  popup.background.border_width="$POPUP_BORDER_WIDTH"
+  popup.background.corner_radius="$POPUP_CORNER_RADIUS"
+  popup.background.border_color="$POPUP_COLOR_BORDER"
+  popup.background.color="$POPUP_COLOR_BG"
+  popup.background.shadow.drawing="$SHADOW"
+)
+sketchybar --default "${default[@]}"
+
+# Left side Items
+source "$ITEMS/spaces/item.sh"
+source "$ITEMS/pomodoro/item.sh"
+source "$ITEMS/caffeinate/item.sh"
+source "$ITEMS/front_app/item.sh"
+
+# Right side Items
+source "$ITEMS/time/item.sh"
+source "$ITEMS/ical/item.sh"
+source "$ITEMS/packages/item.sh"
+source "$ITEMS/git/item.sh"
+source "$ITEMS/battery/item.sh"
+source "$ITEMS/volume/item.sh"
+source "$ITEMS/cpu/item.sh"
+source "$ITEMS/ram/item.sh"
+source "$ITEMS/disk/item.sh"
+source "$ITEMS/spotify/item.sh"
+
+
+# UPDATE
+sketchybar --update
