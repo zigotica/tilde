@@ -3,7 +3,7 @@
 source "$HOME/.config/sketchybar/vars.sh"
 
 info() {
-  DATA=$($HOME/.config/sketchybar/items/git/git-short.sh $HOME/Documents/ -d 3)
+  DATA=$($HOME/.config/sketchybar/items/git/helpers/git-short.sh $HOME/Documents/ -d 3)
   SYNC=$(echo "$DATA" | jq '.behind_main')
   BACKUP=$(echo "$DATA" | jq '.ahead_lab')
   DEFAULT="0"
@@ -71,11 +71,17 @@ mouse_exited() {
 update_sync() {
   # Pending action
   echo "Updating sync..."
+  $HOME/.config/sketchybar/items/git/helpers/git-sync.sh -d 3 $HOME/Documents/
+  sketchybar -m --trigger git_upgrade
+  echo "Triggered git_upgrade" >> ~/.config/sketchybar/items/git/helpers/_sync.log
 }
 
 update_backup() {
   # Pending action
   echo "Updating backup..."
+  $HOME/.config/sketchybar/items/git/helpers/git-backup.sh -d 3 $HOME/Documents/
+  sketchybar -m --trigger git_upgrade
+  echo "Triggered git_upgrade" >> ~/.config/sketchybar/items/git/helpers/_backup.log
 }
 
 

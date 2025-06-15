@@ -4,7 +4,7 @@
 # 󰊢 ⇡ ⇣   󰳏 󱓎 -             
 
 sketchybar -m --add       item             git.total right                        \
-              --add       event            pkg_upgrade                            \
+              --add       event            git_upgrade                            \
               --set       git.total        update_freq="$POLL_UPDATES_LONG"       \
                                            popup.horizontal=off                   \
                                            popup.align=center                     \
@@ -12,7 +12,7 @@ sketchybar -m --add       item             git.total right                      
                                            script="$ITEMS/git/plugin.sh $ITEMS/git" \
                                            icon="󰊢"                               \
                                            lazy=off                               \
-              --subscribe git.total        pkg_upgrade                            \
+              --subscribe git.total        git_upgrade                            \
                                            mouse.entered                          \
                                            mouse.exited                           \
                                            mouse.exited.global                    \

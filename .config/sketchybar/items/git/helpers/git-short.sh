@@ -67,13 +67,19 @@ for SUBDIR in "${FOLDERS[@]}"; do
     fi
 
     # Ahead of lab?
-    if [[ -n "$HAS_LAB_REMOTE" ]] && [[ $(count-remote-branch "$LAB_REMOTE/$BRANCH") -gt 0 ]]; then
-      AHEAD_LAB=$(count-commits-diff "$LAB_REMOTE/$BRANCH" "$BRANCH")
+    if [[ -n "$HAS_LAB_REMOTE" ]]; then
+      if git show-ref --verify --quiet "refs/remotes/$LAB_REMOTE/$BRANCH"; then
+        AHEAD_LAB=$(count-commits-diff "$LAB_REMOTE/$BRANCH" "$BRANCH")
+      else
+        AHEAD_LAB=1  # Remote branch missing → needs push
+      fi
+
       if [[ "$AHEAD_LAB" -gt 0 ]]; then
         repos_ahead_lab=$((repos_ahead_lab + 1))
         repos_ahead_lab_names+=("\"$REPO_NAME\"")
       fi
     fi
+
   fi
 done
 
