@@ -9,7 +9,9 @@ sketchybar -m --add       item             git.total right                      
                                            popup.horizontal=off                   \
                                            popup.align=center                     \
                                            popup.y_offset="$POPUP_OFFSET"         \
+                                           label.font="$FONT:$LABEL_SUB_SIZE"     \
                                            script="$ITEMS/git/plugin.sh $ITEMS/git" \
+                                           icon.font="$ICON_FONT:$ICON_SIZE_XL"   \
                                            icon="󰊢"                               \
                                            lazy=off                               \
               --subscribe git.total        git_upgrade                            \

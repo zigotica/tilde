@@ -12,6 +12,7 @@ sketchybar -m --add       item             packages.total right                 
                                            popup.y_offset="$POPUP_OFFSET"         \
                                            script="$ITEMS/packages/plugin.sh"     \
                                            icon=""                               \
+                                           label.font="$FONT:$LABEL_SUB_SIZE"     \
                                            lazy=off                               \
               --subscribe packages.total   pkg_upgrade                            \
                                            mouse.entered                          \
