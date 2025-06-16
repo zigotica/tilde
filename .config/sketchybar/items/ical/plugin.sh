@@ -6,7 +6,7 @@
 # sketchybar does not have access to PATH, so you need to pass the full path to binary
 # Update list of events, for up to end of current day (no args passed):
 EVENTS_FILE="$HOME/.config/sketchybar/items/ical/events.txt"
-~/.config/bin/utils/calendar-events 5 > "$EVENTS_FILE"
+~/.config/bin/utils/calendar-events > "$EVENTS_FILE"
 
 source "$HOME/.config/sketchybar/vars.sh"
 
