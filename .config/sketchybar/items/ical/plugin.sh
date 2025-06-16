@@ -6,7 +6,7 @@
 # sketchybar does not have access to PATH, so you need to pass the full path to binary
 # Update list of events, for up to end of current day (no args passed):
 EVENTS_FILE="$HOME/.config/sketchybar/items/ical/events.txt"
-~/.config/bin/utils/calendar-events > "$EVENTS_FILE"
+~/.config/bin/utils/calendar-events 5 > "$EVENTS_FILE"
 
 source "$HOME/.config/sketchybar/vars.sh"
 
@@ -51,8 +51,8 @@ update() {
         # Default color
         LABEL_COLOR="$SKBAR_COLOR_LABEL_ACTIVE"
 
-        # If current time is within event range
-        if (( now_total_minutes >= start_total_minutes && now_total_minutes < end_total_minutes )); then
+        # If event is today and current time is within event range
+        if [ "$event_date" = "$today" ] && (( now_total_minutes >= start_total_minutes && now_total_minutes < end_total_minutes )); then
           LABEL_COLOR="$COLOR_YELLOW"
         fi
 
