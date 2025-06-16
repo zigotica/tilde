@@ -22,30 +22,54 @@ update() {
     # Read all lines, trim spaces
     EVENTS=$(cat "$EVENTS_FILE")
 
+    # Get current time in minutes since midnight
+    now_hour=$(date +%H)
+    now_min=$(date +%M)
+    now_total_minutes=$((10#$now_hour * 60 + 10#$now_min))
+
     # Process each event line
     while IFS= read -r line; do
-      # Skip empty lines
       [ -z "$line" ] && continue
 
-      # Only process lines matching the expected event format: e.g. "HH:mm–HH:mm | Title"
       if [[ "$line" =~ ^[0-9]{2}:[0-9]{2}–[0-9]{2}:[0-9]{2}\ \|\ .+ ]]; then
-          COUNTER=$((COUNTER + 1))
-          # Extract time and title
-          time_part="${line%%|*}"
-          time_part="$(echo "$time_part" | xargs)"
-          title_part="${line#*|}"
-          title_part="$(echo "$title_part" | xargs)"
+        COUNTER=$((COUNTER + 1))
 
-          args+=(
-            --add item "ical.event.$COUNTER" popup.ical
-            --set "ical.event.$COUNTER" \
-              label="${time_part}: ${title_part}" \
-              background.height=20 \
-              background.drawing=on
-          )
+        # Extract time and title
+        time_part="${line%%|*}"
+        time_part="$(echo "$time_part" | xargs)"
+        title_part="${line#*|}"
+        title_part="$(echo "$title_part" | xargs)"
+
+        # Extract start and end time
+        start_time="${time_part%%–*}"
+        end_time="${time_part##*–}"
+
+        start_hour=${start_time%%:*}
+        start_min=${start_time##*:}
+        end_hour=${end_time%%:*}
+        end_min=${end_time##*:}
+
+        start_total_minutes=$((10#$start_hour * 60 + 10#$start_min))
+        end_total_minutes=$((10#$end_hour * 60 + 10#$end_min))
+
+        # Default color
+        LABEL_COLOR="$SKBAR_COLOR_LABEL_ACTIVE"
+
+        # If current time is within event range
+        if [[ $now_total_minutes -ge $start_total_minutes && $now_total_minutes -lt $end_total_minutes ]]; then
+          LABEL_COLOR="$COLOR_YELLOW"
+        fi
+
+        args+=(
+          --add item "ical.event.$COUNTER" popup.ical
+          --set "ical.event.$COUNTER" \
+            label="${time_part}: ${title_part}" \
+            label.color="$LABEL_COLOR" \
+            background.height=20 \
+            background.drawing=on
+        )
       fi
     done <<< "$EVENTS"
-
 
     # Create popup items
     sketchybar "${args[@]}" > /dev/null
