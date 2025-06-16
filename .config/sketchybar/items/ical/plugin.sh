@@ -14,15 +14,15 @@ update() {
     args=()
     COUNTER=0
 
-    # Remove events from previous updates
+    # Remove previous popup events
     for i in $(seq 1 200); do
       args+=(--remove "ical.event.$i")
     done
 
-    # Read all lines, trim spaces
     EVENTS=$(cat "$EVENTS_FILE")
 
     # Get current time in minutes since midnight
+    today=$(date +%F)
     now_hour=$(date +%H)
     now_min=$(date +%M)
     now_total_minutes=$((10#$now_hour * 60 + 10#$now_min))
@@ -31,18 +31,14 @@ update() {
     while IFS= read -r line; do
       [ -z "$line" ] && continue
 
-      if [[ "$line" =~ ^[0-9]{2}:[0-9]{2}–[0-9]{2}:[0-9]{2}\ \|\ .+ ]]; then
+      if [[ "$line" =~ ^([0-9]{4}-[0-9]{2}-[0-9]{2})[[:space:]]([0-9]{2}:[0-9]{2})[-–]([0-9]{2}:[0-9]{2})[[:space:]]\|[[:space:]](.+)$ ]]; then
+        event_date="${BASH_REMATCH[1]}"
+        start_time="${BASH_REMATCH[2]}"
+        end_time="${BASH_REMATCH[3]}"
+        title_part="${BASH_REMATCH[4]}"
+
         COUNTER=$((COUNTER + 1))
-
-        # Extract time and title
-        time_part="${line%%|*}"
-        time_part="$(echo "$time_part" | xargs)"
-        title_part="${line#*|}"
-        title_part="$(echo "$title_part" | xargs)"
-
-        # Extract start and end time
-        start_time="${time_part%%–*}"
-        end_time="${time_part##*–}"
+        time_part="${start_time}–${end_time}"
 
         start_hour=${start_time%%:*}
         start_min=${start_time##*:}
@@ -56,7 +52,7 @@ update() {
         LABEL_COLOR="$SKBAR_COLOR_LABEL_ACTIVE"
 
         # If current time is within event range
-        if [[ $now_total_minutes -ge $start_total_minutes && $now_total_minutes -lt $end_total_minutes ]]; then
+        if (( now_total_minutes >= start_total_minutes && now_total_minutes < end_total_minutes )); then
           LABEL_COLOR="$COLOR_YELLOW"
         fi
 
@@ -71,23 +67,21 @@ update() {
       fi
     done <<< "$EVENTS"
 
-    # Create popup items
+    # Apply popup update
     sketchybar "${args[@]}" > /dev/null
 
-    if [[ $COUNTER -gt 5 ]]; then
+    # Update calendar icon color based on number of events
+    if (( COUNTER > 5 )); then
       COLOR="$COLOR_RED"
-    elif [[ $COUNTER -gt 2 ]]; then
+    elif (( COUNTER > 2 )); then
       COLOR="$COLOR_ORANGE"
-    elif [[ $COUNTER -gt 0 ]]; then
+    elif (( COUNTER > 0 )); then
       COLOR="$COLOR_YELLOW"
     else
       COLOR="$COLOR_GREEN"
     fi
 
-    # update calendar icon color based on the number of events
-    sketchybar -m \
-      --set ical \
-        icon.color="$COLOR"
+    sketchybar -m --set ical icon.color="$COLOR"
 }
 
 popup() {
