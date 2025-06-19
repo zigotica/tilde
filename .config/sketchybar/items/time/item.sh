@@ -3,7 +3,7 @@
 # 󰥔 󱑎
 sketchybar \
   --add item date right \
-  --set date \
+  --set date update_freq="$POLL_UPDATES_MID" \
     label.font="$FONT:$LABEL_SUB_SIZE" \
     y_offset="$LABEL_SUP_OFFSET" \
     width=0 \
