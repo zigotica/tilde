@@ -6,6 +6,7 @@ bar=(
   height="$HEIGHT"
   blur_radius="$BLUR"
   color="$COLOR_DARK"
+  display=all
 )
 sketchybar --bar "${bar[@]}"
 

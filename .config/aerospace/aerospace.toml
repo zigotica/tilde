@@ -25,7 +25,7 @@ automatically-unhide-macos-hidden-apps = false
     inner.vertical =   2
     outer.left =       2
     outer.bottom =     2
-    outer.top =        2
+    outer.top =        [{ monitor.main = 2 }, { monitor.secondary = 35 }, 2]
     outer.right =      2
 
 [mode.main.binding]
@@ -37,6 +37,8 @@ automatically-unhide-macos-hidden-apps = false
 
     alt-shift-h = 'resize smart -20'
     alt-shift-l = 'resize smart +20'
+
+    alt-shift-m = 'move-node-to-monitor --wrap-around next'
 
     # WORK --------------
     alt-p = 'workspace Project' # (figma / ghostty / simulators / docker)
