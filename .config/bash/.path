@@ -39,5 +39,9 @@ PATH=$PATH:$BREW_PREFIX/bin/go:$BREW_PREFIX/bin/gofmt:$BREW_PREFIX/bin/gopls
 # Lua LSP
 PATH=$PATH:$HOME/.config/lua-language-server/bin
 
+# ANDROID STUDIO JAVA
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+PATH="$JAVA_HOME/bin:$PATH"
+
 export PATH
 
