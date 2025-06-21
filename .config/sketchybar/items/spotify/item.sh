@@ -15,7 +15,7 @@ sketchybar --add       event           spotify_change $SPOTIFY_EVENT       \
                                        icon.font="$FONT:$ICON_SIZE"        \
                                        icon.color="$COLOR_GREEN"           \
                                        icon=""                             \
-                                       label.max_chars=48                  \
+                                       label.max_chars=42                  \
                                        label.font="$ICON_FONT:$LABEL_SUB_SIZE"  \
                                        scroll_texts=on                     \
                                                                            \
