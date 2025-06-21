@@ -1,95 +1,91 @@
-version: 2
-final_space: true
-console_title_template: "{{ .Shell }} in {{ .Folder }}"
-
-blocks:
-  - type: prompt
-    alignment: left
-    newline: true
-    segments:
-      - type: os
-        style: plain
-        background: transparent
-        foreground: white
-        template: "{{.Icon}} "
-
-      - type: session
-        style: diamond
-        background: transparent
-        foreground: white
-        template: "{{ .UserName }} {{ if .SSHSession }}<red>SSH </>{{ end }}"
-
-      - type: path
-        style: plain
-        background: transparent
-        foreground: blue
-        template: "{{ .Path }}"
-        properties:
-          style: full
-
-  - type: prompt
-    alignment: left
-    newline: true
-    segments:
-      - type: node
-        style: plain
-        fetch_package_manager: true
-        fetch_version: true
-        display_mode: context
-        foreground: green
-        background: transparent
-        template:
-          "{{ if .Mismatch }}<red> {{ .Expected }}</>{{ else }} {{ .Full }}{{ end }}</> "
-
-      - type: git
-        style: plain
-        foreground: yellow
-        background: transparent
-        template:
-          "{{ .HEAD }} <p:orange>{{ .Working }} {{ if gt .Behind 0 }}{{ .Behind }}⇣{{ end }}{{ if gt .Ahead 0 }}{{ .Ahead }}⇡{{ end }}</>"
-        properties:
-          branch_icon: " "
-          commit_icon: "@"
-          fetch_status: true
-
-
-  - type: prompt
-    alignment: left
-    newline: true
-    segments:
-      - type: text
-        style: plain
-        foreground_templates:
-          - "{{if gt .Code 0}}red{{end}}"
-          - "{{if eq .Code 0}}p:purple{{end}}"
-        background: transparent
-        template:
-          "{{ if .Root }}<red>#</>{{ else }}${{ end }}"
-
-  - type: rprompt
-    overflow: hidden
-    segments:
-      - type: executiontime
-        style: plain
-        foreground: p:grey
-        background: transparent
-        template: "{{ .FormattedMs }}"
-        properties:
-          threshold: 5000
-
-transient_prompt:
-  foreground_templates:
-    - "{{if gt .Code 0}}red{{end}}"
-    - "{{if eq .Code 0}}p:grey{{end}}"
-  background: transparent
-  template: "{{ if .Root }}<red>#</>{{ else }}${{ end }}"
-
-secondary_prompt:
-  foreground: p:purple
-  background: transparent
-  template: "❯❯ "
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 
 palette:
+  grey: "#3b4252"
   orange: "#c98b65"
   purple: "#a585e6"
-  grey: "#3b4252"
+secondary_prompt:
+  template: "❯❯ "
+  foreground: p:purple
+  background: transparent
+transient_prompt:
+  template: "{{ if .Root }}<red>#</>{{ else }}${{ end }}"
+  background: transparent
+  foreground_templates:
+  - "{{if gt .Code 0}}red{{end}}"
+  - "{{if eq .Code 0}}p:grey{{end}}"
+console_title_template: "{{ .Shell }} in {{ .Folder }}"
+blocks:
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+    template: "{{.Icon}} "
+    foreground: white
+    background: transparent
+    type: os
+    style: plain
+  - properties:
+      cache_duration: none
+    template: "{{ .UserName }} {{ if .SSHSession }}<red>SSH </>{{ end }}"
+    foreground: white
+    background: transparent
+    type: session
+    style: diamond
+  - properties:
+      cache_duration: none
+      style: full
+    template: "{{ .Path }}"
+    foreground: blue
+    background: transparent
+    type: path
+    style: plain
+  newline: true
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+    template: "{{ if .Mismatch }}<red>\ue718 {{ .Expected }}</>{{ else }}\ue718 {{ .Full }}{{ end }}</> "
+    foreground: green
+    background: transparent
+    type: node
+    style: plain
+  - properties:
+      branch_icon: "\ue725 "
+      cache_duration: none
+      commit_icon: "@"
+      fetch_status: true
+    template: "{{ .HEAD }} <p:orange>{{ .Working }} {{ if gt .Behind 0 }}{{ .Behind }}⇣{{ end }}{{ if gt .Ahead 0 }}{{ .Ahead }}⇡{{ end }}</>"
+    foreground: yellow
+    background: transparent
+    type: git
+    style: plain
+  newline: true
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+    template: "{{ if .Root }}<red>#</>{{ else }}${{ end }}"
+    background: transparent
+    type: text
+    style: plain
+    foreground_templates:
+    - "{{if gt .Code 0}}red{{end}}"
+    - "{{if eq .Code 0}}p:purple{{end}}"
+  newline: true
+- type: rprompt
+  overflow: hidden
+  segments:
+  - properties:
+      cache_duration: none
+      threshold: 5000
+    template: "{{ .FormattedMs }}"
+    foreground: p:grey
+    background: transparent
+    type: executiontime
+    style: plain
+version: 3
+final_space: true
