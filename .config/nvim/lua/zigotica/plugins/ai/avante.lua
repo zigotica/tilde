@@ -317,7 +317,7 @@ function M.telescope_providers()
 
   local opts = {
     prompt_title = "Avante AI Providers/Models by cost",
-    results_title = "Available Models",
+    results_title = "Available Providers/Models",
     finder = require("telescope.finders").new_table({
       results = providers,
       entry_maker = function(entry)
@@ -422,5 +422,53 @@ function M.telescope_providers()
   require("telescope.pickers").new({}, opts):find()
 end
 
+-- Create a telescope picker for Avante modes
+function M.telescope_modes()
+  local ok, telescope = pcall(require, "telescope.builtin")
+  if not ok then
+    vim.notify("Telescope not available", vim.log.levels.ERROR)
+    return
+  end
+
+  local modes = { "legacy", "agentic" }
+  local current_mode = M.get_config().mode
+
+  local opts = {
+    prompt_title = "Avante AI Mode Select",
+    results_title = "Available Modes",
+    finder = require("telescope.finders").new_table({
+      results = modes,
+      entry_maker = function(entry)
+        local current = M.get_config().mode
+        return {
+          value = entry,
+          display = entry .. (entry == current and " (current)" or ""),
+          ordinal = entry,
+        }
+      end,
+    }),
+    sorter = require("telescope.sorters").get_generic_fuzzy_sorter(),
+    attach_mappings = function(prompt_bufnr, map)
+      local actions = require("telescope.actions")
+      actions.select_default:replace(function()
+        actions.close(prompt_bufnr)
+        local selection = require("telescope.actions.state").get_selected_entry()
+        local selected_mode = selection.value
+
+        -- Update the mode in the config
+        avante_config.mode = selected_mode
+
+        vim.notify("Switched to mode: " .. selected_mode, vim.log.levels.INFO)
+
+        -- Don't reopen the picker automatically
+      end)
+      return true
+    end,
+  }
+
+  require("telescope.pickers").new({}, opts):find()
+end
+
 -- Keymaps
-vim.keymap.set("n", "<leader>am", M.telescope_providers, { desc = "[A]vante [M]odel Select" })
+vim.keymap.set("n", "<leader>ap", M.telescope_providers, { desc = "[A]vante [P]rovider Select" })
+vim.keymap.set("n", "<leader>am", M.telescope_modes, { desc = "[A]vante [M]ode Select" })
