@@ -36,6 +36,7 @@ return {
     TypeParameter = '',
     Tab9 = '',
     Codeium = '{…}', -- 󰞔 →
+    Copilot = '',
   },
   ai = {
     Chat = '', --     

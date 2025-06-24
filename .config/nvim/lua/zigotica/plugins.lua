@@ -123,6 +123,33 @@ require("lazy").setup({
       "hrsh7th/nvim-cmp",
     },
   },
+  -- COPILOT code multiline suggestion
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        copilot_model = "gpt-4o-copilot",
+        server_opts_overrides = {
+          settings = {
+            telemetry = {
+              telemetryLevel = "off",
+            },
+            advanced = {
+              listCount = 5,   -- #completions for panel
+              inlineSuggestCount = 5, -- #completions for getCompletions
+            },
+          },
+        },
+      })
+    end,
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
+    end,
+  },
 
   -- AI menu with code and english actions
   { "David-Kunz/gen.nvim" },
