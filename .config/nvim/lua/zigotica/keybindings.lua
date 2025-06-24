@@ -89,10 +89,6 @@ map('i', '<c-n>', '<cmd>lua require("luasnip").jump(1)<CR>', { silent=true, desc
 map('n', '<leader><leader>ee', '<plug>(emmet-expand-abbr)', {desc='[E]mmet [E]expand abbrv'})
 map('i', '<c-e>e', '<plug>(emmet-expand-abbr)', {desc='[E]mmet [E]expand abbrv'})
 
--- AI
-----------------------------------------------
-map('n', '<leader>ai', ':Gen<CR>', {desc='[AI] menu'})
-map('v', '<leader>ai', ':Gen<CR>', {desc='[AI] menu'})
 
 -- REPLACEMENT
 ----------------------------------------------
