@@ -90,3 +90,9 @@ require("neotest").setup({
     }),
   },
 })
+
+-- Keymaps
+vim.keymap.set('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest").summary.open()<CR>', {desc='[T]est [R]un'})
+vim.keymap.set('n', '<leader>ts', '<cmd>lua require("neotest").run.stop();require("neotest").summary.close()<CR>', {desc='[T]est [S]top'})
+vim.keymap.set('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>', {desc='[T]est [T]oggle summary'})
+

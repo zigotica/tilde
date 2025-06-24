@@ -76,11 +76,6 @@ map('n', '<leader>bc', ':%bd<CR>:e#<CR>:bd#<CR>:NvimTreeOpen<CR><C-w>l', {desc='
 ----------------------------------------------
 map('n', '<leader>gb', '<cmd>lua require"gitsigns".blame_line{full=true}<CR>', {desc='[G]it [B]lame'})
 
--- TESTING
-----------------------------------------------
-map('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest").summary.open()<CR>', {desc='[T]est [R]un'})
-map('n', '<leader>ts', '<cmd>lua require("neotest").run.stop();require("neotest").summary.close()<CR>', {desc='[T]est [S]top'})
-map('n', '<leader>tt', '<cmd>lua require("neotest").summary.toggle()<CR>', {desc='[T]est [T]oggle summary'})
 
 -- SNIPPETS / EMMET expansions
 ----------------------------------------------

@@ -172,16 +172,16 @@ require("lazy").setup({
     },
   },
 
-
   -- Testing
   {
     "nvim-neotest/neotest",
     dependencies = {
+      "nvim-treesitter/nvim-treesitter",
       "nvim-neotest/nvim-nio",
       "haydenmeade/neotest-jest",
       "antoinemadec/FixCursorHold.nvim",
     },
-    ft = { "js", "ts", "jsx", "tsx" },
+    ft = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
   },
 
   -- Git
