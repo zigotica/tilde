@@ -97,10 +97,6 @@ map('v', '<leader>ai', ':Gen<CR>', {desc='[AI] menu'})
 -- REPLACEMENT
 ----------------------------------------------
 -- (2x leader being a destructive command)
-map('n', '<leader><leader>co', '<plug>(AvanteConflictOurs)', {desc='Avante [C]onflict, keep [O]riginal'})
-map('n', '<leader><leader>ct', '<plug>(AvanteConflictTheirs)', {desc='Avante [C]onflict, keep [T]heirs'})
-map('n', '<leader><leader>ca', '<plug>(AvanteConflictAllTheirs)', {desc='Avante [C]onflict, keep [A]ll Theirs'})
-
 map('n', '<leader><leader>rf', ':%s/<C-r><C-w>//g<Left><Left>', {desc='[R]eplace word under cursor in [F]ile'})
 map('v', '<leader><leader>rs', ':s///g<Left><Left><Left>', {desc='[R]eplace in [S]election'})
 map('n', '<leader><leader>rb', ':bufdo %s/<C-r><C-w>//ge | update<C-Left><C-Left><Left><Left><Left><Left>', {desc='[R]eplace word under cursor in all open [B]uffers'})

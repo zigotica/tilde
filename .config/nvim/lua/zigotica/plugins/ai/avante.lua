@@ -1,80 +1,184 @@
 local avante_config = {
   ---@alias Provider "claude" | "ollama" | "openai" | "azure" | "gemini" | "vertex" | "cohere" | "copilot" | "bedrock" | string
   ---------------- PROVIDERS
-  -- Switch by using :AvanteSwitchProvider name, or <leader>ap
+  -- Switch by using :AvanteSwitchProvider name, or <leader>a?
+  -- Show prices next to the model name in the <leader>am custom model picker
   provider = "gemini",
-  -- Show prices next to the model name in the <leader>ap picker
   prices = {
-    gemini = "FREE",
-    google_Flash = "FREE",
+    ["Google Pro"] = "FREE",
+    ["Google Flash"] = "FREE",
+    ["Ollama Llama-3.2"] = "FREE",
+    ["Ollama Gemma-v3"] = "FREE",
+    ["Requesty DeepSeek-v3"] = "Input (1M)$0.400 Output (1M)$1.300",
+    ["Requesty DeepSeek-R1-Llama"] = "Input (1M)$0.230 Output (1M)$0.690",
+    ["Requesty o3-mini"] = "Input (1M)$1.100 Output (1M)$4.400",
+    ["Requesty GPT-4o-mini"] = "Input (1M)$0.150 Output (1M)$0.600",
+    ["Requesty GPT-4.1-nano"] = "Input (1M)$0.100 Output (1M)$0.400",
+    ["Requesty GPT-4.1-mini"] = "Input (1M)$0.400 Output (1M)$1.600",
+    ["Requesty Claude-3.5"] = "Input (1M)$3.000 Output (1M)$15.000",
+    ["Requesty Claude-4"] = "Input (1M)$3.000 Output (1M)$15.000",
+    ["OpenAI o4-mini"] = "Input (1M)$1.100 Output (1M)$4.400",
+    ["OpenAI o3-mini"] = "Input (1M)$1.100 Output (1M)$4.400",
     ollama = "FREE",
-    ollama_Llama_32 = "FREE",
-    requesty_Deepseek_v3 = "Input (1M)$0.850 Output (1M)$0.900",
-    requesty_GPT4mini = "Input (1M)$0.150 Output (1M)$0.600",
-    requesty_Llama_33 = "Input (1M)$0.120 Output (1M)$0.300",
+    openai = "Input (1M)$0.150 Output (1M)$0.600",
+    gemini = "FREE",
     claude = "Input (1M)$3.000 Output (1M)$15.000",
   },
   ---------------- PROVIDER SETUPS
-  vendors = {
-    ollama_Llama_32 = {
+  providers = {
+    ["Ollama Llama-3.2"] = {
       __inherited_from = "ollama",
       model = "llama3.2",
     },
-    requesty_Deepseek_v3 = {
+    ["Ollama Gemma-v3"] = {
+      __inherited_from = "ollama",
+      model = "gemma3",
+    },
+    ["Requesty Claude-3.5"] = {
       __inherited_from = "openai",
       endpoint = "https://router.requesty.ai/v1",
       api_key_name = "REQUESTY_API_KEY",
-      model = "deepinfra/deepseek-ai/DeepSeek-V3",
-      temperature = 0,
-      max_tokens = 16384,
+      model = "vertex/anthropic/claude-3-5-sonnet-20241022",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
     },
-    requesty_GPT4mini = {
+    ["Requesty Claude-4"] = {
+      __inherited_from = "openai",
+      endpoint = "https://router.requesty.ai/v1",
+      api_key_name = "REQUESTY_API_KEY",
+      model = "vertex/anthropic/claude-4-sonnet-latest",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
+    },
+    ["Requesty DeepSeek-R1-Llama"] = {
+      __inherited_from = "openai",
+      endpoint = "https://router.requesty.ai/v1",
+      api_key_name = "REQUESTY_API_KEY",
+      model = "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
+    },
+    ["Requesty DeepSeek-v3"] = {
+      __inherited_from = "openai",
+      endpoint = "https://router.requesty.ai/v1",
+      api_key_name = "REQUESTY_API_KEY",
+      model = "novita/deepseek/deepseek-v3-0324",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
+    },
+    ["Requesty o3-mini"] = {
+      __inherited_from = "openai",
+      endpoint = "https://router.requesty.ai/v1",
+      api_key_name = "REQUESTY_API_KEY",
+      model = "openai/o3-mini",
+    },
+    ["Requesty GPT-4o-mini"] = {
       __inherited_from = "openai",
       endpoint = "https://router.requesty.ai/v1",
       api_key_name = "REQUESTY_API_KEY",
       model = "openai/gpt-4o-mini",
-      temperature = 0,
-      max_tokens = 16384,
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
     },
-    requesty_Llama_33 = {
+    ["Requesty GPT-4.1-nano"] = {
       __inherited_from = "openai",
       endpoint = "https://router.requesty.ai/v1",
       api_key_name = "REQUESTY_API_KEY",
-      model = "deepinfra/meta-llama/Llama-3.3-70B-Instruct-Turbo",
-      temperature = 0,
-      max_tokens = 16384,
+      model = "openai/gpt-4.1-nano",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
     },
-    google_Flash = {
+    ["Requesty GPT-4.1-mini"] = {
+      __inherited_from = "openai",
+      endpoint = "https://router.requesty.ai/v1",
+      api_key_name = "REQUESTY_API_KEY",
+      model = "openai/gpt-4.1-mini",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
+    },
+    ["OpenAI o4-mini"] = {
+      __inherited_from = "openai",
+      model = "o4-mini-2025-04-16",
+      extra_request_body = {
+        reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      }
+    },
+    ["OpenAI o3-mini"] = {
+      __inherited_from = "openai",
+      model = "o3-mini-2025-01-31",
+      extra_request_body = {
+        reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      }
+    },
+    ["Google Flash"] = {
       __inherited_from = "gemini",
       model = "gemini-2.0-flash",
     },
-  },
-  ollama = {
-    endpoint = "http://127.0.0.1:11434",
-    model = "deepseek-r1",
-    temperature = 0,
-    max_tokens = 16384,
-  },
-  gemini = {
-    endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
-    api_key_name = "GEMINI_API_KEY",
-    model = "gemini-2.5-pro-exp-03-25",
-    temperature = 0,
-    max_tokens = 32768,
-  },
-  claude = { -- Claude does not use the vendors object
-    endpoint = "https://api.anthropic.com",
-    model = "claude-3-7-sonnet-20250219",
-    temperature = 0,
-    max_tokens = 16384,
+    ["Google Pro"] = {
+      __inherited_from = "gemini",
+      model = "gemini-2.5-pro-exp-03-25",
+    },
+    ollama = {
+      endpoint = "http://127.0.0.1:11434",
+      model = "deepseek-r1",
+      extra_request_body = {
+        options = {
+          temperature = 0,
+          max_tokens = 16384,
+        },
+      },
+    },
+    openai = {
+      endpoint = "https://api.openai.com/v1",
+      api_key_name = "OPENAI_API_KEY",
+      model = "gpt-4o-mini",
+      timeout = 30000,
+      extra_request_body = {
+        temperature = 0,
+        max_completion_tokens = 8192,
+        -- reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      },
+    },
+    gemini = {
+      endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
+      api_key_name = "GEMINI_API_KEY",
+      model = "gemini-2.5-flash-preview-04-17", -- "gemini-2.0-flash" "gemini-2.5-pro-exp-03-25" "gemini-2.5-flash-preview-04-17"
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 32768,
+      }
+    },
+    claude = { -- Claude does not use the vendors object
+      endpoint = "https://api.anthropic.com",
+      model = "claude-3-7-sonnet-20250219",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      }
+    },
   },
   ---------------- COMMON SETTINGS
+  mode = "legacy",          -- "agentic" | "legacy"
   behaviour = {
     auto_suggestions = false, -- Experimental stage
     auto_set_highlight_group = true,
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
-    support_paste_from_clipboard = false,
+    support_paste_from_clipboard = true,
   },
   mappings = {
     --- @class AvanteConflictMappings
@@ -168,20 +272,9 @@ end
 function M.get_providers()
   local providers = {}
 
-  -- Add vendors
-  for key, _ in pairs(avante_config.vendors) do
+  -- Add all entries from the new providers table
+  for key, _ in pairs(avante_config.providers) do
     table.insert(providers, key)
-  end
-
-  -- List of additional providers to check
-  local additional_providers =
-  { "claude", "ollama", "openai", "azure", "gemini", "vertex", "cohere", "copilot", "bedrock" }
-
-  -- Check for additional providers
-  for _, provider in ipairs(additional_providers) do
-    if avante_config[provider] then
-      table.insert(providers, provider)
-    end
   end
 
   -- Function to extract and convert price for sorting
@@ -223,8 +316,8 @@ function M.telescope_providers()
   local current_provider = M.get_config().provider
 
   local opts = {
-    prompt_title = "Avante Providers",
-    results_title = "Available Providers",
+    prompt_title = "Avante AI Providers/Models by cost",
+    results_title = "Available Models",
     finder = require("telescope.finders").new_table({
       results = providers,
       entry_maker = function(entry)
@@ -249,34 +342,40 @@ function M.telescope_providers()
         local display_name = entry
         local model_name = ""
 
-        -- Check if the entry is a vendor (contains an underscore)
-        local provider, model = string.match(entry, "^([^_]*)_?(.*)$")
-        if provider and model then
+        -- Check if the entry is a vendor (contains a space)
+        local provider, model = string.match(entry, "^([^ ]*) ?(.*)$")
+        if provider then
           -- If it's a vendor, separate the provider and model names
-          display_name = string.upper(provider)
-          model_name = model
+          display_name = provider -- string.upper(provider)
+          if model and model ~= "" then
+            model_name = model
+          end
         else
           -- If it's not a vendor, uppercase the display name
-          display_name = string.gsub(entry, "^([^ _]*)", string.upper)
+          -- display_name = string.gsub(entry, "^([^ _]*)", string.upper)
         end
 
         -- Manually set display names for specific providers
         if entry == "gemini" then
-          display_name = "GOOGLE"
+          display_name = "Google"
+        elseif entry == "ollama" then
+          display_name = "Ollama"
+        elseif entry == "openai" then
+          display_name = "OpenAI"
         elseif entry == "claude" then
-          display_name = "ANTHROPIC"
+          display_name = "Anthropic"
         end
 
         display_name = string.gsub(display_name, "_", " ")
         model_name = string.gsub(model_name, "_", " ")
 
         -- Get model name from config if available, before any string manipulation
-        if avante_config[entry] and avante_config[entry].model then
-          model_name = avante_config[entry].model
+        if avante_config.providers[entry] and avante_config.providers[entry].model then
+          model_name = avante_config.providers[entry].model
         end
 
         -- Calculate padding for provider name
-        local max_provider_length = 12 -- Adjust this value based on the longest provider name
+        local max_provider_length = 15 -- Adjust this value based on the longest provider name
         local provider_padding_length = max_provider_length - string.len(display_name)
         local provider_padding = string.rep(" ", math.max(0, provider_padding_length))
 
@@ -323,11 +422,5 @@ function M.telescope_providers()
   require("telescope.pickers").new({}, opts):find()
 end
 
--- Create a user command for the telescope picker
-vim.api.nvim_create_user_command("AvanteProviders", function()
-  M.telescope_providers()
-end, {})
-
-vim.keymap.set("n", "<leader>ap", function()
-  require("avante").telescope_providers()
-end, { desc = "Avante Providers" })
+-- Keymaps
+vim.keymap.set("n", "<leader>am", M.telescope_providers, { desc = "[A]vante [M]odel Select" })

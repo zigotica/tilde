@@ -130,13 +130,11 @@ require("lazy").setup({
   -- AI with filesystem / diff apply support
   {
     "yetone/avante.nvim",
-    -- commit = "ba9f014b", checker = { check_pinned = true },
+    -- commit = "f9aa754", -- before agentic mode
+    -- checker = { check_pinned = true },
     event = "VeryLazy",
     lazy = false,
     version = false, -- always pull the latest change
-    opts = {
-      debug = true,
-    },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
     dependencies = {
