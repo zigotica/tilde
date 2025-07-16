@@ -6,7 +6,7 @@
 # sketchybar does not have access to PATH, so you need to pass the full path to binary
 # Update list of events, for up to end of current day (no args passed):
 EVENTS_FILE="$HOME/.config/sketchybar/items/ical/events.txt"
-~/.config/bin/utils/calendar-events > "$EVENTS_FILE"
+~/.config/bin/utils/calendar_events > "$EVENTS_FILE"
 
 source "$HOME/.config/sketchybar/vars.sh"
 
@@ -36,6 +36,11 @@ update() {
         start_time="${BASH_REMATCH[2]}"
         end_time="${BASH_REMATCH[3]}"
         title_part="${BASH_REMATCH[4]}"
+
+        # Filter out events which title is exactly "busy" that are used to block slots
+        if [ "$title_part" = "busy" ]; then
+          continue
+        fi
 
         COUNTER=$((COUNTER + 1))
         time_part="${start_time}–${end_time}"
@@ -71,9 +76,9 @@ update() {
     sketchybar "${args[@]}" > /dev/null
 
     # Update calendar icon color based on number of events
-    if (( COUNTER > 5 )); then
+    if (( COUNTER > 6 )); then
       COLOR="$COLOR_RED"
-    elif (( COUNTER > 2 )); then
+    elif (( COUNTER > 3 )); then
       COLOR="$COLOR_ORANGE"
     elif (( COUNTER > 0 )); then
       COLOR="$COLOR_YELLOW"
