@@ -9,7 +9,7 @@ sketchybar \
     width=0 \
     script="$ITEMS/time/plugin.sh date" \
   --add item time right \
-  --set time update_freq="$POLL_UPDATES_MID" \
+  --set time update_freq="$POLL_UPDATES" \
     label.font="$FONT:$LABEL_SUB_SIZE" \
     label.y_offset="$LABEL_OFFSET" \
     script="$ITEMS/time/plugin.sh"
