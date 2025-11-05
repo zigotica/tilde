@@ -61,7 +61,7 @@ automatically-unhide-macos-hidden-apps = false
 Project = 'secondary'
 Talk = 'main'
 Web = 'secondary'
-Code = 'secondary'
+Code = 'main'
 Surf = 'main'
 User = 'main'
 
