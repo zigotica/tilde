@@ -91,12 +91,7 @@ mouse_exited() {
 }
 
 update_brew() {
-  osascript <<EOF
-    tell application "Terminal"
-      activate
-      do script "brew update && brew upgrade && sketchybar -m --trigger pkg_upgrade"
-    end tell
-EOF
+  open -a Terminal "$HOME/.config/sketchybar/items/packages/update.sh"
 }
 
 update_mas() {

@@ -11,7 +11,7 @@
 #####################################################################################
 
 # Path folders
-PATH=$PATH:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin
+PATH=$PATH:/usr/local/bin:/usr/local/sbin:usr/bin:/usr/sbin:$HOME/.local/bin
 
 # Personal folders (recursive)
 PATH=$HOME/bin$(find $HOME/.config/bin -type d -printf :%p):$PATH
