@@ -42,11 +42,9 @@ require'nvim-tree'.setup {
       ".ccls-cache",
       ".repro",
       ".swc",
-      "dist",
-      "history",
       "node_modules",
       "vendor",
-      ".DS_Store"
+      ".DS_Store",
     }
   },
   view = {
