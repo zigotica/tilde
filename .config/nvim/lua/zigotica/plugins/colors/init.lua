@@ -61,6 +61,11 @@ local groups = {
 		AvanteConflictIncoming = { link = "Normal" },
 		AvanteConflictCurrentLabel = { bg = "palette.orange" },
 		AvanteConflictCurrent = { link = "Normal" },
+
+		-- Test Coverage
+		CoverageCovered = { fg = "palette.green" },
+		CoveragePartial = { fg = "palette.orange" },
+		CoverageUncovered = { fg = "palette.red" },
 	},
 }
 

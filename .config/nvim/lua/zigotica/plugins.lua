@@ -198,6 +198,13 @@ require("lazy").setup({
     },
     ft = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
   },
+  {
+    "andythigpen/nvim-coverage",
+    version = "*",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+  },
 
   -- Git
   "lewis6991/gitsigns.nvim",

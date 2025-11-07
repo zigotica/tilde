@@ -73,3 +73,37 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+vim.api.nvim_create_autocmd({"BufEnter", "BufWritePost"}, {
+  pattern = {"*.ts", "*.tsx"},
+  callback = function()
+    local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+    if not git_root or git_root == '' then
+      vim.notify("Not inside a git project", vim.log.levels.WARN)
+      return
+    end
+
+    -- prefer 'app' but fall back to 'app-nextjs'
+    local candidates = { git_root .. '/app', git_root .. '/app-nextjs' }
+    local project_root = nil
+
+    for _, dir in ipairs(candidates) do
+      if vim.fn.isdirectory(dir) == 1 then
+        project_root = dir
+        break
+      end
+    end
+
+    if not project_root then
+      vim.notify("No app or app-nextjs directory found", vim.log.levels.WARN)
+      return
+    end
+
+    local coverage_report = project_root .. '/coverage/lcov.info'
+    if vim.fn.filereadable(coverage_report) == 0 then
+      vim.notify("No coverage file found at " .. coverage_report, vim.log.levels.WARN)
+      return
+    end
+
+    require('coverage').load_lcov(coverage_report, true)
+  end,
+})
