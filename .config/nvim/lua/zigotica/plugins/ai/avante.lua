@@ -5,18 +5,21 @@ local avante_config = {
   -- Show prices next to the model name in the <leader>am custom model picker
   provider = "gemini",
   prices = {
-    ["Google Pro"] = "FREE",
-    ["Google Flash"] = "FREE",
+    ["Gemini Flash"] = "FREE",
     ["Ollama Llama-3.2"] = "FREE",
     ["Ollama Gemma-v3"] = "FREE",
     ["Requesty DeepSeek-v3"] = "Input (1M)$0.400 Output (1M)$1.300",
     ["Requesty DeepSeek-R1-Llama"] = "Input (1M)$0.230 Output (1M)$0.690",
     ["Requesty o3-mini"] = "Input (1M)$1.100 Output (1M)$4.400",
-    ["Requesty GPT-4o-mini"] = "Input (1M)$0.150 Output (1M)$0.600",
-    ["Requesty GPT-4.1-nano"] = "Input (1M)$0.100 Output (1M)$0.400",
-    ["Requesty GPT-4.1-mini"] = "Input (1M)$0.400 Output (1M)$1.600",
+    -- ["Requesty GPT-4o-mini"] = "Input (1M)$0.150 Output (1M)$0.600",
+    -- ["Requesty GPT-4.1-nano"] = "Input (1M)$0.100 Output (1M)$0.400",
+    -- ["Requesty GPT-4.1-mini"] = "Input (1M)$0.400 Output (1M)$1.600",
+    ["Requesty GPT-5"] = "Input (1M)$1.250 Output (1M)$10.000",
+    ["Requesty GPT-5-mini"] = "Input (1M)$0.250 Output (1M)$2.000",
+    ["Requesty GPT-5-nano"] = "Input (1M)$0.050 Output (1M)$0.400",
     ["Requesty Claude-3.5"] = "Input (1M)$3.000 Output (1M)$15.000",
     ["Requesty Claude-4"] = "Input (1M)$3.000 Output (1M)$15.000",
+    ["Requesty Kimi-K2"] = "Input (1M)$0.570 Output (1M)$2.300",
     ["OpenAI o4-mini"] = "Input (1M)$1.100 Output (1M)$4.400",
     ["OpenAI o3-mini"] = "Input (1M)$1.100 Output (1M)$4.400",
     ollama = "FREE",
@@ -41,8 +44,8 @@ local avante_config = {
       model = "vertex/anthropic/claude-3-5-sonnet-20241022",
       extra_request_body = {
         temperature = 0,
-        max_tokens = 16384,
-      }
+        max_tokens = 8192,
+      },
     },
     ["Requesty Claude-4"] = {
       __inherited_from = "openai",
@@ -52,7 +55,17 @@ local avante_config = {
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
+    },
+    ["Requesty Kimi-K2"] = {
+      __inherited_from = "openai",
+      endpoint = "https://router.requesty.ai/v1",
+      api_key_name = "REQUESTY_API_KEY",
+      model = "moonshot/kimi-k2-0711-preview",
+      extra_request_body = {
+        temperature = 0,
+        max_tokens = 16384,
+      },
     },
     ["Requesty DeepSeek-R1-Llama"] = {
       __inherited_from = "openai",
@@ -62,7 +75,7 @@ local avante_config = {
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
     },
     ["Requesty DeepSeek-v3"] = {
       __inherited_from = "openai",
@@ -72,7 +85,7 @@ local avante_config = {
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
     },
     ["Requesty o3-mini"] = {
       __inherited_from = "openai",
@@ -80,57 +93,53 @@ local avante_config = {
       api_key_name = "REQUESTY_API_KEY",
       model = "openai/o3-mini",
     },
-    ["Requesty GPT-4o-mini"] = {
+    ["Requesty GPT-5"] = {
       __inherited_from = "openai",
       endpoint = "https://router.requesty.ai/v1",
       api_key_name = "REQUESTY_API_KEY",
-      model = "openai/gpt-4o-mini",
+      model = "openai/gpt-5",
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
     },
-    ["Requesty GPT-4.1-nano"] = {
+    ["Requesty GPT-5-mini"] = {
       __inherited_from = "openai",
       endpoint = "https://router.requesty.ai/v1",
       api_key_name = "REQUESTY_API_KEY",
-      model = "openai/gpt-4.1-nano",
+      model = "openai/gpt-5-mini",
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
     },
-    ["Requesty GPT-4.1-mini"] = {
+    ["Requesty GPT-5-nano"] = {
       __inherited_from = "openai",
       endpoint = "https://router.requesty.ai/v1",
       api_key_name = "REQUESTY_API_KEY",
-      model = "openai/gpt-4.1-mini",
+      model = "openai/gpt-5-nano",
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
     },
     ["OpenAI o4-mini"] = {
       __inherited_from = "openai",
       model = "o4-mini-2025-04-16",
       extra_request_body = {
         reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
-      }
+      },
     },
     ["OpenAI o3-mini"] = {
       __inherited_from = "openai",
       model = "o3-mini-2025-01-31",
       extra_request_body = {
         reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
-      }
+      },
     },
-    ["Google Flash"] = {
+    ["Gemini Flash"] = {
       __inherited_from = "gemini",
       model = "gemini-2.0-flash",
-    },
-    ["Google Pro"] = {
-      __inherited_from = "gemini",
-      model = "gemini-2.5-pro-exp-03-25",
     },
     ollama = {
       endpoint = "http://127.0.0.1:11434",
@@ -156,11 +165,11 @@ local avante_config = {
     gemini = {
       endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
       api_key_name = "GEMINI_API_KEY",
-      model = "gemini-2.5-flash-preview-04-17", -- "gemini-2.0-flash" "gemini-2.5-pro-exp-03-25" "gemini-2.5-flash-preview-04-17"
+      model = "gemini-2.5-pro", -- "gemini-2.0-flash" "gemini-2.5-pro"
       extra_request_body = {
         temperature = 0,
         max_tokens = 32768,
-      }
+      },
     },
     claude = { -- Claude does not use the vendors object
       endpoint = "https://api.anthropic.com",
@@ -168,7 +177,7 @@ local avante_config = {
       extra_request_body = {
         temperature = 0,
         max_tokens = 16384,
-      }
+      },
     },
   },
   ---------------- COMMON SETTINGS
