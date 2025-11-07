@@ -1,5 +1,11 @@
 require("colorizer").setup({
-  "*",
+	"*",
+	css = {
+		css = true, -- Enable all CSS features
+	},
+	scss = {
+		css = true, -- Enable all CSS features
+	},
 })
 
 local shared_palette = require("zigotica.common.colors")

@@ -33,6 +33,12 @@ vim.api.nvim_create_autocmd({"BufRead","BufNewFile"}, {
   command = "set filetype=yaml.ansible",
 })
 
+vim.api.nvim_create_autocmd({"BufRead","BufNewFile"}, {
+  desc = "Interpret gitlab-ci yaml files as yaml.gitlab to be used by gitlab-ci-ls",
+  pattern = "*/**/.gitlab-ci.yml",
+  command = "set filetype=yaml.gitlab",
+})
+
 -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#imports-and-formatting
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
