@@ -129,7 +129,7 @@ require("lazy").setup({
     event = "InsertEnter",
     config = function()
       require("copilot").setup({
-        copilot_model = "gpt-4o-copilot",
+        copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v22.11.0/bin/node",
         server_opts_overrides = {
           settings = {
             telemetry = {
