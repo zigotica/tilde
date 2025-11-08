@@ -41,55 +41,74 @@ require("neotest").setup({
     require("neotest-jest")({
       jestCommand = function()
         local file = vim.fn.expand("%:p")
-        local workspace = file:match("/app[^/]*/") -- matches /app/ or /app-something/
-        local has_ws = has_workspaces()
-        local command
-        -- local is_test = file:match("%.test%.") or file:match("%.spec%.")
-        -- local config
+        file = file:gsub("\\", "/")
 
-        if workspace then
-          workspace = workspace:gsub("/", "") -- remove slashes
-          -- local workspace_path = vim.fn.getcwd() .. "/" .. workspace
-          -- config = get_config_path(workspace_path)
-
-          if has_ws then
-            command = string.format("npm run test --workspace=%s -- --watch", workspace)
-          else
-            command = "npm run test -- --watch"
-          end
-        else
-          -- config = get_config_path(vim.fn.getcwd())
-          command = "npm run test -- --watch"
+        -- Get Git root (fallback to cwd if not in a repo)
+        local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+        if not git_root or git_root == "" then
+          git_root = vim.loop.cwd()
         end
 
-        -- print(
-        -- 	string.format(
-        -- 		"DEBUG Neotest-jest: full_path='%s', is_test_file=%s, workspace='%s', has_workspaces=%s, command='%s', config='%s'",
-        -- 		file,
-        -- 		is_test and "true" or "false",
-        -- 		workspace or "none",
-        -- 		has_ws,
-        -- 		command,
-        -- 		config
-        -- 	)
-        -- )
-        return command
+        -- Detect workspace (e.g., app or app-nextjs)
+        local workspace = file:match("/(app[^/]*)/")
+        local workspace_path = workspace and (git_root .. "/" .. workspace) or git_root
+
+        -- Path to local Jest binary
+        local jest_bin = workspace_path .. "/node_modules/.bin/jest"
+        if vim.fn.filereadable(jest_bin) == 0 then
+          jest_bin = git_root .. "/node_modules/.bin/jest"
+        end
+        if vim.fn.filereadable(jest_bin) == 0 then
+          jest_bin = "jest"
+        end
+
+        -- Run Jest directly from the workspace
+        return string.format("%s --watchAll=false", jest_bin)
       end,
+
+      cwd = function()
+        local file = vim.fn.expand("%:p")
+        file = file:gsub("\\", "/")
+
+        local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+        if not git_root or git_root == "" then
+          git_root = vim.loop.cwd()
+        end
+
+        local workspace = file:match("/(app[^/]*)/")
+        return workspace and (git_root .. "/" .. workspace) or git_root
+      end,
+
       jestConfigFile = function()
         local file = vim.fn.expand("%:p")
-        local workspace = file:match("/app[^/]*/")
+        file = file:gsub("\\", "/")
 
-        if workspace then
-          workspace = workspace:gsub("/", "") -- remove slashes
-          local workspace_path = vim.fn.getcwd() .. "/" .. workspace
-          return get_config_path(workspace_path)
+        local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+        if not git_root or git_root == "" then
+          git_root = vim.loop.cwd()
         end
 
-        return get_config_path(vim.fn.getcwd())
+        local workspace = file:match("/(app[^/]*)/")
+        local candidates = {}
+
+        if workspace then
+          table.insert(candidates, git_root .. "/" .. workspace .. "/jest.config.ts")
+          table.insert(candidates, git_root .. "/" .. workspace .. "/jest.config.js")
+        end
+        table.insert(candidates, git_root .. "/jest.config.ts")
+        table.insert(candidates, git_root .. "/jest.config.js")
+
+        for _, path in ipairs(candidates) do
+          if vim.fn.filereadable(path) == 1 then
+            return path
+          end
+        end
+        return nil
       end,
     }),
   },
 })
+
 
 -- Keymaps
 vim.keymap.set('n', '<leader>tr', '<cmd>lua require("neotest").run.run();require("neotest").summary.open()<CR>', {desc='[T]est [R]un'})
