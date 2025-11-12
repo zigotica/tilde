@@ -1,20 +1,32 @@
 #!/usr/bin/env bash
 
-# git interactive restore (checkout --) wrapper to be used with fzf
-# use case: gir
-# use case: gir .
+# git interactive restore wrapper to be used with fzf
+# use case: giR
+# use case: giR .
 # shift+tab to multi pick, tab to move
 
-if [[ -z $@ ]]; then
+if [[ $# -eq 0 ]]; then
   prev="git diff --minimal --color {}"
-  win=50%,border-double,right
-  git add --intent-to-add . &&
+  win="50%,border-double,right"
+
+  # (subshell) for temporary staging
+  # otherwise untracked files are added even after escaping
+  (
+    # ensure cleanup even if fzf or script exits unexpectedly
+    trap 'git reset >/dev/null 2>&1' EXIT
+
+    # stage untracked files as "intent-to-add" so git diff can preview them
+    git add --intent-to-add . >/dev/null 2>&1
+
+    # list modified + untracked files (ignoring .gitignore)
     git ls-files -m -o --exclude-standard |
-    fzf-tmux --print0 -m --preview="$prev" --preview-window=$win |
-    xargs -0 -t -o -r git checkout -- $files
+      fzf-tmux --print0 -m --preview="$prev" --preview-window="$win" |
+      xargs -0 -t -o -r git restore --source=HEAD -- 2>/dev/null
+  )
+
+  # final safety reset (clean any “intent-to-add” leftovers)
+  git reset >/dev/null 2>&1
 else
-  git checkout -- $1
+  git restore --source=HEAD -- "$1"
 fi
-
-
 
