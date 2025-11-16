@@ -1,0 +1,58 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "bash": "ask",
+    "edit": "ask"
+  },
+  "disabled_providers": ["amazon", "azure", "nebius", "v0"],
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama Cloud",
+      "options": {
+        "baseURL": "https://ollama.com/v1",
+        "apiKey": "{env:OLLAMA_API_KEY}"
+      },
+      "models": {
+        "glm-4.6-cloud": {
+          "name": "GLM 4.6"
+        },
+        "kimi-k2:1t-cloud": {
+          "name": "Kimi K2:1t"
+        },
+        "kimi-k2-thinking-cloud": {
+          "name": "Kimi K2 Thinking"
+        },
+        "gpt-oss:20b-cloud": {
+          "name": "GPT-OSS 20b"
+        },
+        "gpt-oss:120b-cloud": {
+          "name": "GPT-OSS 120b"
+        },
+        "minimax-m2-cloud": {
+          "name": "MiniMax M2"
+        },
+        "qwen3-coder:480b-cloud": {
+          "name": "Qwen3 coder"
+        },
+        "deepseek-v3.1:671b-cloud": {
+          "name": "Deepseek v3.1"
+        }
+      }
+    }
+  },
+  "mcp" : {
+    "figma-dev-mode-mcp-server": {
+      "type": "remote",
+      "url": "http://127.0.0.1:3845/mcp",
+      "enabled": true,
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
+    }
+  }
+}
