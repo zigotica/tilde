@@ -2,7 +2,17 @@
 
 source "$HOME/.config/sketchybar/vars.sh"
 
+# ----- DEBUG FLAG
+DEBUG=0
+LOG_FILE="$HOME/.config/sketchybar/items/packages/packages_debug.log"
+
+log() {
+  (( DEBUG )) && echo "$@" >> "$LOG_FILE"
+}
+
 info() {
+  log "--- $(date) ---"
+
   # Set environment variables to prevent brew from doing hardware detection and auto-updates
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
@@ -18,34 +28,38 @@ info() {
   BREW_COLOR="$COLOR_GREEN"
   MAS_COLOR="$COLOR_GREEN"
 
+  log "Initial BREW: $BREW, MAS: $MAS"
+
   # Checks to see if the brew command is avaliable and the package manager is in the enabled list above.
   if [[ -x "$(command -v brew)" ]] && [[ $USE == *"brew"* ]]; then
 
     # Use Ruby wrapper to properly initialize $CHILD_STATUS for Homebrew's hardware detection
-    # This fixes the "undefined method 'success?' for nil" error
-    if [[ -f "$HOME/.config/sketchybar/items/packages/brew_outdated_ruby.rb" ]]; then
-      brewJSON=$(ruby "$HOME/.config/sketchybar/items/packages/brew_outdated_ruby.rb" 2>&1)
-      brew_exit_code=$?
-    else
-      # Fallback: try direct call if Ruby wrapper doesn't exist
-      brewJSON=$(
-        env -i \
-          HOME="$HOME" \
-          USER="$USER" \
-          PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
-          HOMEBREW_NO_AUTO_UPDATE=1 \
-          HOMEBREW_NO_INSTALL_CLEANUP=1 \
-          HOMEBREW_NO_ENV_HINTS=1 \
-          HOMEBREW_NO_ANALYTICS=1 \
-          /opt/homebrew/bin/brew outdated --json 2>&1
-      )
-      brew_exit_code=$?
-    fi
+    # Run the ruby wrapper within a clean `env -i` environment. This ensures that
+    # brew runs in a pristine environment (fixing stale results) while also allowing
+    # the ruby wrapper to prime the $CHILD_STATUS (fixing the 'success?' error).
+    brewJSON=$(
+      env -i \
+        HOME="$HOME" \
+        USER="$USER" \
+        PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+        bash -c 'ruby "$HOME/.config/sketchybar/items/packages/brew_outdated_ruby.rb" 2>&1'
+    )
+    brew_exit_code=$?
+
+    log "Exit Code: $brew_exit_code"
+    log "Output (brewJSON):"
+    log "$brewJSON"
+
+    # clean result
+    brewJSON=$(echo "$brewJSON" | awk '/^[[:space:]]*{/,0')
+    log "Output cleanup:"
+    log "$brewJSON"
   
     # Check if brew command failed or if output contains error messages
     if [[ $brew_exit_code -ne 0 ]] || [[ "$brewJSON" =~ ^Error: ]] || [[ "$brewJSON" =~ ^Please\ report ]] || [[ ! "$brewJSON" =~ ^\{ ]]; then
       BREW='666'
       BREW_COLOR="$COLOR_RED"
+      log "BREW error: $brewJSON"
     else
       # Parse JSON output to count outdated packages
       # Count both formulae and casks
@@ -70,22 +84,44 @@ info() {
   if [[ -x "$(command -v mas)" ]] && [[ $USE == *"mas"* ]]; then
 
     # runs the outdated command and stores the output as a list variable.
-    # Filter out common non-package messages that might appear on stderr
-    masLIST=$(mas outdated 2>&1 | grep -v '^$')
+    local mas_cmd_output
+    local mas_exit_code
 
-    # checks to see if the returned list is empty. If so, it sets the outdated packages list to zero, if not, sets it to the line count of the list.
-    if [[ -z "$masLIST" ]] || [[ "$masLIST" =~ ^[[:space:]]*$ ]]; then
-      MAS=0
-      masLIST=""
-      MAS_COLOR="$COLOR_GREEN"
+    if command -v gtimeout &>/dev/null; then
+      mas_cmd_output=$(gtimeout 10 mas outdated 2>&1)
+      mas_exit_code=$?
     else
-      # Count non-empty lines, trimming whitespace from the count
-      MAS=$(printf '%s\n' "$masLIST" | grep -v '^[[:space:]]*$' | wc -l | tr -d '[:space:]')
-      # Ensure MAS is a valid number, default to 0 if not
-      MAS=$((MAS + 0))
-      MAS_COLOR="$COLOR_YELLOW"
+      mas_cmd_output=$(mas outdated 2>&1)
+      mas_exit_code=$?
     fi
 
+    # Check if command timed out (exit code 124 for gtimeout)
+    if [[ "$mas_exit_code" -eq 124 ]]; then
+      MAS=666 # Indicate timeout/error
+      MAS_COLOR="$COLOR_RED"
+      masLIST="output: $mas_cmd_output"
+      log "MAS timeout: $masLIST"
+    elif [[ "$mas_exit_code" -ne 0 ]]; then
+      # Other errors from mas itself
+      MAS=666
+      MAS_COLOR="$COLOR_RED"
+      masLIST="output: $mas_cmd_output"
+      log "MAS failed: $masLIST"
+    else
+      # Command succeeded, process output
+      masLIST=$(printf '%s\n' "$mas_cmd_output" | grep -v '^$')
+      log "MAS succeeded: $masLIST"
+
+      if [[ -z "$masLIST" ]] || [[ "$masLIST" =~ ^[[:space:]]*$ ]]; then
+        MAS=0
+        masLIST=""
+        MAS_COLOR="$COLOR_GREEN"
+      else
+        MAS=$(printf '%s\n' "$masLIST" | grep -v '^[[:space:]]*$' | wc -l | tr -d '[:space:]')
+        MAS=$((MAS + 0))
+        MAS_COLOR="$COLOR_YELLOW"
+      fi
+    fi
   fi
 
   # sum of all outdated packages

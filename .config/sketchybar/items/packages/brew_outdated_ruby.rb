@@ -6,7 +6,6 @@
 `getconf _NPROCESSORS_ONLN > /dev/null 2>&1`
 
 # Set environment variables
-ENV['HOMEBREW_NO_AUTO_UPDATE'] = '1'
 ENV['HOMEBREW_NO_INSTALL_CLEANUP'] = '1'
 ENV['HOMEBREW_NO_ENV_HINTS'] = '1'
 ENV['HOMEBREW_NO_ANALYTICS'] = '1'

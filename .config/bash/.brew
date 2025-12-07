@@ -18,6 +18,11 @@ if [ "$(uname -s)" == "Darwin" ]; then
 
   BREW_PREFIX=$(brew --prefix)
 
+  # Disable hints, force auto update every 5 mins
+  export HOMEBREW_NO_AUTO_UPDATE=0
+  export HOMEBREW_NO_ENV_HINTS=1
+  export HOMEBREW_AUTO_UPDATE_SECS="300"
+
   # curl
   export LDFLAGS="-L/${BREW_PREFIX}/opt/curl/lib"
   export CPPFLAGS="-I/${BREW_PREFIX}/opt/curl/include"
