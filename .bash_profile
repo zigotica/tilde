@@ -8,8 +8,11 @@ unset file;
 # source hidden secret vars
 source "$HOME/.bash_env_vars";
 
-# oh-my-posh prompt
-eval "$(oh-my-posh init bash --config $HOME/.config/oh-my-posh/config.yml)"
+# Only initialize these in interactive shells (should fix sketchybar scripts)
+if [[ $- == *i* ]]; then
+  # oh-my-posh prompt
+  eval "$(oh-my-posh init bash --config $HOME/.config/oh-my-posh/config.yml)"
 
-# terminal decorators
-eval $(ls $HOME/.config/bin/terminal-decorators/ | shuf -n 1)
+  # terminal decorators
+  eval $(ls $HOME/.config/bin/terminal-decorators/ | shuf -n 1)
+fi
