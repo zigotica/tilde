@@ -60,7 +60,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
     vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
     vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-    vim.keymap.set("n", "<space>f", function()
+    vim.keymap.set("n", "<space>F", function()
       vim.lsp.buf.format({ async = true })
     end, opts)
   end,
@@ -139,7 +139,7 @@ vim.lsp.config("yaml_ls", {
 
 -- specific settings for gitlab_cs server
 vim.lsp.config("gitlab_cs_ls", {
-  cmd = { 'gitlab-ci-ls' },
+  cmd = { "gitlab-ci-ls" },
 })
 
 -- specific settings for typescript server
@@ -171,4 +171,3 @@ if vim.lsp.inlay_hint then
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end, { desc = "Toggle Inlay [H]ints" })
 end
-
