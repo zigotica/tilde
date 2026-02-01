@@ -1,51 +1,284 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "permission": {
-    "bash": "ask",
-    "edit": "ask"
+    "*": "ask",
+    "bash": {
+      "*": "ask",
+      "git status*": "allow",
+      "git log*": "allow",
+      "git diff*": "allow",
+      "npm run test*": "allow",
+      "npm run lint*": "allow",
+      "npm run dev": "deny",
+      "npm run dev:start": "deny"
+    },
+    "edit*": "allow",
+    "find*": "allow",
+    "glob*": "allow",
+    "grep*": "allow",
+    "list*": "allow",
+    "lsp": "allow",
+    "question": "allow",
+    "read": "allow",
+    "todowrite": "allow",
+    "webfetch": "allow"
   },
-  "disabled_providers": ["amazon", "azure", "nebius", "v0"],
+  "keybinds": {
+    "app_exit": "none"
+  },
+  "plugin": [
+    "opencode-antigravity-auth@latest"
+  ],
   "provider": {
+    "google": {
+      "models": {
+        "antigravity-gemini-3-pro": {
+          "name": "Gemini 3 Pro (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-gemini-3-flash": {
+          "name": "Gemini 3 Flash (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "minimal": {
+              "thinkingLevel": "minimal"
+            },
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "medium": {
+              "thinkingLevel": "medium"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "antigravity-claude-sonnet-4-5-thinking": {
+          "name": "Claude Sonnet 4.5 Thinking (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingConfig": {
+                "thinkingBudget": 8192
+              }
+            },
+            "max": {
+              "thinkingConfig": {
+                "thinkingBudget": 32768
+              }
+            }
+          }
+        },
+        "antigravity-claude-opus-4-5-thinking": {
+          "name": "Claude Opus 4.5 Thinking (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingConfig": {
+                "thinkingBudget": 8192
+              }
+            },
+            "max": {
+              "thinkingConfig": {
+                "thinkingBudget": 32768
+              }
+            }
+          }
+        },
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash Preview (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-3-pro-preview": {
+          "name": "Gemini 3 Pro Preview (Gemini CLI)",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        }
+      }
+    },
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama Cloud",
+      "name": "Ollama Local/Cloud",
       "options": {
-        "baseURL": "https://ollama.com/v1",
+        "baseURL": "http://localhost:11434/v1",
         "apiKey": "{env:OLLAMA_API_KEY}"
       },
       "models": {
-        "glm-4.6-cloud": {
-          "name": "GLM 4.6"
+        "glm-4.7:cloud": {
+          "name": "GLM 4.7 Cloud"
         },
         "kimi-k2:1t-cloud": {
-          "name": "Kimi K2:1t"
+          "name": "Kimi K2:1t Cloud"
         },
-        "kimi-k2-thinking-cloud": {
-          "name": "Kimi K2 Thinking"
+        "kimi-k2-thinking:cloud": {
+          "name": "Kimi K2 Thinking Cloud"
         },
         "gpt-oss:20b-cloud": {
-          "name": "GPT-OSS 20b"
+          "name": "GPT-OSS 20b Cloud"
         },
         "gpt-oss:120b-cloud": {
-          "name": "GPT-OSS 120b"
+          "name": "GPT-OSS 120b Cloud"
         },
-        "minimax-m2-cloud": {
-          "name": "MiniMax M2"
+        "minimax-m2:cloud": {
+          "name": "MiniMax M2 Cloud"
         },
         "qwen3-coder:480b-cloud": {
-          "name": "Qwen3 coder"
+          "name": "Qwen3 coder Cloud"
         },
         "deepseek-v3.1:671b-cloud": {
-          "name": "Deepseek v3.1"
+          "name": "Deepseek v3.1 Cloud"
+        },
+        "gemma3:27b-cloud": {
+          "name": "Gemma3 Cloud"
+        },
+        "ministral-3:8b-cloud": {
+          "name": "Ministral 3 Cloud"
         }
       }
     }
   },
-  "mcp" : {
+  "mcp": {
     "figma-dev-mode-mcp-server": {
       "type": "remote",
       "url": "http://127.0.0.1:3845/mcp",
-      "enabled": true,
+      "enabled": true
     },
     "context7": {
       "type": "remote",
