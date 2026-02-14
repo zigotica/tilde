@@ -6,20 +6,18 @@ set -euo pipefail
 # CONFIG
 # -------------------------
 
-declare -A ROOTS=(
-  ["Work"]="$HOME/Documents/work"
-  ["Personal"]="$HOME/Documents/personal"
-)
+WORK_ROOT="$HOME/Documents/work"
+PERSONAL_ROOT="$HOME/Documents/personal"
+VAULT_ROOT="$PERSONAL_ROOT/obsidian"
+TEMPLATE="$VAULT_ROOT/templates/calendar/day.md"
+TARGET_FILE="${0%/*}/_target.txt"
 
-VAULT_BASE="$HOME/Documents/personal/obsidian/pkm/calendar/daily"
-TEMPLATE="$HOME/Documents/personal/obsidian/templates/calendar/day.md"
-
-DATE="$(date +%F)"
-YEAR="$(date +%Y)"
-NOTE_DIR="$VAULT_BASE/$YEAR"
+today=$(date +%F)
+DATE="$today"
+YEAR=$(date +%Y)
+NOTE_DIR="$VAULT_ROOT/pkm/calendar/daily/$YEAR"
 NOTE="$NOTE_DIR/$DATE.md"
 
-SINCE="midnight"
 mkdir -p "$NOTE_DIR"
 
 TOTAL_COMMITS=0
@@ -27,55 +25,76 @@ WORK_LINES=""
 PERSONAL_LINES=""
 
 # -------------------------
+# Find repos modified today
+# -------------------------
+
+find_modified_repos() {
+  local label="$1"
+  local root="$2"
+  local depth="$3"
+  
+  find "$root" -maxdepth "$depth" -name .git -type d 2>/dev/null | while read -r gitdir; do
+    repo="${gitdir%/.git}"
+    if [[ -n $(find "$gitdir/refs/heads" -type f -newermt "$today" 2>/dev/null | head -1) ]]; then
+      echo "$label|$repo"
+    fi
+  done
+}
+
+: > "$TARGET_FILE"
+
+[[ -d "$WORK_ROOT" ]] && find_modified_repos "Work" "$WORK_ROOT" "3" > "$TARGET_FILE"
+[[ -d "$PERSONAL_ROOT" ]] && find_modified_repos "Personal" "$PERSONAL_ROOT" "2" >> "$TARGET_FILE"
+# reduce the depth for personal projects for speed, then add individual modules
+[[ -d "$VAULT_ROOT" ]] && find_modified_repos "Personal" "$VAULT_ROOT" "2" >> "$TARGET_FILE"
+
+# -------------------------
+# CLICK HANDLER
+# -------------------------
+
+if [[ "${1:-}" == "open" ]]; then
+  osascript <<'EOF'
+tell application "Obsidian" to activate
+delay 1
+tell application "System Events"
+  keystroke "d" using {command down}
+end tell
+EOF
+  exit 0
+fi
+
+# -------------------------
 # COLLECT COMMITS
 # -------------------------
 
-collect() {
-  local label="$1"
-  local root="$2"
-
-  [[ -d "$root" ]] || return
-
-  while IFS= read -r -d '' repo; do
+if [[ -f "$TARGET_FILE" ]]; then
+  while IFS='|' read -r label repo; do
+    [[ -z "$label" || -z "$repo" ]] && continue
+    [[ -d "$repo" ]] || continue
+    
     cd "$repo"
-
     # work/personal have different configs
     AUTHOR="$(git config user.email 2>/dev/null || true)"
     [[ -z "$AUTHOR" ]] && continue
-
-    while IFS= read -r msg; do
+    
+    while IFS='|' read -r hash msg; do
       [[ -z "$msg" ]] && continue
       repo_name=$(basename "$repo")
-      line="  - $repo_name: $msg"
-
       if [[ "$label" == "Work" ]]; then
-        WORK_LINES+="$line"$'\n'
+        WORK_LINES+="  - $repo_name: (${hash:0:8}) $msg"$'\n'
       else
-        PERSONAL_LINES+="$line"$'\n'
+        PERSONAL_LINES+="  - $repo_name: (${hash:0:8}) $msg"$'\n'
       fi
-
       TOTAL_COMMITS=$((TOTAL_COMMITS + 1))
-    done < <(
-      git log \
-        --since="$SINCE" \
-        --author="$AUTHOR" \
-        --pretty="%s" 2>/dev/null || true
-    )
-
-  done < <(
-    find "$root" -type d -name ".git" -prune -print0 \
-    | xargs -0 -I{} dirname {} \
-    | tr '\n' '\0'
-  )
-}
-
-for label in "${!ROOTS[@]}"; do
-  collect "$label" "${ROOTS[$label]}"
-done
+    done < <(git log --since="midnight" --author="$AUTHOR" --pretty="%h|%s" 2>/dev/null)
+  done < "$TARGET_FILE"
+fi
 
 # -------------------------
 # NO COMMITS → UPDATE BAR
 # -------------------------
+
+rm -f "$TARGET_FILE"
 
 if [[ "$TOTAL_COMMITS" -eq 0 ]]; then
   sketchybar --set "$NAME" label="0"
@@ -83,25 +102,24 @@ if [[ "$TOTAL_COMMITS" -eq 0 ]]; then
 fi
 
 # -------------------------
+# UPDATE SKETCHYBAR LABEL
+# -------------------------
+
+sketchybar --set "$NAME" label="$TOTAL_COMMITS"
+
+# -------------------------
 # CREATE NOTE IF NEEDED
 # -------------------------
 
 if [[ ! -f "$NOTE" ]]; then
   cp "$TEMPLATE" "$NOTE"
-
+  perl -pi -e "s/<%tp\.date\.now\(\"YYYY-MM-DD\"\)%>/$DATE/g" "$NOTE"
+  
   replacement=""
-
-  if [[ -n "$WORK_LINES" ]]; then
-    replacement+="- Work"$'\n'"$WORK_LINES"
-  fi
-
-  if [[ -n "$PERSONAL_LINES" ]]; then
-    replacement+="- Personal"$'\n'"$PERSONAL_LINES"
-  fi
-
-  perl -0777 -pe \
-    "s/- <% tp\.file\.cursor\(\) %>/$replacement/" \
-    -i "$NOTE"
+  [[ -n "$WORK_LINES" ]] && replacement+="- Work"$'\n'"$WORK_LINES"
+  [[ -n "$PERSONAL_LINES" ]] && replacement+="- Personal"$'\n'"$PERSONAL_LINES"
+  
+  perl -0777 -pe "s/- <% tp\.file\.cursor\(\) %>/$replacement/" -i "$NOTE"
 fi
 
 # -------------------------
@@ -111,27 +129,20 @@ fi
 insert_under_section() {
   local section="$1"
   local lines="$2"
-
   [[ -z "$lines" ]] && return
-
-  new_lines=""
+  
+  local new_lines=""
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
-    if ! grep -Fqx "$line" "$NOTE"; then
-      new_lines+="$line"$'\n'
-    fi
+    grep -Fqx "$line" "$NOTE" || new_lines+="$line"$'\n'
   done <<< "$lines"
-
+  
   [[ -z "$new_lines" ]] && return
-
+  
   if grep -q "^- $section" "$NOTE"; then
-    perl -0777 -pe "
-      s/(^- $section[^\n]*\n)/\$1$new_lines/m
-    " -i "$NOTE"
+    perl -0777 -i -pe 's/(^- '"$section"'[^\n]*\n)/$1'"$new_lines"'/m' "$NOTE"
   else
-    perl -0777 -pe "
-      s/(# Notes.*?\n)/\$1- $section\n$new_lines/s
-    " -i "$NOTE"
+    perl -0777 -i -pe 's/(# Notes.*?\n)/$1- '"$section"'\n'"$new_lines"'/s' "$NOTE"
   fi
 }
 
@@ -141,10 +152,4 @@ insert_under_section() {
 
 insert_under_section "Work" "$WORK_LINES"
 insert_under_section "Personal" "$PERSONAL_LINES"
-
-# -------------------------
-# UPDATE SKETCHYBAR LABEL
-# -------------------------
-
-sketchybar --set "$NAME" label="$TOTAL_COMMITS"
 

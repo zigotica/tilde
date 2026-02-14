@@ -8,4 +8,5 @@ sketchybar --add item pkm right                      \
            label="-"                                 \
            label.font="$FONT:$LABEL_SUB_SIZE"        \
            script="$ITEMS/pkm/plugin.sh"             \
+           click_script="$ITEMS/pkm/plugin.sh open"  \
            update_freq="$POLL_UPDATES_DAILY"
