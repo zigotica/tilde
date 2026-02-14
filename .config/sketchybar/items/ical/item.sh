@@ -8,6 +8,7 @@ sketchybar --add       item            ical right                         \
                                        icon="􀉉 "                          \
                                        icon.padding_right="$PADDING"      \
                                        label=""                           \
+                                       label.font="$FONT:$LABEL_SUB_SIZE" \
                                        popup.align=right                  \
                                        popup.height=0                     \
                                        popup.y_offset="$POPUP_OFFSET"     \

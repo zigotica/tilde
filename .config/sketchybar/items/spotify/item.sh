@@ -15,8 +15,8 @@ sketchybar --add       event           spotify_change $SPOTIFY_EVENT       \
                                        icon.font="$FONT:$ICON_SIZE"        \
                                        icon.color="$COLOR_GREEN"           \
                                        icon=""                             \
-                                       label.max_chars=42                  \
-                                       label.font="$ICON_FONT:$LABEL_SUB_SIZE"  \
+                                       label.max_chars=45                  \
+                                       label.font="$ICON_FONT:$LABEL_MUSIC_SIZE"  \
                                        scroll_texts=on                     \
                                                                            \
            --add       item            spotify.back popup.spotify.name     \
