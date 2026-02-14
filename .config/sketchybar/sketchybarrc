@@ -38,6 +38,7 @@ source "$ITEMS/front_app/item.sh"
 # Right side Items
 source "$ITEMS/time/item.sh"
 source "$ITEMS/ical/item.sh"
+source "$ITEMS/pkm/item.sh"
 source "$ITEMS/packages/item.sh"
 source "$ITEMS/git/item.sh"
 source "$ITEMS/battery/item.sh"
