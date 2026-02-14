@@ -1,38 +1,22 @@
 #!/usr/bin/env bash
 
 # setup tmux session for development
-# will create 1 main pane for coding, and two bottom panes for terminal
+# will create 1 right pane for AI, one main pane on left for coding, and two bottom panes for terminal
 # requires being called from inside a tmux window/session
-# optional argument:
-# -l __LOCAL_layout (by default vh meaning 1 main on top, 2 on bottom)
-#    can also be any combination of v / h
-#    for instance:
-#    -l hhh will create 3 horizontal splits, while 
-#    -l hvvv will create one horizontal then 3 vertical
 if [[ ! "$TERM" =~ screen ]]; then
   echo "You need to start a tmux session before running this function"
 else
-  __LOCAL_layout="vh"
-
-  # get optional __LOCAL_layout from -l argument
-  while getopts 'l:' opt
-  do
-    case $opt in
-      l) __LOCAL_layout="$OPTARG"; ;;
-    esac
-  done
-
-  # create splits
-  vh=$(echo $__LOCAL_layout | tr -cd 'vh')
-  for ((i=0; i<${#vh}; i++)); do
-    what="${vh:$i:1}"
-    tmux splitw -$what
-  done
+  tmux splitw -h
+  tmux selectp -t 1
+  tmux splitw -v
+  tmux splitw -h
+  tmux splitw -h
 
   # wait for each panel to be ready, then
+  # if not in the first panel,
   # run cd . so they can use nvm version
   num=$(tmux list-panes | wc -l | xargs)
-  for ((i=1; i<=$num; i++)); do
+  for ((i=2; i<=$num; i++)); do
     tmux selectp -t $i
     while ! tmux capture-pane -p -t $i | grep " "; do
       sleep 1
