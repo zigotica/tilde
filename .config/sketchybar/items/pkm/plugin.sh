@@ -81,12 +81,12 @@ if [[ -f "$TARGET_FILE" ]]; then
       [[ -z "$msg" ]] && continue
       repo_name=$(basename "$repo")
       if [[ "$label" == "Work" ]]; then
-        WORK_LINES+="  - $repo_name: (${hash:0:8}) $msg"$'\n'
+        WORK_LINES+="- [x] ${hash:0:8}: $repo_name - $msg"$'\n'
       else
-        PERSONAL_LINES+="  - $repo_name: (${hash:0:8}) $msg"$'\n'
+        PERSONAL_LINES+="- [x] ${hash:0:8}: $repo_name - $msg"$'\n'
       fi
       TOTAL_COMMITS=$((TOTAL_COMMITS + 1))
-    done < <(git log --since="midnight" --author="$AUTHOR" --pretty="%h|%s" 2>/dev/null)
+    done < <(git log --first-parent --reverse --since="midnight" --author="$AUTHOR" --abbrev=8 --pretty="%h|%s" 2>/dev/null)
   done < "$TARGET_FILE"
 fi
 
@@ -111,45 +111,87 @@ sketchybar --set "$NAME" label="$TOTAL_COMMITS"
 # CREATE NOTE IF NEEDED
 # -------------------------
 
-if [[ ! -f "$NOTE" ]]; then
-  cp "$TEMPLATE" "$NOTE"
-  perl -pi -e "s/<%tp\.date\.now\(\"YYYY-MM-DD\"\)%>/$DATE/g" "$NOTE"
-  
-  replacement=""
-  [[ -n "$WORK_LINES" ]] && replacement+="- Work"$'\n'"$WORK_LINES"
-  [[ -n "$PERSONAL_LINES" ]] && replacement+="- Personal"$'\n'"$PERSONAL_LINES"
-  
-  perl -0777 -pe "s/- <% tp\.file\.cursor\(\) %>/$replacement/" -i "$NOTE"
-fi
-
-# -------------------------
-# FUNCTION: insert with dedup
-# -------------------------
-
 insert_under_section() {
   local section="$1"
   local lines="$2"
   [[ -z "$lines" ]] && return
   
-  local new_lines=""
+  local new_lines=()
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
-    grep -Fqx "$line" "$NOTE" || new_lines+="$line"$'\n'
+    hash=$(echo "$line" | cut -d' ' -f3 | tr -d ':')
+    [[ ${#hash} -ge 7 ]] || continue
+    if grep -q "$hash:" "$NOTE"; then
+      :
+    else
+      new_lines+=("$line")
+    fi
   done <<< "$lines"
   
-  [[ -z "$new_lines" ]] && return
+  [[ ${#new_lines[@]} -eq 0 ]] && return
   
-  if grep -q "^- $section" "$NOTE"; then
-    perl -0777 -i -pe 's/(^- '"$section"'[^\n]*\n)/$1'"$new_lines"'/m' "$NOTE"
-  else
-    perl -0777 -i -pe 's/(# Notes.*?\n)/$1- '"$section"'\n'"$new_lines"'/s' "$NOTE"
+  local tmp="$NOTE.tmp"
+  > "$tmp"
+  local in_section=0
+  local section_buffer=()
+  
+  while IFS= read -r note_line; do
+    if [[ "$note_line" == "## $section" ]]; then
+      in_section=1
+      echo "$note_line" >> "$tmp"
+    elif [[ $in_section -eq 1 && ( "$note_line" == "##"* || "$note_line" == "<% tp.file.cursor() %>" || "$note_line" == "---" ) ]]; then
+      while [[ ${#section_buffer[@]} -gt 0 && -z "${section_buffer[-1]}" ]]; do
+        unset 'section_buffer[-1]'
+      done
+      for buf in "${section_buffer[@]}"; do
+        echo "$buf" >> "$tmp"
+      done
+      for nl in "${new_lines[@]}"; do
+        echo "$nl" >> "$tmp"
+      done
+      echo "" >> "$tmp"
+      new_lines=()
+      section_buffer=()
+      in_section=0
+      echo "$note_line" >> "$tmp"
+    elif [[ $in_section -eq 1 ]]; then
+      section_buffer+=("$note_line")
+    else
+      echo "$note_line" >> "$tmp"
+    fi
+  done < "$NOTE"
+  
+  if [[ ${#new_lines[@]} -gt 0 ]]; then
+    while [[ ${#section_buffer[@]} -gt 0 && -z "${section_buffer[-1]}" ]]; do
+      unset 'section_buffer[-1]'
+    done
+    for buf in "${section_buffer[@]}"; do
+      echo "$buf" >> "$tmp"
+    done
+    for nl in "${new_lines[@]}"; do
+      echo "$nl" >> "$tmp"
+    done
   fi
+  
+  mv "$tmp" "$NOTE"
 }
 
-# -------------------------
-# APPEND INSIDE SECTIONS
-# -------------------------
-
-insert_under_section "Work" "$WORK_LINES"
-insert_under_section "Personal" "$PERSONAL_LINES"
-
+if [[ ! -f "$NOTE" ]]; then
+  cp "$TEMPLATE" "$NOTE"
+  sed -i '' "s/<%tp\.date\.now(\"YYYY-MM-DD\")%>/$DATE/g" "$NOTE"
+  
+  tmp="$NOTE.tmp"
+  > "$tmp"
+  while IFS= read -r note_line; do
+    echo "$note_line" >> "$tmp"
+    if [[ "$note_line" == "## Work" ]]; then
+      echo -n "$WORK_LINES" >> "$tmp"
+    elif [[ "$note_line" == "## Personal" ]]; then
+      echo -n "$PERSONAL_LINES" >> "$tmp"
+    fi
+  done < "$NOTE"
+  mv "$tmp" "$NOTE"
+else
+  insert_under_section "Work" "$WORK_LINES"
+  insert_under_section "Personal" "$PERSONAL_LINES"
+fi
