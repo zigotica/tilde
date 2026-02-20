@@ -77,6 +77,9 @@ if [[ -f "$TARGET_FILE" ]]; then
     AUTHOR="$(git config user.email 2>/dev/null || true)"
     [[ -z "$AUTHOR" ]] && continue
     
+    current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+    [[ "$current_branch" != "main" && "$current_branch" != "master" && "$current_branch" != "develop" ]] && continue
+
     while IFS='|' read -r hash msg; do
       [[ -z "$msg" ]] && continue
       repo_name=$(basename "$repo")
