@@ -25,6 +25,12 @@ WORK_LINES=""
 PERSONAL_LINES=""
 
 # -------------------------
+# Remove tmp file on exit
+# -------------------------
+
+trap 'rm -f "$TARGET_FILE"' EXIT
+
+# -------------------------
 # Find repos modified today
 # -------------------------
 
@@ -96,8 +102,6 @@ fi
 # -------------------------
 # NO COMMITS → UPDATE BAR
 # -------------------------
-
-rm -f "$TARGET_FILE"
 
 if [[ "$TOTAL_COMMITS" -eq 0 ]]; then
   sketchybar --set "$NAME" label="0"
