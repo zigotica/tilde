@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# cleanup docker and other crap
+echo "Stopping apps..."
+
+# Stop Docker cleanly
+pkill Docker 2>/dev/null || true
+pkill com.docker.backend 2>/dev/null || true
+
+# Stop Telegram
+pkill Telegram 2>/dev/null || true
+
+# Stop Spotify
+pkill Spotify 2>/dev/null || true
+
+echo "Removing Docker disk..."
+rm -f ~/Library/Containers/com.docker.docker/Data/vms/0/Docker.raw 2>/dev/null || true
+
+echo "Removing Telegram cache..."
+rm -rf ~/Library/Caches/ru.keepcoder.Telegram 2>/dev/null || true
+
+echo "Removing Spotify cache..."
+rm -rf ~/Library/Caches/com.spotify.client 2>/dev/null || true
+
+echo "Removing Homebrew downloads..."
+rm -rf ~/Library/Caches/Homebrew/downloads/*
+
+echo "Removing iOS update files..."
+rm -rf ~/Library/iTunes/iPad\ Software\ Updates 2>/dev/null || true
+rm -rf ~/Library/iTunes/iPhone\ Software\ Updates 2>/dev/null || true
+
+echo "Emptying User Trash safely..."
+sudo rm -rf ~/.Trash/* 2>/dev/null || true
+
+if [[ `which sketchybar` != "" ]]; then
+  sketchybar --reload
+fi
+
+echo "clean"
