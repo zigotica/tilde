@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# Reusable lossless FLAC splitter with track list
+# Usage: split-songs input.flac tracks.txt
+# where tracks.txt is a list of timestamps and track titles
+# i.e.
+# 00:00:00 Intro
+# 00:01:28 The Great Marsh
+# 00:03:25 Rhayader
+# or
+# 00:00 Se A Cabo
+# 07:38 Black Magic Woman
+# 13:19 Oye Como Va
+
+
+
+# -----------------------
+# 1️⃣ Parse parameters
+# -----------------------
+INPUT="${1:-original.flac}"
+TRACKS_FILE="${2:-tracks.txt}"
+
+if [[ ! -f "$INPUT" ]]; then
+    echo "Error: input file '$INPUT' not found." >&2
+    exit 1
+fi
+
+if [[ ! -f "$TRACKS_FILE" ]]; then
+    echo "Error: tracks file '$TRACKS_FILE' not found." >&2
+    exit 1
+fi
+
+# -----------------------
+# 2️⃣ Read tracks and convert timestamps to seconds
+# -----------------------
+lines=()
+while IFS= read -r line; do
+    [[ -z "$line" || "$line" =~ ^# ]] && continue  # skip empty or comment lines
+    timestamp="${line%% *}"
+    title="${line#* }"
+    # Convert HH:MM:SS to seconds
+    IFS=: read -r h m s <<< "$timestamp"
+    if [[ -z "$s" ]]; then
+        s=$m
+        m=$h
+        h=0
+    fi
+    sec=$((10#$h*3600 + 10#$m*60 + 10#$s))
+    lines+=("$sec|$title")
+done < "$TRACKS_FILE"
+
+total=${#lines[@]}
+if (( total == 0 )); then
+    echo "Error: no tracks found in '$TRACKS_FILE'" >&2
+    exit 1
+fi
+
+# -----------------------
+# 3️⃣ Split with ffmpeg
+# -----------------------
+for ((i=0; i<total; i++)); do
+    start_sec=${lines[i]%%|*}
+    title=${lines[i]#*|}
+    if (( i < total-1 )); then
+        end_sec=${lines[i+1]%%|*}
+    else
+        end_sec=""
+    fi
+
+    # Build output filename: 00. Title.flac
+    printf -v NUM "%02d" "$i"
+    OUT_FILE="$NUM. $title.flac"
+    # sanitize filename
+    OUT_FILE_SAFE=$(echo "$OUT_FILE" | sed 's#[/:?*"<>|]#-#g')
+
+    # Run ffmpeg
+    if [[ -z "$end_sec" ]]; then
+        ffmpeg -y -i "$INPUT" -c:a flac -ss "$start_sec" "$OUT_FILE_SAFE"
+    else
+        ffmpeg -y -i "$INPUT" -c:a flac -ss "$start_sec" -to "$end_sec" "$OUT_FILE_SAFE"
+    fi
+done
+
+echo "Split complete. Files are named 00. ..., 01. ..., etc."
