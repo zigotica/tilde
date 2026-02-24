@@ -9,17 +9,6 @@
 #                                          
 #####################################################################################
 
-# youtube downloader 
-# use: ytd video-url
-function ytd() {
-  yt-dlp -f 'bestvideo+bestaudio/best/best' --merge-output-format mkv $1
-}
-
-# only audio
-function ytda() {
-  yt-dlp -x --audio-format flac $1
-}
-
 # Return history entries filtered by grep or number of items
 # use case: hist [<grep>] [<number>]
 # example: hist yarn

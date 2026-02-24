@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# youtube audio downloader (flac)
+# use: ytda 'video-url' (single quotes is important)
+yt-dlp -x --audio-format flac "${1}"
+

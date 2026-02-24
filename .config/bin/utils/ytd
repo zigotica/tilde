@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# youtube downloader
+# use: ytd 'video-url' (single quotes is important)
+yt-dlp -f 'bestvideo+bestaudio/best/best' --merge-output-format mkv "${1}"
+
