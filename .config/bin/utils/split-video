@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+# Video to MKV with chapters/tracks
+# Usage: split-video input.mp4 tracks.txt [output.mkv]
+# Requires: mkvtoolnix (brew install mkvtoolnix) for chapters
+# where tracks.txt is a list of timestamps and track titles
+# i.e.
+# 00:00:00 Intro
+# 00:01:28 The Great Marsh
+# 00:03:25 Rhayader
+
+
+INPUT="${1:-}"
+TRACKS_FILE="${2:-tracks.txt}"
+OUTPUT="${3:-output.mkv}"
+
+if [[ -z "$INPUT" ]]; then
+    echo "Usage: split-video <input video> [tracks.txt] [output.mkv]" >&2
+    exit 1
+fi
+
+if [[ ! -f "$INPUT" ]]; then
+    echo "Error: input file '$INPUT' not found." >&2
+    exit 1
+fi
+
+if [[ ! -f "$TRACKS_FILE" ]]; then
+    echo "Error: tracks file '$TRACKS_FILE' not found." >&2
+    exit 1
+fi
+
+# -----------------------
+# Read tracks and convert timestamps to seconds
+# -----------------------
+lines=()
+while IFS= read -r line; do
+    [[ -z "$line" || "$line" =~ ^# ]] && continue
+    timestamp="${line%% *}"
+    title="${line#* }"
+    IFS=: read -r h m s <<< "$timestamp"
+    if [[ -z "$s" ]]; then
+        s=$m
+        m=$h
+        h=0
+    fi
+    sec=$((10#$h*3600 + 10#$m*60 + 10#$s))
+    lines+=("$sec|$title")
+done < "$TRACKS_FILE"
+
+total=${#lines[@]}
+if (( total == 0 )); then
+    echo "Error: no tracks found in '$TRACKS_FILE'" >&2
+    exit 1
+fi
+
+# -----------------------
+# Convert to MKV with chapters
+# -----------------------
+
+# First convert to MKV
+TEMP_MKV=$(mktemp).mkv
+ffmpeg -y -i "$INPUT" -c copy "$TEMP_MKV" 2>/dev/null
+
+# Try mkvmerge if available
+if command -v mkvmerge &> /dev/null; then
+    mkv_chapters=$(mktemp).txt
+    {
+        for ((i=0; i<total; i++)); do
+            start_sec=${lines[i]%%|*}
+            title=${lines[i]#*|}
+            printf "CHAPTER%02d=%02d:%02d:%02d.000\n" "$i" $((start_sec/3600)) $((start_sec%3600/60)) $((start_sec%60))
+            printf "CHAPTER%02dNAME=%s\n" "$i" "$title"
+        done
+    } > "$mkv_chapters"
+    
+    mkvmerge -o "$OUTPUT" --chapters "$mkv_chapters" "$TEMP_MKV"
+    rm -f "$mkv_chapters"
+else
+    # Fallback: no chapters without mkvmerge
+    cp "$TEMP_MKV" "$OUTPUT"
+    echo "Warning: mkvmerge not installed. Chapters not added." >&2
+    echo "Install with: brew install mkvtoolnix" >&2
+fi
+
+rm -f "$TEMP_MKV"
+
+echo "Created '$OUTPUT' with $total chapters."
