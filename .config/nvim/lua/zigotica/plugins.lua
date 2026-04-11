@@ -211,7 +211,7 @@ require("lazy").setup({
 
   -- Colors
   "edeneast/nightfox.nvim",
-  "norcalli/nvim-colorizer.lua",
+  "catgoose/nvim-colorizer.lua",
 
   -- Markdown viewer; other options:
   --   "OXY2DEV/markview.nvim",
