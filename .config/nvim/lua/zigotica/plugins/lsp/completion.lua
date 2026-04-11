@@ -115,7 +115,7 @@ cmp.setup({
     end, { "i", "s" }),
   },
   sources = cmp.config.sources({
-    { name = "copilot" },
+    -- { name = "copilot" },
     { name = "luasnip" },
     { name = "codeium" },
     { name = "cmp_tabnine" },
@@ -129,7 +129,7 @@ cmp.setup({
       vim_item.kind = string.format("%s %s", source_type_icons[vim_item.kind], vim_item.kind)
       -- Sources
       vim_item.menu = ({
-        copilot = "[CPLT]",
+        -- copilot = "[CPLT]",
         luasnip = "[Snip]",
         codeium = "[Cod]",
         cmp_tabnine = "[Tab9]",
@@ -144,8 +144,8 @@ cmp.setup({
         format_ai_source_kind(entry, vim_item, source_type_icons.Codeium)
       elseif entry.source.name == "cmp_tabnine" then
         format_ai_source_kind(entry, vim_item, source_type_icons.Tab9)
-      elseif entry.source.name == "copilot" then
-        format_ai_source_kind(entry, vim_item, source_type_icons.Copilot)
+      -- elseif entry.source.name == "copilot" then
+      --   format_ai_source_kind(entry, vim_item, source_type_icons.Copilot)
       end
 
       return vim_item

@@ -124,68 +124,68 @@ require("lazy").setup({
     },
   },
   -- COPILOT code multiline suggestion
-  {
-    "zbirenbaum/copilot.lua",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v22.11.0/bin/node",
-        server_opts_overrides = {
-          settings = {
-            telemetry = {
-              telemetryLevel = "off",
-            },
-            advanced = {
-              listCount = 5,   -- #completions for panel
-              inlineSuggestCount = 5, -- #completions for getCompletions
-            },
-          },
-        },
-      })
-    end,
-  },
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
-    end,
-  },
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("copilot").setup({
+  --       copilot_node_command = vim.fn.expand("$HOME") .. "/.nvm/versions/node/v22.11.0/bin/node",
+  --       server_opts_overrides = {
+  --         settings = {
+  --           telemetry = {
+  --             telemetryLevel = "off",
+  --           },
+  --           advanced = {
+  --             listCount = 5,   -- #completions for panel
+  --             inlineSuggestCount = 5, -- #completions for getCompletions
+  --           },
+  --         },
+  --       },
+  --     })
+  --   end,
+  -- },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function()
+  --     require("copilot_cmp").setup()
+  --   end,
+  -- },
 
   -- AI menu with code and english actions
-  { "David-Kunz/gen.nvim" },
+  -- { "David-Kunz/gen.nvim" },
 
   -- AI with filesystem / diff apply support
-  {
-    "yetone/avante.nvim",
-    -- commit = "f9aa754", -- before agentic mode
-    -- checker = { check_pinned = true },
-    event = "VeryLazy",
-    lazy = false,
-    version = false, -- always pull the latest change
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    build = "make",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      {
-        -- support for image pasting
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            use_absolute_path = true,
-          },
-        },
-      },
-    },
-  },
+  -- {
+  --   "yetone/avante.nvim",
+  --   -- commit = "f9aa754", -- before agentic mode
+  --   -- checker = { check_pinned = true },
+  --   event = "VeryLazy",
+  --   lazy = false,
+  --   version = false, -- always pull the latest change
+  --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  --   build = "make",
+  --   dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "stevearc/dressing.nvim",
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     {
+  --       -- support for image pasting
+  --       "HakonHarnes/img-clip.nvim",
+  --       event = "VeryLazy",
+  --       opts = {
+  --         default = {
+  --           embed_image_as_base64 = false,
+  --           prompt_for_file_name = false,
+  --           drag_and_drop = {
+  --             insert_mode = true,
+  --           },
+  --           use_absolute_path = true,
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 
   -- Testing
   {
