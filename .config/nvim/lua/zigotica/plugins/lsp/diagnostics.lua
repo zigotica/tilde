@@ -9,11 +9,6 @@ for type, icon in pairs(signs) do
 end
 
 -- sort signs by severity (show most critical sign from those in the same line)
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    severity_sort = true
-  }
-)
 
 -- wrap open_float to inspect diagnostics and use the severity color for border
 -- https://neovim.discourse.group/t/lsp-diagnostics-how-and-where-to-retrieve-severity-level-to-customise-border-color/1679
@@ -59,6 +54,7 @@ vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float()]]
 -- Show source in diagnostics, not inline but as a floating popup
 vim.diagnostic.config({
   virtual_text = false,
+  severity_sort = true,
   float = {
     source = "always",  -- Or "if_many"
   },
