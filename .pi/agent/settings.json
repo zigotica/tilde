@@ -1,0 +1,6 @@
+{
+  "lastChangelogVersion": "0.67.2",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.4-nano",
+  "defaultThinkingLevel": "medium"
+}

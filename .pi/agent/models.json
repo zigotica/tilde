@@ -1,0 +1,67 @@
+{
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "deepseek-v3.2:cloud",
+          "reasoning": false
+        },
+        {
+          "id": "gemma3:27b-cloud",
+          "reasoning": false
+        },
+        {
+          "id": "glm-4.7:cloud",
+          "reasoning": false
+        },
+        {
+          "id": "glm-5:cloud",
+          "reasoning": false
+        },
+        {
+          "id": "gpt-oss:20b-cloud",
+          "reasoning": true
+        },
+        {
+          "id": "gpt-oss:120b-cloud",
+          "reasoning": true
+        },
+        {
+          "id": "kimi-k2:1t-cloud",
+          "reasoning": false
+        },
+        {
+          "id": "kimi-k2-thinking:cloud",
+          "reasoning": true
+        },
+        {
+          "id": "minimax-m2.7:cloud",
+          "reasoning": false
+        },
+        {
+          "id": "ministral-3:8b-cloud",
+          "reasoning": false
+        },
+        {
+          "id": "nemotron-3-super:cloud",
+          "reasoning": false
+        },
+        {
+          "id": "qwen3-coder:480b-cloud",
+          "reasoning": false
+        },
+        {
+          "id": "gemma3:latest",
+          "reasoning": false
+        }
+      ]
+    }
+  }
+}
