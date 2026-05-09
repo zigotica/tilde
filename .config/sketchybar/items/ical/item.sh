@@ -5,7 +5,7 @@ POPUP_CLICK_SCRIPT="sketchybar --set ical popup.drawing=toggle"
 
 sketchybar --add       item            ical right                         \
            --set       ical            update_freq="$POLL_UPDATES_MID"    \
-                                       icon="􀉉 "                          \
+                                       icon="󰃵 "                          \
                                        icon.padding_right="$PADDING"      \
                                        label=""                           \
                                        label.font="$FONT:$LABEL_SUB_SIZE" \

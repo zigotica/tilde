@@ -5,7 +5,7 @@ sketchybar \
   --add item timer q \
   --set timer \
     label="" \
-    icon=􀐱   \
+    icon="󰔛"   \
     background.drawing=off \
     script="$ITEMS/pomodoro/plugin.sh" \
     click_script="$ITEMS/pomodoro/plugin.sh" \
