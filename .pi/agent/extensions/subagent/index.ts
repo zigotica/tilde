@@ -165,6 +165,7 @@ interface SubagentDetails {
 	agentScope: AgentScope;
 	projectAgentsDir: string | null;
 	results: SingleResult[];
+	totalSteps?: number;
 }
 
 function getFinalOutput(messages: Message[]): string {
@@ -269,6 +270,8 @@ async function runSingleAgent(
 	agents: AgentConfig[],
 	agentName: string,
 	task: string,
+	modelOverride: string | undefined,
+	modelFallback: "stop" | "current",
 	cwd: string | undefined,
 	step: number | undefined,
 	signal: AbortSignal | undefined,
@@ -292,7 +295,8 @@ async function runSingleAgent(
 	}
 
 	const args: string[] = ["--mode", "json", "-p", "--no-session"];
-	if (agent.model) args.push("--model", agent.model);
+	const effectiveModel = modelOverride ?? agent.model;
+	if (effectiveModel) args.push("--model", effectiveModel);
 	if (agent.tools && agent.tools.length > 0) args.push("--tools", agent.tools.join(","));
 
 	let tmpPromptDir: string | null = null;
@@ -306,7 +310,7 @@ async function runSingleAgent(
 		messages: [],
 		stderr: "",
 		usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, cost: 0, contextTokens: 0, turns: 0 },
-		model: agent.model,
+		model: effectiveModel,
 		step,
 	};
 
@@ -411,6 +415,104 @@ async function runSingleAgent(
 
 		currentResult.exitCode = exitCode;
 		if (wasAborted) throw new Error("Subagent was aborted");
+		
+		// Detect model failure (check both stderr and JSON error message)
+		const stderrLower = currentResult.stderr.toLowerCase();
+		const errorMsgLower = (currentResult.errorMessage || "").toLowerCase();
+		const combinedError = stderrLower + " " + errorMsgLower;
+		const isModelError = 
+			// Specific billing/credit patterns (avoid broad matches like "model" or "invalid")
+			combinedError.includes("quota") ||
+			combinedError.includes("credit") ||
+			combinedError.includes("balance") ||
+			combinedError.includes("billing") ||
+			combinedError.includes("payment") ||
+			combinedError.includes("insufficient") ||
+			combinedError.includes("rate limit") ||
+			combinedError.includes("overloaded") ||
+			combinedError.includes("api key") ||
+			combinedError.includes("does not exist") ||
+			currentResult.stopReason === "overloaded" ||
+			currentResult.stopReason === "credit_limit" ||
+			currentResult.stopReason === "billing";
+		
+		// Handle model failure with fallback - retry even if exitCode is 0
+		if (effectiveModel && modelFallback === "current" && isModelError) {
+			console.error(`[subagent] Model error detected (stopReason: ${currentResult.stopReason}, errorMessage: ${currentResult.errorMessage}). Retrying with current model...`);
+			// Retry without model to use current model
+			const retryArgs = args.filter((a, i) => a !== "--model" && args[i - 1] !== "--model");
+			currentResult.messages = [];
+			currentResult.stderr = "";
+			currentResult.model = undefined;
+			currentResult.stopReason = undefined;
+			currentResult.errorMessage = undefined;
+			
+			const retryExitCode = await new Promise<number>((resolve) => {
+				const invocation = getPiInvocation(retryArgs);
+				const proc = spawn(invocation.command, invocation.args, {
+					cwd: cwd ?? defaultCwd,
+					shell: false,
+					stdio: ["ignore", "pipe", "pipe"],
+				});
+				let buffer = "";
+				
+				proc.stdout.on("data", (data) => {
+					buffer += data.toString();
+					const lines = buffer.split("\n");
+					buffer = lines.pop() || "";
+					for (const line of lines) {
+						if (!line.trim()) continue;
+						let event: any;
+						try { event = JSON.parse(line); } catch { continue; }
+						if (event.type === "message_end" && event.message) {
+							const msg = event.message as Message;
+							currentResult.messages.push(msg);
+							if (msg.role === "assistant") {
+								currentResult.usage.turns++;
+								const usage = msg.usage;
+								if (usage) {
+									currentResult.usage.input += usage.input || 0;
+									currentResult.usage.output += usage.output || 0;
+									currentResult.usage.cacheRead += usage.cacheRead || 0;
+									currentResult.usage.cacheWrite += usage.cacheWrite || 0;
+									currentResult.usage.cost += usage.cost?.total || 0;
+									currentResult.usage.contextTokens = usage.totalTokens || 0;
+								}
+								if (msg.model) currentResult.model = msg.model;
+								if (msg.stopReason) currentResult.stopReason = msg.stopReason;
+								if (msg.errorMessage) currentResult.errorMessage = msg.errorMessage;
+							}
+							emitUpdate();
+						}
+					}
+				});
+				
+				proc.stderr.on("data", (data) => {
+					currentResult.stderr += data.toString();
+				});
+				
+				proc.on("close", (code) => {
+					if (buffer.trim()) {
+						try {
+							const event = JSON.parse(buffer);
+							if (event.type === "message_end" && event.message) {
+								currentResult.messages.push(event.message as Message);
+							}
+						} catch {}
+					}
+					resolve(code ?? 0);
+				});
+				
+				proc.on("error", () => resolve(1));
+			});
+			
+			currentResult.exitCode = retryExitCode;
+			currentResult.model = currentResult.model || "(current model)";
+			console.error(`[subagent] Retry completed with exit code ${retryExitCode}, model: ${currentResult.model}`);
+		}
+		return currentResult;
+	} catch {
+		// Should not reach here since we handle errors inline
 		return currentResult;
 	} finally {
 		if (tmpPromptPath)
@@ -428,16 +530,9 @@ async function runSingleAgent(
 	}
 }
 
-const TaskItem = Type.Object({
-	agent: Type.String({ description: "Name of the agent to invoke" }),
-	task: Type.String({ description: "Task to delegate to the agent" }),
-	cwd: Type.Optional(Type.String({ description: "Working directory for the agent process" })),
-});
-
-const ChainItem = Type.Object({
-	agent: Type.String({ description: "Name of the agent to invoke" }),
-	task: Type.String({ description: "Task with optional {previous} placeholder for prior output" }),
-	cwd: Type.Optional(Type.String({ description: "Working directory for the agent process" })),
+const ModelFallbackSchema = StringEnum(["stop", "current"] as const, {
+	description: 'What to do when agent model fails (quota, missing key, etc). "stop" halts the flow. "current" falls back to the current model.',
+	default: "current",
 });
 
 const AgentScopeSchema = StringEnum(["user", "project", "both"] as const, {
@@ -445,12 +540,34 @@ const AgentScopeSchema = StringEnum(["user", "project", "both"] as const, {
 	default: "user",
 });
 
+const TaskItem = Type.Object({
+	agent: Type.String({ description: "Name of the agent to invoke" }),
+	task: Type.String({ description: "Task to delegate to the agent" }),
+	model: Type.Optional(Type.String({ description: "Override model for this agent (e.g. 'anthropic/claude-opus-4-5')" })),
+	modelFallback: Type.Optional(ModelFallbackSchema),
+	outputFile: Type.Optional(Type.String({ description: "Save final output to this file path" })),
+	cwd: Type.Optional(Type.String({ description: "Working directory for the agent process" })),
+});
+
+const ChainItem = Type.Object({
+	agent: Type.String({ description: "Name of the agent to invoke" }),
+	task: Type.String({ description: "Task with optional {previous} placeholder for prior output" }),
+	model: Type.Optional(Type.String({ description: "Override model for this agent" })),
+	modelFallback: Type.Optional(ModelFallbackSchema),
+	outputFile: Type.Optional(Type.String({ description: "Save final output to this file path" })),
+	cwd: Type.Optional(Type.String({ description: "Working directory for the agent process" })),
+	interactive: Type.Optional(Type.Boolean({ description: "Run this step in the parent process (interactive TUI) instead of spawning a subprocess. Agent context is injected into current session. Use for steps that need user interaction.", default: false })),
+});
+
 const SubagentParams = Type.Object({
 	agent: Type.Optional(Type.String({ description: "Name of the agent to invoke (for single mode)" })),
 	task: Type.Optional(Type.String({ description: "Task to delegate (for single mode)" })),
+	model: Type.Optional(Type.String({ description: "Override model (single mode only)" })),
+	outputFile: Type.Optional(Type.String({ description: "Save final output to this file path (single mode)" })),
 	tasks: Type.Optional(Type.Array(TaskItem, { description: "Array of {agent, task} for parallel execution" })),
 	chain: Type.Optional(Type.Array(ChainItem, { description: "Array of {agent, task} for sequential execution" })),
 	agentScope: Type.Optional(AgentScopeSchema),
+	modelFallback: Type.Optional(ModelFallbackSchema),
 	confirmProjectAgents: Type.Optional(
 		Type.Boolean({ description: "Prompt before running project-local agents. Default: true.", default: true }),
 	),
@@ -471,6 +588,7 @@ export default function (pi: ExtensionAPI) {
 
 		async execute(_toolCallId, params, signal, onUpdate, ctx) {
 			const agentScope: AgentScope = params.agentScope ?? "user";
+		const modelFallback: "stop" | "current" = params.modelFallback ?? "current";
 			const discovery = discoverAgents(ctx.cwd, agentScope);
 			const agents = discovery.agents;
 			const confirmProjectAgents = params.confirmProjectAgents ?? true;
@@ -481,12 +599,13 @@ export default function (pi: ExtensionAPI) {
 			const modeCount = Number(hasChain) + Number(hasTasks) + Number(hasSingle);
 
 			const makeDetails =
-				(mode: "single" | "parallel" | "chain") =>
+				(mode: "single" | "parallel" | "chain", totalSteps?: number) =>
 				(results: SingleResult[]): SubagentDetails => ({
 					mode,
 					agentScope,
 					projectAgentsDir: discovery.projectAgentsDir,
 					results,
+					totalSteps,
 				});
 
 			if (modeCount !== 1) {
@@ -535,6 +654,50 @@ export default function (pi: ExtensionAPI) {
 					const step = params.chain[i];
 					const taskWithContext = step.task.replace(/\{previous\}/g, previousOutput);
 
+					// Interactive step: inject agent context into current session instead of spawning subprocess
+					if (step.interactive) {
+						const agent = agents.find((a) => a.name === step.agent);
+						if (!agent) {
+							const available = agents.map((a) => `"${a.name}"`).join(", ") || "none";
+							return {
+								content: [{ type: "text", text: `Unknown agent: "${step.agent}". Available: ${available}` }],
+								details: makeDetails("chain", params.chain.length)(results),
+								isError: true,
+							};
+						}
+
+						// Build a synthetic SingleResult for this step
+						const interactiveResult: SingleResult = {
+							agent: step.agent,
+							agentSource: agent.source,
+							task: taskWithContext,
+							exitCode: 0,
+							messages: [],
+							stderr: "",
+							usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, cost: 0, contextTokens: 0, turns: 0 },
+							model: "(interactive)",
+							step: i + 1,
+						};
+						results.push(interactiveResult);
+
+						// Return agent context as tool result — parent model continues as this agent
+						const contextBlock = [
+							`[Agent: ${step.agent} | Role: ${agent.description}]`,
+							"",
+							"--- System Prompt ---",
+							agent.systemPrompt.trim(),
+							"",
+							"--- Task ---",
+							taskWithContext,
+						].join("\n");
+
+						return {
+							content: [{ type: "text", text: contextBlock }],
+							details: makeDetails("chain", params.chain.length)(results),
+						};
+					}
+
+					// Non-interactive step: spawn subprocess
 					// Create update callback that includes all previous results
 					const chainUpdate: OnUpdateCallback | undefined = onUpdate
 						? (partial) => {
@@ -544,7 +707,7 @@ export default function (pi: ExtensionAPI) {
 									const allResults = [...results, currentResult];
 									onUpdate({
 										content: partial.content,
-										details: makeDetails("chain")(allResults),
+										details: makeDetails("chain", params.chain.length)(allResults),
 									});
 								}
 							}
@@ -555,11 +718,13 @@ export default function (pi: ExtensionAPI) {
 						agents,
 						step.agent,
 						taskWithContext,
+						step.model,
+						step.modelFallback ?? modelFallback,
 						step.cwd,
 						i + 1,
 						signal,
 						chainUpdate,
-						makeDetails("chain"),
+						makeDetails("chain", params.chain.length),
 					);
 					results.push(result);
 
@@ -568,15 +733,30 @@ export default function (pi: ExtensionAPI) {
 						const errorMsg = getResultOutput(result);
 						return {
 							content: [{ type: "text", text: `Chain stopped at step ${i + 1} (${step.agent}): ${errorMsg}` }],
-							details: makeDetails("chain")(results),
+							details: makeDetails("chain", params.chain.length)(results),
 							isError: true,
 						};
 					}
 					previousOutput = getFinalOutput(result.messages);
 				}
+				
+				const chainOutput = getFinalOutput(results[results.length - 1].messages) || "(no output)";
+				
+				// Save output to file if last step has outputFile
+				const lastStep = params.chain[params.chain.length - 1];
+				if (lastStep.outputFile) {
+					try {
+						const outputDir = path.dirname(lastStep.outputFile);
+						await fs.promises.mkdir(outputDir, { recursive: true });
+						await fs.promises.writeFile(lastStep.outputFile, chainOutput, "utf-8");
+					} catch (err) {
+						console.error(`[subagent] Failed to save output to ${lastStep.outputFile}:`, err);
+					}
+				}
+				
 				return {
-					content: [{ type: "text", text: getFinalOutput(results[results.length - 1].messages) || "(no output)" }],
-					details: makeDetails("chain")(results),
+					content: [{ type: "text", text: chainOutput }],
+					details: makeDetails("chain", params.chain.length)(results),
 				};
 			}
 
@@ -627,6 +807,8 @@ export default function (pi: ExtensionAPI) {
 						agents,
 						t.agent,
 						t.task,
+						t.model,
+						t.modelFallback ?? modelFallback,
 						t.cwd,
 						undefined,
 						signal,
@@ -652,6 +834,22 @@ export default function (pi: ExtensionAPI) {
 						: "completed";
 					return `### [${r.agent}] ${status}\n\n${output}`;
 				});
+				
+				// Save each task's output to its outputFile
+				for (let i = 0; i < results.length; i++) {
+					const task = params.tasks[i];
+					if (task.outputFile && !isFailedResult(results[i])) {
+						try {
+							const output = getResultOutput(results[i]);
+							const outputDir = path.dirname(task.outputFile);
+							await fs.promises.mkdir(outputDir, { recursive: true });
+							await fs.promises.writeFile(task.outputFile, output, "utf-8");
+						} catch (err) {
+							console.error(`[subagent] Failed to save output to ${task.outputFile}:`, err);
+						}
+					}
+				}
+				
 				return {
 					content: [
 						{
@@ -669,6 +867,8 @@ export default function (pi: ExtensionAPI) {
 					agents,
 					params.agent,
 					params.task,
+					params.model,
+					modelFallback,
 					params.cwd,
 					undefined,
 					signal,
@@ -684,8 +884,22 @@ export default function (pi: ExtensionAPI) {
 						isError: true,
 					};
 				}
+				
+				const output = getFinalOutput(result.messages) || "(no output)";
+				
+				// Save output to file if outputFile is specified
+				if (params.outputFile) {
+					try {
+						const outputDir = path.dirname(params.outputFile);
+						await fs.promises.mkdir(outputDir, { recursive: true });
+						await fs.promises.writeFile(params.outputFile, output, "utf-8");
+					} catch (err) {
+						console.error(`[subagent] Failed to save output to ${params.outputFile}:`, err);
+					}
+				}
+				
 				return {
-					content: [{ type: "text", text: getFinalOutput(result.messages) || "(no output)" }],
+					content: [{ type: "text", text: output }],
 					details: makeDetails("single")([result]),
 				};
 			}
@@ -839,7 +1053,7 @@ export default function (pi: ExtensionAPI) {
 
 			if (details.mode === "chain") {
 				const successCount = details.results.filter((r) => r.exitCode === 0).length;
-				const icon = successCount === details.results.length ? theme.fg("success", "✓") : theme.fg("error", "✗");
+				const icon = successCount === (details.totalSteps || details.results.length) ? theme.fg("success", "✓") : theme.fg("error", "✗");
 
 				if (expanded) {
 					const container = new Container();
@@ -848,7 +1062,7 @@ export default function (pi: ExtensionAPI) {
 							icon +
 								" " +
 								theme.fg("toolTitle", theme.bold("chain ")) +
-								theme.fg("accent", `${successCount}/${details.results.length} steps`),
+								theme.fg("accent", `${successCount}/${details.totalSteps || details.results.length} steps`),
 							0,
 							0,
 						),
@@ -905,7 +1119,7 @@ export default function (pi: ExtensionAPI) {
 					icon +
 					" " +
 					theme.fg("toolTitle", theme.bold("chain ")) +
-					theme.fg("accent", `${successCount}/${details.results.length} steps`);
+					theme.fg("accent", `${successCount}/${details.totalSteps || details.results.length} steps`);
 				for (const r of details.results) {
 					const rIcon = r.exitCode === 0 ? theme.fg("success", "✓") : theme.fg("error", "✗");
 					const displayItems = getDisplayItems(r.messages);
@@ -930,8 +1144,8 @@ export default function (pi: ExtensionAPI) {
 						? theme.fg("warning", "◐")
 						: theme.fg("success", "✓");
 				const status = isRunning
-					? `${successCount + failCount}/${details.results.length} done, ${running} running`
-					: `${successCount}/${details.results.length} tasks`;
+					? `${successCount + failCount}/${details.totalSteps || details.results.length} done, ${running} running`
+					: `${successCount}/${details.totalSteps || details.results.length} tasks`;
 
 				if (expanded && !isRunning) {
 					const container = new Container();
