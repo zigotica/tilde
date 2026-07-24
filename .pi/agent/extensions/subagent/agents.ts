@@ -8,11 +8,14 @@ import { CONFIG_DIR_NAME, getAgentDir, parseFrontmatter } from "@earendil-works/
 
 export type AgentScope = "user" | "project" | "both";
 
+export type AgentThinkingLevel = "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | "max";
+
 export interface AgentConfig {
 	name: string;
 	description: string;
 	tools?: string[];
 	model?: string;
+	thinking?: AgentThinkingLevel;
 	systemPrompt: string;
 	source: "user" | "project";
 	filePath: string;
@@ -60,11 +63,17 @@ function loadAgentsFromDir(dir: string, source: "user" | "project"): AgentConfig
 			.map((t: string) => t.trim())
 			.filter(Boolean);
 
+		const thinkingLevels = new Set<AgentThinkingLevel>(["off", "minimal", "low", "medium", "high", "xhigh", "max"]);
+		const thinking = thinkingLevels.has(frontmatter.thinking as AgentThinkingLevel)
+			? (frontmatter.thinking as AgentThinkingLevel)
+			: undefined;
+
 		agents.push({
 			name: frontmatter.name,
 			description: frontmatter.description,
 			tools: tools && tools.length > 0 ? tools : undefined,
 			model: frontmatter.model,
+			thinking,
 			systemPrompt: body,
 			source,
 			filePath,

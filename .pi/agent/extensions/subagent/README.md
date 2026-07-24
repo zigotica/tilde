@@ -1,175 +1,110 @@
-# Subagent Example
+# Subagent Extension
 
-Delegate tasks to specialized subagents with isolated context windows.
+Enhanced version of [Pi agent harness](https://pi.dev) [official subagent example](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions/subagent). Adds persistent interactive planning, structured build-validation workflows, per-agent model and thinking configuration, and fallback to parent session settings.
 
-## Features
+Extension uses modular, testable architecture: schemas, process execution, workflow orchestration, and TUI rendering are separated behind explicit dependency boundaries. This enables deterministic testing of single, parallel, and chained subagents without launching real Pi processes or calling models.
 
-- **Isolated context**: Each subagent runs in a separate `pi` process
-- **Streaming output**: See tool calls and progress as they happen
-- **Parallel streaming**: All parallel tasks stream updates simultaneously
-- **Markdown rendering**: Final output rendered with proper formatting (expanded view)
-- **Usage tracking**: Shows turns, tokens, cost, and context usage per agent
-- **Abort support**: Ctrl+C propagates to kill subagent processes
+## Workflow
 
-## Structure
-
-```
-subagent/
-├── README.md            # This file
-├── index.ts             # The extension (entry point)
-├── agents.ts            # Agent discovery logic
-├── agents/              # Sample agent definitions
-│   ├── scout.md         # Fast recon, returns compressed context
-│   ├── planner.md       # Creates implementation plans
-│   ├── reviewer.md      # Code review
-│   └── worker.md        # General-purpose (full capabilities)
-└── prompts/             # Workflow presets (prompt templates)
-    ├── implement.md     # scout -> planner -> worker
-    ├── scout-and-plan.md    # scout -> planner (no implementation)
-    └── implement-and-review.md  # worker -> reviewer -> worker
+```text
+/plan <task>   Start scout plus persistent interactive planner
+/build <task>  Run blocking implementation and validation chain
 ```
 
-## Installation
+## Extension Architecture
 
-From the repository root, symlink the files:
+```text
+extensions/subagent/
+├── index.ts    Tool registration and production dependency wiring
+├── schema.ts   Tool schemas and shared contracts
+├── agents.ts   User and project agent discovery
+├── runner.ts   Pi process lifecycle, event parsing, fallback, and prompts
+├── execute.ts  Single, parallel, and chain orchestration
+└── render.ts   TUI call and result rendering
+```
+
+Side effects use explicit boundaries:
+
+- `ProcessRunner` abstracts child-process lifecycle and output streams.
+- Prompt-file storage owns secure temporary prompt creation and cleanup.
+- Output writer owns result persistence and directory creation.
+- Execution accepts injected discovery, runner, confirmation, and storage dependencies.
+
+Production uses real Pi, filesystem, and UI adapters. Tests use deterministic fakes, covering orchestration, process parsing, fallback, abort handling, rendering, and registration without real model calls.
+
+## Agents
+
+| Agent | Role |
+|---|---|
+| scout | Codebase reconnaissance → `scout.md` |
+| planner | Planning agent → `spec.md` |
+| builder | Implement spec → `changes.md` |
+| linter | Lint, formatting, and type checks |
+| tester | Test suite |
+| validator | Validate implementation against spec |
+| auditor | Security audit |
+
+Standard `/plan` starts scout, then a persistent planner child. Planner returns a numbered `STATUS: QUESTIONS` batch. Parent shows it unchanged and passes user replies back into same planner session until explicit confirmation produces `STATUS: SPEC_READY` and `spec.md`.
+
+## Artifacts
+
+```text
+.ai/features/{slug}/
+├── scout.md
+├── spec.md
+└── changes.md
+```
+
+Downstream lint, test, validation, and audit results return through chain output rather than extra artifact files.
+
+Planner sessions use Pi's standard project-scoped session storage under global Pi config. Extension supplies stable session ID but does not override Pi's session directory.
+
+## Chain Composition
+
+Parent chooses smallest suitable chain:
+
+| Chain | Use |
+|---|---|
+| builder | Quick implementation |
+| builder → linter | Quick static verification |
+| builder → tester | Functional verification |
+| builder → linter → tester | Standard |
+| builder → linter → tester → validator | Standard plus spec check |
+| builder → linter → tester → validator → auditor | Full pipeline |
+| builder → auditor | Security-focused |
+
+Build uses existing blocking `subagent` chain mode. Re-run `/build` to retry. No workflow status or resume commands.
+
+## Development
 
 ```bash
-# Symlink the extension (must be in a subdirectory with index.ts)
-mkdir -p ~/.pi/agent/extensions/subagent
-ln -sf "$(pwd)/packages/coding-agent/examples/extensions/subagent/index.ts" ~/.pi/agent/extensions/subagent/index.ts
-ln -sf "$(pwd)/packages/coding-agent/examples/extensions/subagent/agents.ts" ~/.pi/agent/extensions/subagent/agents.ts
-
-# Symlink agents
-mkdir -p ~/.pi/agent/agents
-for f in packages/coding-agent/examples/extensions/subagent/agents/*.md; do
-  ln -sf "$(pwd)/$f" ~/.pi/agent/agents/$(basename "$f")
-done
-
-# Symlink workflow prompts
-mkdir -p ~/.pi/agent/prompts
-for f in packages/coding-agent/examples/extensions/subagent/prompts/*.md; do
-  ln -sf "$(pwd)/$f" ~/.pi/agent/prompts/$(basename "$f")
-done
+cd extensions/subagent
+npm test
+npm run typecheck
 ```
 
-## Security Model
+Tests use Node's built-in test runner and do not invoke real Pi processes or models.
 
-This tool executes a separate `pi` subprocess with a delegated system prompt and tool/model configuration.
+## Install
 
-**Project-local agents** (`.pi/agents/*.md`) are repo-controlled prompts that can instruct the model to read files, run bash commands, etc.
+Project-local:
 
-**Default behavior:** Only loads **user-level agents** from `~/.pi/agent/agents`.
-
-To enable project-local agents, pass `agentScope: "both"` (or `"project"`). Only do this for repositories you trust.
-
-When running interactively, the tool prompts for confirmation before running project-local agents. Set `confirmProjectAgents: false` to disable.
-
-## Usage
-
-### Single agent
-```
-Use scout to find all authentication code
+```bash
+mkdir -p .pi/extensions/subagent .pi/agents .pi/prompts
+cp -r extensions/subagent/. .pi/extensions/subagent/
+cp README.md .pi/extensions/subagent/README.md
+cp agents/*.md .pi/agents/
+cp prompts/*.md .pi/prompts/
 ```
 
-### Parallel execution
-```
-Run 2 scouts in parallel: one to find models, one to find providers
-```
+Global:
 
-### Chained workflow
-```
-Use a chain: first have scout find the read tool, then have planner suggest improvements
-```
-
-### Workflow prompts
-```
-/implement add Redis caching to the session store
-/scout-and-plan refactor auth to support OAuth
-/implement-and-review add input validation to API endpoints
+```bash
+mkdir -p ~/.pi/agent/extensions/subagent ~/.pi/agent/agents ~/.pi/agent/prompts
+cp -r extensions/subagent/. ~/.pi/agent/extensions/subagent/
+cp README.md ~/.pi/agent/extensions/subagent/README.md
+cp agents/*.md ~/.pi/agent/agents/
+cp prompts/*.md ~/.pi/agent/prompts/
 ```
 
-## Tool Modes
-
-| Mode | Parameter | Description |
-|------|-----------|-------------|
-| Single | `{ agent, task }` | One agent, one task |
-| Parallel | `{ tasks: [...] }` | Multiple agents run concurrently (max 8, 4 concurrent) |
-| Chain | `{ chain: [...] }` | Sequential with `{previous}` placeholder |
-
-## Output Display
-
-**Collapsed view** (default):
-- Status icon (✓/✗/⏳) and agent name
-- Last 5-10 items (tool calls and text)
-- Usage stats: `3 turns ↑input ↓output RcacheRead WcacheWrite $cost ctx:contextTokens model`
-
-**Expanded view** (Ctrl+O):
-- Full task text
-- All tool calls with formatted arguments
-- Final output rendered as Markdown
-- Per-task usage (for chain/parallel)
-
-**Parallel mode streaming**:
-- Shows all tasks with live status (⏳ running, ✓ done, ✗ failed)
-- Updates as each task makes progress
-- Shows "2/3 done, 1 running" status
-- Returns each completed task's final output to the parent model, capped at 50 KB per task
-- Returns failure diagnostics from stderr/error messages when a child exits before producing output
-
-**Tool call formatting** (mimics built-in tools):
-- `$ command` for bash
-- `read ~/path:1-10` for read
-- `grep /pattern/ in ~/path` for grep
-- etc.
-
-## Agent Definitions
-
-Agents are markdown files with YAML frontmatter:
-
-```markdown
----
-name: my-agent
-description: What this agent does
-tools: read, grep, find, ls
-model: claude-haiku-4-5
----
-
-System prompt for the agent goes here.
-```
-
-**Locations:**
-- `~/.pi/agent/agents/*.md` - User-level (always loaded)
-- `.pi/agents/*.md` - Project-level (only with `agentScope: "project"` or `"both"`)
-
-Project agents override user agents with the same name when `agentScope: "both"`.
-
-## Sample Agents
-
-| Agent | Purpose | Model | Tools |
-|-------|---------|-------|-------|
-| `scout` | Fast codebase recon | Haiku | read, grep, find, ls, bash |
-| `planner` | Implementation plans | Sonnet | read, grep, find, ls |
-| `reviewer` | Code review | Sonnet | read, grep, find, ls, bash |
-| `worker` | General-purpose | Sonnet | (all default) |
-
-## Workflow Prompts
-
-| Prompt | Flow |
-|--------|------|
-| `/implement <query>` | scout → planner → worker |
-| `/scout-and-plan <query>` | scout → planner |
-| `/implement-and-review <query>` | worker → reviewer → worker |
-
-## Error Handling
-
-- **Exit code != 0**: Tool returns error with stderr/output
-- **stopReason "error"**: LLM error propagated with error message
-- **stopReason "aborted"**: User abort (Ctrl+C) kills subprocess, throws error
-- **Chain mode**: Stops at first failing step, reports which step failed
-
-## Limitations
-
-- Output truncated to last 10 items in collapsed view (expand to see all)
-- Parallel model-visible output is capped at 50 KB per task; full results remain in tool details
-- Agents discovered fresh on each invocation (allows editing mid-session)
-- Parallel mode limited to 8 tasks, 4 concurrent
+Reload Pi after installation.
